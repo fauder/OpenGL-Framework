@@ -7,6 +7,7 @@
 #include "Input.h"
 #include "Renderer.h"
 #include "Shader.h"
+#include "Texture.h"
 #include "Vector.hpp"
 #include "VertexArray.h"
 
@@ -53,6 +54,8 @@ int main()
 		renderer.SetPolygonMode( PolygonMode::FILL );
 
 		Color color;
+
+		Texture test( "Asset/Texture/container.jpg", GL_RGB );
 
 		while( !glfwWindowShouldClose( window ) )
 		{
