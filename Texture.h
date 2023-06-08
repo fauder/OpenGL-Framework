@@ -14,6 +14,10 @@ public:
 	void Unbind() const;
 	void ActivateAndBind( GLenum texture_unit ) const;
 
+	inline int Width() const { return width; }
+	inline int Height() const { return height; }
+	inline int ChannelsInFile() const { return channels_in_file; }
+
 public:
 	static const Color DEFAULT_BORDER_COLOR;
 
