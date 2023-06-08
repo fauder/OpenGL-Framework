@@ -71,25 +71,25 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Fragment.shader">
-      <Filter>Resource\Shader</Filter>
-    </None>
-    <None Include="Vertex.shader">
-      <Filter>Resource\Shader</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <Filter Include="Source">
       <UniqueIdentifier>{a50ac61c-5b90-4a27-95fb-3735d314d72d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header">
       <UniqueIdentifier>{060f9dbf-5ac6-4d28-974e-c0240c6dfa30}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource">
+    <Filter Include="Asset">
       <UniqueIdentifier>{a1b93530-2050-4fa2-aece-a75f5aebefec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource\Shader">
+    <Filter Include="Asset\Shader">
       <UniqueIdentifier>{f263e60e-24b7-4d15-b1d7-72e5cdeffdf2}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Asset\Shader\Fragment.shader">
+      <Filter>Asset\Shader</Filter>
+    </None>
+    <None Include="Asset\Shader\Vertex.shader">
+      <Filter>Asset\Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>
