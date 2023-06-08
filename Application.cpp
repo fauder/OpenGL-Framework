@@ -26,12 +26,13 @@ int main()
 		// Shader creation & compilation.
 		Shader shader( "Asset/Shader/Vertex.shader", "Asset/Shader/Fragment.shader" );
 
-		const VectorBase< float, 7 > vertices[] =
+		const VectorBase< float, 3 + 4 + 2 > vertices[] =
 		{
-			{ +0.5f, +0.5f, +0.0f, 1.0f, 0.0f, 0.0f, 1.0f },  // Top right.
-			{ +0.5f, -0.5f, +0.0f, 1.0f, 1.0f, 0.0f, 1.0f },  // Bottom right.
-			{ -0.5f, -0.5f, +0.0f, 1.0f, 0.0f, 1.0f, 1.0f },  // Bottom left.
-			{ -0.5f,  0.5f, +0.0f, 0.0f, 1.0f, 1.0f, 1.0f }   // Top left.
+			/* NDC Positions.				Vertex Colors			Tex. Coords. */
+			{ +0.5f, +0.5f, +0.0f,		1.0f, 0.0f, 0.0f, 1.0f,		1.0f, 1.0f },  // Top right.
+			{ +0.5f, -0.5f, +0.0f,		1.0f, 1.0f, 0.0f, 1.0f,		1.0f, 0.0f },  // Bottom right.
+			{ -0.5f, -0.5f, +0.0f,		1.0f, 0.0f, 1.0f, 1.0f,		0.0f, 0.0f },  // Bottom left.
+			{ -0.5f,  0.5f, +0.0f,		0.0f, 1.0f, 1.0f, 1.0f,		0.0f, 1.0f }   // Top left.
 		};
 		const Vector3I indices[] =
 		{ // Note that we start from 0!
@@ -42,8 +43,9 @@ int main()
 		VertexBuffer vertex_buffer( vertices, sizeof( vertices ) );
 
 		VertexBufferLayout vertex_buffer_layout;
-		vertex_buffer_layout.Push< float >( 3 );
-		vertex_buffer_layout.Push< float >( 4 );
+		vertex_buffer_layout.Push< float >( 3 ); // NDC positions.
+		vertex_buffer_layout.Push< float >( 4 ); // Vertex colors.
+		vertex_buffer_layout.Push< float >( 2 ); // Tex. coords.
 		VertexArray vertex_array( vertex_buffer, vertex_buffer_layout );
 
 		IndexBuffer index_buffer( indices, 6 );
@@ -55,7 +57,7 @@ int main()
 
 		Color color;
 
-		Texture test( "Asset/Texture/container.jpg", GL_RGB );
+		Texture texture_container( "Asset/Texture/container.jpg", GL_RGB );
 
 		while( !glfwWindowShouldClose( window ) )
 		{

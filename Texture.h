@@ -1,6 +1,7 @@
 #pragma once
 
 // Project Includes.
+#include "Color.hpp"
 #include "Graphics.h"
 
 class Texture
@@ -8,6 +9,13 @@ class Texture
 public:
 	Texture( const char* file_path, GLenum color_format );
 	~Texture();
+
+	void Bind() const;
+	void Unbind() const;
+
+public:
+	static const Color DEFAULT_BORDER_COLOR;
+
 private:
 	unsigned int id;
 	int width;

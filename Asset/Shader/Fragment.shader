@@ -1,13 +1,14 @@
 #version 330 core
 
-//uniform vec4 u_color;
-in vec4 color_out;
+in vec4 out_color_vertex;
+in vec2 out_tex_coords;
+
+uniform sampler2D texture_sampler;
 
 out vec4 frag_color;
 
 void main()
 {
-    //frag_color = u_color;
-    frag_color = color_out;
-    //frag_color = vec4( 1.0f, 0.5f, 0.2f, 1.0f );
+    vec4 tex_sample = texture( texture_sampler, out_tex_coords );
+    frag_color = mix( out_color_vertex, tex_sample, 0.5 );
 }
