@@ -179,6 +179,9 @@
     <None Include="Asset\Shader\Fragment.shader" />
     <None Include="Asset\Shader\Vertex.shader" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Asset\Texture\container.jpg" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

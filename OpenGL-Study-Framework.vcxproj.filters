@@ -83,6 +83,9 @@
     <Filter Include="Asset\Shader">
       <UniqueIdentifier>{f263e60e-24b7-4d15-b1d7-72e5cdeffdf2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Asset\Texture">
+      <UniqueIdentifier>{6c679216-0df1-4933-8ad1-2819e19582b2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Asset\Shader\Fragment.shader">
@@ -91,5 +94,10 @@
     <None Include="Asset\Shader\Vertex.shader">
       <Filter>Asset\Shader</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Asset\Texture\container.jpg">
+      <Filter>Asset\Texture</Filter>
+    </Image>
   </ItemGroup>
 </Project>
