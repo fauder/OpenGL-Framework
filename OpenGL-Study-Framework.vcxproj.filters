@@ -114,5 +114,8 @@
     <Image Include="Asset\Texture\container.jpg">
       <Filter>Asset\Texture</Filter>
     </Image>
+    <Image Include="Asset\Texture\awesomeface.png">
+      <Filter>Asset\Texture</Filter>
+    </Image>
   </ItemGroup>
 </Project>

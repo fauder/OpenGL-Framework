@@ -58,17 +58,24 @@ int main()
 		Color color;
 
 		Texture texture_container( "Asset/Texture/container.jpg", GL_RGB );
+		Texture texture_awesome_face( "Asset/Texture/awesomeface.png", GL_RGBA );
+
+		texture_container.ActivateAndBind( GL_TEXTURE0 );
+		texture_awesome_face.ActivateAndBind( GL_TEXTURE1 );
+
+		shader.Bind();
+		shader.SetInt( "texture_sampler_1", 0 );
+		shader.SetInt( "texture_sampler_2", 1 );
 
 		while( !glfwWindowShouldClose( window ) )
 		{
 			Input::Process( window );
 
 			shader.Bind();
-			/*const float time_seconds_normalized = static_cast< float >( std::sin( glfwGetTime() * 10 ) / 2.0 + 0.5 );
-			color.Set( time_seconds_normalized, 1.0f, 1.0f, 1.0f );
-			shader.SetColor( "u_color", color );*/
+
 			const float offset_horizontal = static_cast< float >( std::sin( glfwGetTime() * 2 ) / 2.0f );
 			shader.SetFloat( "offset_horizontal", offset_horizontal );
+
 			renderer.Update( window );
 		}
 	}

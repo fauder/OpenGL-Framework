@@ -12,6 +12,7 @@ public:
 
 	void Bind() const;
 	void Unbind() const;
+	void ActivateAndBind( GLenum texture_unit ) const;
 
 public:
 	static const Color DEFAULT_BORDER_COLOR;

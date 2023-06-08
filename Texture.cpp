@@ -11,6 +11,8 @@ Texture::Texture( const char* file_path, GLenum color_format )
 	:
 	id( 0 )
 {
+	stbi_set_flip_vertically_on_load( 1 );
+
 	local_buffer = stbi_load( file_path, &width, &height, &channels_in_file, 0 );
 	if( local_buffer )
 	{
@@ -46,4 +48,10 @@ void Texture::Bind() const
 void Texture::Unbind() const
 {
 	GLCALL( glBindTexture( GL_TEXTURE_2D, 0 ) );
+}
+
+void Texture::ActivateAndBind( GLenum texture_unit ) const
+{
+	GLCALL( glActiveTexture( texture_unit ) );
+	Bind();
 }
