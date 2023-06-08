@@ -22,7 +22,7 @@ int main()
 	/* A scope is created here to prevent the Application to go into an endless loop after the render-loop is exited. */
 	{
 		// Shader creation & compilation.
-		Shader shader( "Vertex.shader", "Fragment.shader" );
+		Shader shader( "Asset/Shader/Vertex.shader", "Asset/Shader/Fragment.shader" );
 
 		const VectorBase< float, 7 > vertices[] =
 		{
