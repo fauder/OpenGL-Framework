@@ -5,7 +5,7 @@
 #include "Vendor/stb_image.h"
 
 /* Static member variable initializations. */
-const Color Texture::DEFAULT_BORDER_COLOR{ 1.0f, 0.0f, 1.0f, 1.0f };
+const Color Texture::DEFAULT_BORDER_COLOR{ 1.0f, 1.0f, 0.0f, 1.0f };
 
 Texture::Texture( const char* file_path, GLenum color_format )
 	:
@@ -19,8 +19,8 @@ Texture::Texture( const char* file_path, GLenum color_format )
 		GLCALL( glGenTextures( 1, &id ) );
 		Bind();
 
-		GLCALL( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE ) );
-		GLCALL( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE ) );
+		GLCALL( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER ) );
+		GLCALL( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER ) );
 		GLCALL( glTexParameterfv( GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, DEFAULT_BORDER_COLOR.Data() ) );
 
 		GLCALL( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR ) );
