@@ -1,0 +1,38 @@
+#pragma once
+
+// GLAD Includes.
+#include <glad/glad.h>
+
+// GLFW Includes.
+#include <GLFW/glfw3.h>
+
+// Project Includes.
+#include "Drawable.h"
+#include "Graphics.h"
+
+// std Includes.
+#include <iostream>
+#include <vector>
+
+enum class PolygonMode
+{
+	POINT = 0, LINE = 1, FILL = 2
+};
+
+class Renderer
+{
+public:
+	Renderer( GLFWwindow*& window );
+
+	void Update( GLFWwindow* window );
+	void CleanUp();
+	void AddDrawable( const Drawable& drawable );
+	void SetPolygonMode( const PolygonMode mode );
+
+private:
+	/* GLAD needs the created window's context made current BEFORE it is initialized. */
+	void InitializeGLAD();
+
+private:
+	std::vector< Drawable > drawable_list;
+};
