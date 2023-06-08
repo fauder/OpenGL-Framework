@@ -31,6 +31,9 @@
     <ClCompile Include="Window.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Vendor\stb_image.cpp">
+      <Filter>Vendor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.hpp">
@@ -69,6 +72,9 @@
     <ClInclude Include="Window.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="Vendor\stb_image.h">
+      <Filter>Vendor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -85,6 +91,9 @@
     </Filter>
     <Filter Include="Asset\Texture">
       <UniqueIdentifier>{6c679216-0df1-4933-8ad1-2819e19582b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Vendor">
+      <UniqueIdentifier>{dd826d64-cb3f-4e67-bb28-1989a4b0aa41}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
