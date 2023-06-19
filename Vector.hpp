@@ -7,12 +7,12 @@ template< typename Type, unsigned int Size >
 class VectorBase
 {
 public:
+/* Constructors. */
 	VectorBase()
 		:
 		data{ 0 }
 	{
 	}
-
 	template< typename... Values >
 	VectorBase( Values... values )
 		: 
@@ -52,16 +52,7 @@ public:
 	{
 	}
 
-	template< typename... Values >
-	VectorBase& Set( Values... values )
-	{
-		// Utilize fold expressions with a lambda to "loop over" the parameter pack.
-		int i = 0;
-		( /* Lambda: */ [&] { data[ i++ ] = values; }(), ... );
-
-		return *this;
-	}
-
+/* Getters & Setters. */
 	const Type* Data() const { return data.data(); };
 
 	template< typename = std::enable_if_t< Size >= 1 > >
@@ -73,6 +64,15 @@ public:
 	template< typename = std::enable_if_t< Size >= 4 > >
 	Type W() const { return data[ 3 ]; };
 
+	template< typename... Values >
+	VectorBase& Set( Values... values )
+	{
+		// Utilize fold expressions with a lambda to "loop over" the parameter pack.
+		int i = 0;
+		( /* Lambda: */ [&] { data[ i++ ] = values; }( ), ... );
+
+		return *this;
+	}
 protected:
 	std::array< Type, Size > data;
 };
