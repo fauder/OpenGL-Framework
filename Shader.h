@@ -27,11 +27,17 @@ public:
 	void SetVector( const char* name, const VectorBase< float, Size >& value )
 	{
 		if constexpr( Size == 2 )
+		{
 			GLCALL( glUniform2fv( GetUniformLocation( name ), Size, value.Data() ) );
+		}
 		if constexpr( Size == 3 )
+		{
 			GLCALL( glUniform3fv( GetUniformLocation( name ), Size, value.Data() ) );
+		}
 		if constexpr( Size == 4 )
+		{
 			GLCALL( glUniform4fv( GetUniformLocation( name ), Size, value.Data() ) );
+		}
 	}
 	void SetColor( const char* name, const Color& value );
 
