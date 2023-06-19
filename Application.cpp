@@ -5,6 +5,7 @@
 #include "Drawable.h"
 #include "IndexBuffer.h"
 #include "Input.h"
+#include "Matrix.hpp"
 #include "Renderer.h"
 #include "Shader.h"
 #include "Texture.h"
@@ -67,6 +68,19 @@ int main()
 		shader.SetInt( "texture_sampler_1", 0 );
 		shader.SetInt( "texture_sampler_2", 1 );
 
+		const float PI = 3.14159265359f;
+		const auto rotate_by_radians = PI / 4;
+		const auto cosine_term = std::cos( rotate_by_radians );
+		const auto   sine_term = std::sin( rotate_by_radians );
+
+		Matrix4x4 rotation
+		{
+			cosine_term, -sine_term, 0.0f, 0.0f,
+			sine_term, cosine_term, 0.0f, 0.0f,
+			0.0f, 0.0f, 1.0f, 0.0f,
+			0.0f, 0.0f, 0.0f, 1.0f
+		};
+
 		while( !glfwWindowShouldClose( window ) )
 		{
 			Input::Process( window );
@@ -75,6 +89,7 @@ int main()
 
 			const float offset_horizontal = static_cast< float >( std::sin( glfwGetTime() * 2 ) / 2.0f );
 			shader.SetFloat( "offset_horizontal", offset_horizontal );
+			shader.SetMatrix( "transformation", rotation );
 
 			renderer.Update( window );
 		}

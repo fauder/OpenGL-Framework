@@ -6,6 +6,7 @@
 // Project Includes.
 #include "Color.hpp"
 #include "Graphics.h"
+#include "Matrix.hpp"
 #include "Vector.hpp"
 
 // std Includes.
@@ -20,6 +21,23 @@ public:
 
 	void Bind() const;
 
+	/* Only accept square matrices for now. If there a use-case for non-square matrices come up, I'll refactor. */
+	template< unsigned int Size >
+	void SetMatrix( const char* name, const MatrixBase< float, Size, Size >& value )
+	{
+		if constexpr( Size == 2U )
+		{
+			GLCALL( glUniformMatrix2fv( GetUniformLocation( name ), 1, GL_FALSE, value.Data() ) );
+		}
+		if constexpr( Size == 3U )
+		{
+			GLCALL( glUniformMatrix3fv( GetUniformLocation( name ), 1, GL_FALSE, value.Data() ) );
+		}
+		if constexpr( Size == 4U )
+		{
+			GLCALL( glUniformMatrix4fv( GetUniformLocation( name ), 1, GL_FALSE, value.Data() ) );
+		}
+	}
 	void SetFloat( const char* name, const float value );
 	void SetInt( const char* name, const int value );
 	void SetBool( const char* name, const bool value );
