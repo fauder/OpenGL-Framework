@@ -17,9 +17,9 @@
 
 int main()
 {
+	GLFWwindow* window = nullptr;
+	Renderer renderer( window, 800, 600, 1000, 100 );
 
-	GLFWwindow* window;
-	Renderer renderer( window );
 	
 	/* A scope is created here to prevent the Application to go into an endless loop after the render-loop is exited. */
 	{

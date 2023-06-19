@@ -4,25 +4,30 @@
 // std Includes.
 #include <iostream>
 
-void Window::Framebuffer_Size_Callback( GLFWwindow* window, int width_new, int height_new )
+void Window::Framebuffer_Size_Callback( GLFWwindow* window, const int width_new, const int height_new )
 {
 	glViewport( 0, 0, width_new, height_new );
 }
 
-void Window::InitializeGLFWAndCreateWindow( GLFWwindow*& window )
+void Window::InitializeGLFWAndCreateWindow( GLFWwindow*& window, const int width, const int height, const int pos_x, const int pos_y )
 {
 	glfwInit();
 	glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
 	glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 3 );
 	glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
-	//glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE ); // Needed for Mac OS X.
 
-	window = glfwCreateWindow( 800, 600, "LearnOpenGL", NULL, NULL );
+	//glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE ); // Needed for Mac OS X.
+	
+	glfwWindowHint( GLFW_VISIBLE, GLFW_FALSE ); // Start hidden as we will move it shortly.
+	window = glfwCreateWindow( width, height, "LearnOpenGL", NULL, NULL );
 	if( window == nullptr )
 	{
 		glfwTerminate();
 		throw std::logic_error( "ERROR::WINDOW::GLFW::FAILED TO CREATE GLFW WINDOW!" );
 	}
+
+	glfwSetWindowPos( window, pos_x, pos_y );
+	glfwShowWindow( window );
 
 	glfwMakeContextCurrent( window );
 }

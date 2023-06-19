@@ -22,7 +22,7 @@ enum class PolygonMode
 class Renderer
 {
 public:
-	Renderer( GLFWwindow*& window );
+	Renderer( GLFWwindow*& window, const int width = 800, const int height = 600, const int pos_x = 0, const int pos_y = 0 );
 
 	void Update( GLFWwindow* window );
 	void CleanUp();

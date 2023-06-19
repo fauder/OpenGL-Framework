@@ -8,16 +8,16 @@
 // std Includes.
 #include <iostream>
 
-Renderer::Renderer( GLFWwindow*& window )
+Renderer::Renderer( GLFWwindow*& window, const int width, const int height, const int pos_x, const int pos_y )
 {
 	try
 	{
-		Window::InitializeGLFWAndCreateWindow( window );
+		Window::InitializeGLFWAndCreateWindow( window, width, height, pos_x, pos_y );
 
 		// GLAD needs the created window's context made current BEFORE it is initialized.
 		InitializeGLAD();
 
-		Window::Framebuffer_Size_Callback( window, 800, 600 );
+		Window::Framebuffer_Size_Callback( window, width, height );
 		glfwSetFramebufferSizeCallback( window, Window::Framebuffer_Size_Callback );
 
 	}
