@@ -1,5 +1,8 @@
 #pragma once
 
+// Project Includes.
+#include "Matrix.hpp"
+
 // std Includes.
 #include <array>
 
@@ -107,6 +110,17 @@ public:
 		return VectorBase( data[ 1 ] * other.data[ 2 ] - data[ 2 ] * other.data[ 1 ],
 						   data[ 2 ] * other.data[ 0 ] - data[ 0 ] * other.data[ 2 ],
 						   data[ 0 ] * other.data[ 1 ] - data[ 1 ] * other.data[ 0 ] );
+	}
+
+	template< unsigned int ColumnSize >
+	VectorBase< Type, ColumnSize > operator* ( const MatrixBase< Type, Size, ColumnSize >& transform_matrix ) const
+	{
+		VectorBase< Type, ColumnSize > vector_transformed;
+		for( auto j = 0; j < ColumnSize; j++ )
+			for( auto k = 0; k < Size; k++ )
+				vector_transformed[ j ] += data[ k ] * transform_matrix[ k ][ j ];
+
+		return vector_transformed;
 	}
 
 protected:
