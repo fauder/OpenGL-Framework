@@ -55,7 +55,8 @@ public:
 
 /* Getters & Setters. */
 	const Type* Data() const { return data; };
-	const Type  Data( unsigned int i ) const { return data[ i ]; };
+	Type& operator[] ( const unsigned int index ) { return data[ index ]; }
+	const Type& operator[] ( const unsigned int index ) const { return data[ index ]; }
 
 	template< typename = std::enable_if_t< Size >= 1 > >
 	Type X() const { return data[ 0 ]; };

@@ -15,10 +15,10 @@ namespace Log
 			  typename = typename std::enable_if< std::is_arithmetic_v< Type > > >
 	void Vector( const VectorBase< Type, Size >& vector )
 	{
-		std::cout << '<' << vector.Data(0);
+		std::cout << '<' << vector[ 0 ];
 
 		for( auto i = 1; i < Size; i++ )
-			std::cout << ", " << vector.Data( i );
+			std::cout << ", " << vector[ i ];
 
 		std::cout << '>';
 	}
