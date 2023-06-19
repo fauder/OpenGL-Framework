@@ -3,7 +3,8 @@
 // std Includes.
 #include <array>
 
-template< typename Type, unsigned int Size >
+template< typename Type, unsigned int Size, 
+		  typename = typename std::enable_if< std::is_arithmetic_v< Type > > >
 class VectorBase
 {
 public:
