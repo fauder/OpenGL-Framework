@@ -82,7 +82,7 @@ public:
 	}
 
 /* Getters & Setters. */
-	const Type* Data() const { return data; };
+	const Type* Data() const { return &data[ 0 ][ 0 ]; };
 	Type* operator[] ( const unsigned int row_index ) { return data[ row_index ]; }
 	const Type* operator[] ( const unsigned int row_index ) const { return data[ row_index ]; }
 
@@ -103,7 +103,7 @@ public:
 
 /* Arithmetic Operations. */
 	template< unsigned int RowSizeOther, unsigned int ColumnSizeOther >
-	MatrixBase< Type, RowSize, ColumnSizeOther > operator * ( const MatrixBase< Type, RowSizeOther, ColumnSizeOther >& other ) const
+	MatrixBase< Type, RowSize, ColumnSizeOther > operator* ( const MatrixBase< Type, RowSizeOther, ColumnSizeOther >& other ) const
 	{
 		MatrixBase< Type, RowSize, ColumnSizeOther > result( Matrix::MATRIX_INITIALIZE_ZERO );
 		for( auto i = 0; i < RowSize; i++ )
