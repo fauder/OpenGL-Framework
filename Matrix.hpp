@@ -3,14 +3,16 @@
 // std Includes.
 #include <array>
 
+namespace Matrix
+{
+	struct MatrixInitializeZero {};
+	static constexpr MatrixInitializeZero MATRIX_INITIALIZE_ZERO;
+};
+
 template< typename Type, unsigned int RowSize, unsigned int ColumnSize,
 		  typename = typename std::enable_if< std::is_arithmetic_v< Type > > >
 class MatrixBase
 {
-public:
-	struct MatrixInitializeZero {};
-	static constexpr MatrixInitializeZero MATRIX_INITIALIZE_ZERO;
-
 public:
 /* Constructors. */
 	MatrixBase()
@@ -22,18 +24,58 @@ public:
 				data[ i ][ i ] = Type( 1 );
 	}
 
-	MatrixBase( const MatrixInitializeZero )
+	MatrixBase( Matrix::MatrixInitializeZero )
 		:
 		data{ 0 }
 	{
 	}
 
-	template< typename... Values >
-	MatrixBase( Values... values )
-		:
-		data{ values... }
+	MatrixBase( const Type( &values )[ RowSize ][ ColumnSize ] )
 	{
+		for( auto i = 0; i < RowSize; i++ )
+			for( auto j = 0; j < ColumnSize; j++ )
+				data[ i ][ j ] = values[ i ][ j ];
 	}
+
+	MatrixBase( Type( &&values )[ RowSize ][ ColumnSize ] )
+	{
+		for( auto i = 0; i < RowSize; i++ )
+			for( auto j = 0; j < ColumnSize; j++ )
+				data[ i ][ j ] = values[ i ][ j ];
+	}
+
+	MatrixBase( const Type( &values )[ RowSize * ColumnSize ] )
+	{
+		for( auto i = 0; i < RowSize; i++ )
+			for( auto j = 0; j < ColumnSize; j++ )
+				data[ i ][ j ] = values[ i * ColumnSize + j ];
+	}
+
+	MatrixBase( Type( && values )[ RowSize * ColumnSize ] )
+	{
+		for( auto i = 0; i < RowSize; i++ )
+			for( auto j = 0; j < ColumnSize; j++ )
+				data[ i ][ j ] = values[ i * ColumnSize + j ];
+	}
+
+	MatrixBase( std::initializer_list< Type > initializer_list )
+	{
+		int i = 0, j = 0;
+		for( auto& value : initializer_list )
+		{
+			data[ i ][ j ] = value;
+			j++;
+			if( j > ColumnSize - 1 )
+			{
+				i++;
+				j = 0;
+			}
+		}
+	}
+
+	MatrixBase( const MatrixBase& other ) = default;
+	MatrixBase( MatrixBase&& donor ) = default;
+	MatrixBase& operator= ( const MatrixBase& right_hand_side ) = default;
 
 	~MatrixBase()
 	{
@@ -58,6 +100,19 @@ public:
 	constexpr unsigned int RowCount()     const { return RowSize; }
 	constexpr unsigned int ColumnCount()  const { return ColumnSize; }
 	constexpr unsigned int ElementCount() const { return RowSize * ColumnSize; }
+
+/* Arithmetic Operations. */
+	template< unsigned int RowSizeOther, unsigned int ColumnSizeOther >
+	MatrixBase< Type, RowSize, ColumnSizeOther > operator * ( const MatrixBase< Type, RowSizeOther, ColumnSizeOther >& other ) const
+	{
+		MatrixBase< Type, RowSize, ColumnSizeOther > result( Matrix::MATRIX_INITIALIZE_ZERO );
+		for( auto i = 0; i < RowSize; i++ )
+			for( auto j = 0; j < ColumnSizeOther; j++ )
+				for( auto k = 0; k < ColumnSize; k++ )
+					result[ i ][ j ] += data[ i ][ k ] * other[ k ][ j ];
+
+		return result;
+	}
 
 protected:
 	/* Row-major. */
