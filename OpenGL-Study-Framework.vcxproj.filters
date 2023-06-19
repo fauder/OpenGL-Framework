@@ -81,6 +81,9 @@
     <ClInclude Include="Texture.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="Utility.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
