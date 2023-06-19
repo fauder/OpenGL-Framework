@@ -13,7 +13,7 @@ namespace Log
 {
 	template< typename Type, unsigned int Size,
 			  typename = typename std::enable_if< std::is_arithmetic_v< Type > > >
-	void Vector( const VectorBase< Type, Size >& vector )
+	void Dump( const VectorBase< Type, Size >& vector )
 	{
 		std::cout << '<' << vector[ 0 ];
 
@@ -23,9 +23,17 @@ namespace Log
 		std::cout << '>';
 	}
 
+	template< typename Type, unsigned int Size,
+			  typename = typename std::enable_if< std::is_arithmetic_v< Type > > >
+	void Dump( const char* debug_name, const VectorBase< Type, Size >& vector )
+	{
+		std::cout << debug_name << ": ";
+		Dump( vector );
+	}
+
 	template< typename Type, unsigned int RowSize, unsigned int ColumnSize,
 			  typename = typename std::enable_if< std::is_arithmetic_v< Type > > >
-	void Matrix( const MatrixBase< Type, RowSize, ColumnSize >& matrix )
+	void Dump( const MatrixBase< Type, RowSize, ColumnSize >& matrix )
 	{
 		int width = 0;
 		for( auto i = 0; i < RowSize; i++ )
@@ -40,5 +48,13 @@ namespace Log
 				std::cout << ", " << std::setw( width ) << std::setprecision( 3 ) << std::fixed << matrix[ i ][ j ];
 			std::cout << " |" << "\n";
 		}
+	}
+
+	template< typename Type, unsigned int RowSize, unsigned int ColumnSize,
+			  typename = typename std::enable_if< std::is_arithmetic_v< Type > > >
+	void Dump( const char* debug_name, const MatrixBase< Type, RowSize, ColumnSize >& matrix )
+	{
+		std::cout << debug_name << ":\n";
+		Dump( matrix );
 	}
 }
