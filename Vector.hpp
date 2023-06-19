@@ -44,7 +44,7 @@ public:
 	template< typename = std::enable_if_t< Size >= 4 > >
 	VectorBase( const Type x, const Type y, const Type z, const Type w )
 		:
-		data{ x, y, z }
+		data{ x, y, z, w }
 	{
 	}
 
