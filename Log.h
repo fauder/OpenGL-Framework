@@ -57,4 +57,18 @@ namespace Log
 		std::cout << debug_name << ":\n";
 		Dump( matrix );
 	}
+
+	template< typename T >
+	void DumpNewLine( const T& stuff )
+	{
+		Dump( stuff );
+		std::cout << "\n";
+	}
+
+	template< typename T >
+	void DumpNewLine( const char* debug_name, const T& stuff )
+	{
+		Dump( debug_name, stuff );
+		std::cout << "\n";
+	}
 }
