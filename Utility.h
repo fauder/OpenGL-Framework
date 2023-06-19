@@ -1,22 +1,22 @@
 #pragma once
 
-// Project Includes.
-#include "Vector.hpp"
-
 // std Includes.
-#include <iostream>
+#include <type_traits>
 
 namespace Utility
 {
-	template< typename Type, unsigned int Size,
-			  typename = typename std::enable_if< std::is_arithmetic_v< Type > > >
-	void Dump( const VectorBase< Type, Size >& vector )
+	template< class Type, typename = typename std::enable_if_t< std::is_unsigned_v< Type > > >
+	int DigitCount( Type number )
 	{
-		std::cout << '<' << vector.Data(0);
+		int digits = 0;
+		if( number < 0 ) // Remove this line if block if '-' counts as a digit.
+			digits = 1; 
 
-		for( auto i = 1; i < Size; i++ )
-			std::cout << ", " << vector.Data( i );
-
-		std::cout << '>';
+		while( number )
+		{
+			number /= 10;
+			digits++;
+		}
+		return digits;
 	}
 }

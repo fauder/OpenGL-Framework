@@ -54,7 +54,7 @@ public:
 	}
 
 /* Getters & Setters. */
-	const Type* Data() const { return data.data(); };
+	const Type* Data() const { return data; };
 	const Type  Data( unsigned int i ) const { return data[ i ]; };
 
 	template< typename = std::enable_if_t< Size >= 1 > >
@@ -75,6 +75,9 @@ public:
 
 		return *this;
 	}
+
+/* Other Queries. */
+	constexpr unsigned int Dimension() const { return Size; }
 
 /* Arithmetic Operations. */
 	/* With self. */
@@ -106,7 +109,7 @@ public:
 	}
 
 protected:
-	std::array< Type, Size > data;
+	Type data[ Size ];
 };
 
 using Vector2  = VectorBase< float,  2 >;
