@@ -1,6 +1,6 @@
 #version 330 core
 
-in vec4 out_color_vertex;
+//in vec4 out_color_vertex;
 in vec2 out_tex_coords;
 
 uniform sampler2D texture_sampler_1;

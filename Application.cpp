@@ -19,41 +19,74 @@
 int main()
 {
 	GLFWwindow* window = nullptr;
-	Renderer renderer( window, 800, 600, 1000, 100 );
-
 	
+	const auto width_pixels  = 800;
+	const auto height_pixels = 600;
+	Renderer renderer( window, width_pixels, height_pixels, 1000, 100 );
+
+	const auto aspect_ratio = float( width_pixels ) / height_pixels;
+
 	/* A scope is created here to prevent the Application to go into an endless loop after the render-loop is exited. */
 	{
 		// Shader creation & compilation.
 		Shader shader( "Asset/Shader/Vertex.shader", "Asset/Shader/Fragment.shader" );
 
-		const VectorBase< float, 3 + 4 + 2 > vertices[] =
+		const std::vector< VectorBase< float, 3 + 2 > > vertices =
 		{
-			/* NDC Positions.				Vertex Colors			Tex. Coords. */
-			{ +0.5f, +0.5f, +0.0f,		1.0f, 0.0f, 0.0f, 1.0f,		1.0f, 1.0f },  // Top right.
-			{ +0.5f, -0.5f, +0.0f,		1.0f, 1.0f, 0.0f, 1.0f,		1.0f, 0.0f },  // Bottom right.
-			{ -0.5f, -0.5f, +0.0f,		1.0f, 0.0f, 1.0f, 1.0f,		0.0f, 0.0f },  // Bottom left.
-			{ -0.5f,  0.5f, +0.0f,		0.0f, 1.0f, 1.0f, 1.0f,		0.0f, 1.0f }   // Top left.
-		};
-		const Vector3I indices[] =
-		{ // Note that we start from 0!
-			{ 0, 1, 3 },   // First triangle.
-			{ 1, 2, 3 }    // Second triangle.
+			/* Object space coordinates			UVs. */
+			{ -0.5f, -0.5f, -0.5f,			0.0f, 0.0f },
+			{  0.5f, -0.5f, -0.5f,			1.0f, 0.0f },
+			{  0.5f,  0.5f, -0.5f,			1.0f, 1.0f },
+			{  0.5f,  0.5f, -0.5f,			1.0f, 1.0f },
+			{ -0.5f,  0.5f, -0.5f,			0.0f, 1.0f },
+			{ -0.5f, -0.5f, -0.5f,			0.0f, 0.0f },
+
+			{ -0.5f, -0.5f,  0.5f,			0.0f, 0.0f },
+			{  0.5f, -0.5f,  0.5f,			1.0f, 0.0f },
+			{  0.5f,  0.5f,  0.5f,			1.0f, 1.0f },
+			{  0.5f,  0.5f,  0.5f,			1.0f, 1.0f },
+			{ -0.5f,  0.5f,  0.5f,			0.0f, 1.0f },
+			{ -0.5f, -0.5f,  0.5f,			0.0f, 0.0f },
+
+			{ -0.5f,  0.5f,  0.5f,			1.0f, 0.0f },
+			{ -0.5f,  0.5f, -0.5f,			1.0f, 1.0f },
+			{ -0.5f, -0.5f, -0.5f,			0.0f, 1.0f },
+			{ -0.5f, -0.5f, -0.5f,			0.0f, 1.0f },
+			{ -0.5f, -0.5f,  0.5f,			0.0f, 0.0f },
+			{ -0.5f,  0.5f,  0.5f,			1.0f, 0.0f },
+
+			{  0.5f,  0.5f,  0.5f,			1.0f, 0.0f },
+			{  0.5f,  0.5f, -0.5f,			1.0f, 1.0f },
+			{  0.5f, -0.5f, -0.5f,			0.0f, 1.0f },
+			{  0.5f, -0.5f, -0.5f,			0.0f, 1.0f },
+			{  0.5f, -0.5f,  0.5f,			0.0f, 0.0f },
+			{  0.5f,  0.5f,  0.5f,			1.0f, 0.0f },
+
+			{ -0.5f, -0.5f, -0.5f,			0.0f, 1.0f },
+			{  0.5f, -0.5f, -0.5f,			1.0f, 1.0f },
+			{  0.5f, -0.5f,  0.5f,			1.0f, 0.0f },
+			{  0.5f, -0.5f,  0.5f,			1.0f, 0.0f },
+			{ -0.5f, -0.5f,  0.5f,			0.0f, 0.0f },
+			{ -0.5f, -0.5f, -0.5f,			0.0f, 1.0f },
+
+			{ -0.5f,  0.5f, -0.5f,			0.0f, 1.0f },
+			{  0.5f,  0.5f, -0.5f,			1.0f, 1.0f },
+			{  0.5f,  0.5f,  0.5f,			1.0f, 0.0f },
+			{  0.5f,  0.5f,  0.5f,			1.0f, 0.0f },
+			{ -0.5f,  0.5f,  0.5f,			0.0f, 0.0f },
+			{ -0.5f,  0.5f, -0.5f,			0.0f, 1.0f }
 		};
 
-		VertexBuffer vertex_buffer( vertices, sizeof( vertices ) );
+		VertexBuffer vertex_buffer( vertices.data(), static_cast< unsigned int >( vertices.size() ) );
 
 		VertexBufferLayout vertex_buffer_layout;
 		vertex_buffer_layout.Push< float >( 3 ); // NDC positions.
-		vertex_buffer_layout.Push< float >( 4 ); // Vertex colors.
 		vertex_buffer_layout.Push< float >( 2 ); // Tex. coords.
 		VertexArray vertex_array( vertex_buffer, vertex_buffer_layout );
 
-		IndexBuffer index_buffer( indices, 6 );
+		Drawable cube( shader, vertex_array );
 
-		Drawable quad( shader, vertex_array, index_buffer );
-
-		renderer.AddDrawable( quad );
+		renderer.AddDrawable( cube );
 		renderer.SetPolygonMode( PolygonMode::FILL );
 
 		Color color;
@@ -68,18 +101,15 @@ int main()
 		shader.SetInt( "texture_sampler_1", 0 );
 		shader.SetInt( "texture_sampler_2", 1 );
 
-		const float PI = 3.14159265359f;
-		const auto rotate_by_radians = PI / 4;
-		const auto cosine_term = std::cos( rotate_by_radians );
-		const auto   sine_term = std::sin( rotate_by_radians );
+		/* Putting the "camera" on z +3 means moving the world to z -3.*/
+		const auto view = Matrix::Translation( 0.0f, 0.0f, -3.0f );
 
-		Matrix4x4 rotation
-		{
-			cosine_term, -sine_term, 0.0f, 0.0f,
-			sine_term, cosine_term, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 0.0f, 1.0f
-		};
+		const auto projection = Matrix::PerspectiveProjection( 0.1f, 100.0f, aspect_ratio, 45.0f );
+
+		shader.SetMatrix( "transformation_view",		view );
+		shader.SetMatrix( "transformation_projection",	projection );
+
+		Matrix4x4 rotation;
 
 		while( !glfwWindowShouldClose( window ) )
 		{
@@ -87,9 +117,9 @@ int main()
 
 			shader.Bind();
 
-			const float offset_horizontal = static_cast< float >( std::sin( glfwGetTime() * 2 ) / 2.0f );
-			shader.SetFloat( "offset_horizontal", offset_horizontal );
-			shader.SetMatrix( "transformation", rotation );
+			const float time = static_cast< float >( glfwGetTime() );
+			rotation = Matrix::RotationAroundX( time * 50.0f ) * Matrix::RotationAroundY( time * 50.0f ) * Matrix::RotationAroundZ( time * 50.0f );
+			shader.SetMatrix( "transformation_world", rotation );
 
 			renderer.Update( window );
 		}

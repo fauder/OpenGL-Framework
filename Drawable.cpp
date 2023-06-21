@@ -3,9 +3,8 @@
 #include "Graphics.h"
 #include "VertexArray.h"
 
-Drawable::Drawable( const Shader& shader, const VertexArray& vertex_array, const IndexBuffer& index_buffer )
+Drawable::Drawable( const Shader& shader, const VertexArray& vertex_array )
 	:
-	index_buffer( index_buffer ),
 	shader( shader ),
 	vertex_array( vertex_array )
 {
@@ -15,9 +14,9 @@ Drawable::~Drawable()
 {
 }
 
-void Drawable::Draw()
+void Drawable::Draw() const
 {
 	vertex_array.Bind();
 	shader.Bind();
-	GLCALL( glDrawElements( GL_TRIANGLES, index_buffer.Count(), GL_UNSIGNED_INT, 0 ) );
+	GLCALL( glDrawArrays( GL_TRIANGLES, 0, vertex_array.VertexCount() ) );
 }

@@ -151,6 +151,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Drawable.cpp" />
+    <ClCompile Include="Drawable_Indexed.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="Input.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="Color.hpp" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Drawable.h" />
+    <ClInclude Include="Drawable_Indexed.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Matrix.hpp" />
     <ClInclude Include="Utility.h" />

@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 
 // Project Includes.
+#include "IndexBuffer.h"
 #include "Shader.h"
 #include "Vector.hpp"
 
@@ -13,15 +14,16 @@
 /* Forward Declarations. */
 class VertexArray;
 
-class Drawable
+class Drawable_Indexed
 {
 public:
-	Drawable( const Shader& shader, const VertexArray& vertex_array );
-	~Drawable();
+	Drawable_Indexed( const Shader& shader, const VertexArray& vertex_array, const IndexBuffer& index_buffer );
+	~Drawable_Indexed();
 
-	void Draw() const;
+	void Draw();
 
 private:
+	const IndexBuffer& index_buffer;
 	const Shader& shader;
 	const VertexArray& vertex_array;
 };

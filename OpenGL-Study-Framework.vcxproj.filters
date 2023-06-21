@@ -40,6 +40,9 @@
     <ClCompile Include="Matrix.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Drawable_Indexed.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.hpp">
@@ -91,6 +94,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Log.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawable_Indexed.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Constants.h">
