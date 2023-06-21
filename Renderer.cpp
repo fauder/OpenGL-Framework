@@ -27,12 +27,12 @@ Renderer::Renderer( GLFWwindow*& window, const int width, const int height, cons
 	}
 }
 
-void Renderer::Update( GLFWwindow* window )
+void Renderer::Update( GLFWwindow* window ) const
 {
 	GLCALL( glClearColor( 0.2f, 0.3f, 0.3f, 1.0f ) );
 	GLCALL( glClear( GL_COLOR_BUFFER_BIT ) );
 
-	for( auto& drawable : drawable_list )
+	for( const auto& drawable : drawable_list )
 	{
 		drawable.Draw();
 	}
@@ -41,7 +41,7 @@ void Renderer::Update( GLFWwindow* window )
 	glfwPollEvents();
 }
 
-void Renderer::CleanUp()
+void Renderer::CleanUp() const
 {
 	glfwTerminate();
 }
@@ -51,13 +51,13 @@ void Renderer::AddDrawable( const Drawable& drawable )
 	drawable_list.push_back( drawable );
 }
 
-void Renderer::SetPolygonMode( const PolygonMode mode )
+void Renderer::SetPolygonMode( const PolygonMode mode ) const
 {
 	GLCALL( glPolygonMode( GL_FRONT_AND_BACK, GL_POINT + ( unsigned int )mode ) );
 }
 
 /* GLAD needs the created window's context made current BEFORE it is initialized. */
-void Renderer::InitializeGLAD()
+void Renderer::InitializeGLAD() const
 {
 	if( !gladLoadGLLoader( ( GLADloadproc )glfwGetProcAddress ) )
 		throw std::logic_error( "ERROR::GRAPHICS::GLAD::FAILED_TO_INITIALIZE!" );

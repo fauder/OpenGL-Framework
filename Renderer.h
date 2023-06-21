@@ -24,14 +24,14 @@ class Renderer
 public:
 	Renderer( GLFWwindow*& window, const int width = 800, const int height = 600, const int pos_x = 0, const int pos_y = 0 );
 
-	void Update( GLFWwindow* window );
-	void CleanUp();
+	void Update( GLFWwindow* window ) const;
+	void CleanUp() const;
 	void AddDrawable( const Drawable& drawable );
-	void SetPolygonMode( const PolygonMode mode );
+	void SetPolygonMode( const PolygonMode mode ) const;
 
 private:
 	/* GLAD needs the created window's context made current BEFORE it is initialized. */
-	void InitializeGLAD();
+	void InitializeGLAD() const;
 
 private:
 	std::vector< Drawable > drawable_list;
