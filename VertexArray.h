@@ -15,6 +15,9 @@ public:
 	void Bind() const;
 	void Unbind() const;
 
+	inline unsigned int VertexCount() const { return vertex_count; }
+
 private:
 	unsigned int id;
+	unsigned int vertex_count;
 };

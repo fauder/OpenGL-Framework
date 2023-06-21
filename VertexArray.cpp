@@ -3,6 +3,8 @@
 #include "VertexArray.h"
 
 VertexArray::VertexArray( const VertexBuffer& vertex_buffer, const VertexBufferLayout& vertex_buffer_layout )
+	:
+	vertex_count( vertex_buffer.VertexCount() )
 {
 	GLCALL( glGenVertexArrays( 1, &id ) );
 
