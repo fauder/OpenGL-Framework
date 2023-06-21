@@ -90,6 +90,9 @@
     <ClInclude Include="Log.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="Constants.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
