@@ -5,15 +5,6 @@
 // std Includes.
 #include <iostream>
 
-VertexBuffer::VertexBuffer( const void* data, const unsigned int size )
-	:
-	size( size )
-{
-	GLCALL( glGenBuffers( 1, &id ) );
-	Bind();
-	GLCALL( glBufferData( GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW ) );
-}
-
 VertexBuffer::~VertexBuffer()
 {
 	GLCALL( glDeleteBuffers( 1, &id ) );
