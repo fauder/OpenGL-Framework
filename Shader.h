@@ -27,15 +27,15 @@ public:
 	{
 		if constexpr( Size == 2U )
 		{
-			GLCALL( glUniformMatrix2fv( GetUniformLocation( name ), 1, GL_FALSE, value.Data() ) );
+			GLCALL( glUniformMatrix2fv( GetUniformLocation( name ), 1, GL_TRUE, value.Data() ) );
 		}
 		if constexpr( Size == 3U )
 		{
-			GLCALL( glUniformMatrix3fv( GetUniformLocation( name ), 1, GL_FALSE, value.Data() ) );
+			GLCALL( glUniformMatrix3fv( GetUniformLocation( name ), 1, GL_TRUE, value.Data() ) );
 		}
 		if constexpr( Size == 4U )
 		{
-			GLCALL( glUniformMatrix4fv( GetUniformLocation( name ), 1, GL_FALSE, value.Data() ) );
+			GLCALL( glUniformMatrix4fv( GetUniformLocation( name ), 1, GL_TRUE, value.Data() ) );
 		}
 	}
 	void SetFloat( const char* name, const float value );
