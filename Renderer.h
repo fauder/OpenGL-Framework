@@ -28,6 +28,8 @@ public:
 	void CleanUp() const;
 	void AddDrawable( const Drawable& drawable );
 	void SetPolygonMode( const PolygonMode mode ) const;
+	void EnableDepthTest() const;
+	void DisableDepthTest() const;
 
 private:
 	/* GLAD needs the created window's context made current BEFORE it is initialized. */

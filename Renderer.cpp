@@ -25,12 +25,14 @@ Renderer::Renderer( GLFWwindow*& window, const int width, const int height, cons
 	{
 		std::cerr << "ERROR::GRAPHICS::CONSTRUCTION_ERROR:\n\t" << e.what() << std::endl;
 	}
+
+	EnableDepthTest();
 }
 
 void Renderer::Update( GLFWwindow* window ) const
 {
 	GLCALL( glClearColor( 0.2f, 0.3f, 0.3f, 1.0f ) );
-	GLCALL( glClear( GL_COLOR_BUFFER_BIT ) );
+	GLCALL( glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) );
 
 	for( const auto& drawable : drawable_list )
 	{
@@ -54,6 +56,16 @@ void Renderer::AddDrawable( const Drawable& drawable )
 void Renderer::SetPolygonMode( const PolygonMode mode ) const
 {
 	GLCALL( glPolygonMode( GL_FRONT_AND_BACK, GL_POINT + ( unsigned int )mode ) );
+}
+
+void Renderer::EnableDepthTest() const
+{
+	glEnable( GL_DEPTH_TEST );
+}
+
+void Renderer::DisableDepthTest() const
+{
+	glDisable( GL_DEPTH_TEST );
 }
 
 /* GLAD needs the created window's context made current BEFORE it is initialized. */
