@@ -5,6 +5,7 @@
 
 // std Includes.
 #include <array>
+#include <cmath>
 
 template< typename Type, unsigned int Size, 
 		  typename = typename std::enable_if< std::is_arithmetic_v< Type > > >
@@ -84,6 +85,23 @@ public:
 	constexpr unsigned int Dimension() const { return Size; }
 
 /* Arithmetic Operations. */
+	VectorBase operator* ( const Type scalar ) const
+	{
+		VectorBase result( *this );
+		for( int i = 0; i < Size; i++ )
+			result.data[ i ] *= scalar;
+
+		return result;
+	}
+
+	VectorBase& operator*= ( const Type scalar )
+	{
+		for( int i = 0; i < Size; i++ )
+			data[ i ] *= scalar;
+
+		return *this;
+	}
+
 	Type Dot( const VectorBase& other ) const // Practically we won't use this for any vectors other than 3D & 4D, but no need to restrict.
 	{
 		const Type result( 0 );
@@ -103,9 +121,6 @@ public:
 		return result;
 	}
 
-	{
-	}
-
 	template< typename = std::enable_if_t< Size == 3 > > // Cross product is only defined for vectors of 3 & 7 dimensions apparently, but practically we only need it for 3D.
 	VectorBase Cross( const VectorBase& other ) const
 	{
@@ -113,6 +128,26 @@ public:
 		return VectorBase( data[ 1 ] * other.data[ 2 ] - data[ 2 ] * other.data[ 1 ],
 						   data[ 2 ] * other.data[ 0 ] - data[ 0 ] * other.data[ 2 ],
 						   data[ 0 ] * other.data[ 1 ] - data[ 1 ] * other.data[ 0 ] );
+	}
+
+	Type SquareMagnitude() const { return Dot(); }
+
+	template< typename = std::enable_if_t< std::is_floating_point_v< Type > > >
+	Type Magnitude() const { return std::sqrt( SquareMagnitude() ); }
+
+	template< typename = std::enable_if_t< std::is_floating_point_v< Type > > >
+	VectorBase Normalized() const
+	{
+		const Type one_over_magnitude = 1.0f / Magnitude();
+		return this * one_over_magnitude;
+	}
+
+	template< typename = std::enable_if_t< std::is_floating_point_v< Type > > >
+	VectorBase& Normalize()
+	{
+		const Type one_over_magnitude = 1.0f / Magnitude();
+		*this *= one_over_magnitude;
+		return *this;
 	}
 
 	template< unsigned int ColumnSize >
