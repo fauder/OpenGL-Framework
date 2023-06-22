@@ -21,6 +21,7 @@ namespace Matrix
 	/* In row-major form. */ Matrix4x4 RotationAroundX( const float angle_inDegrees );
 	/* In row-major form. */ Matrix4x4 RotationAroundY( const float angle_inDegrees );
 	/* In row-major form. */ Matrix4x4 RotationAroundZ( const float angle_inDegrees );
+	/* In row-major form. */ Matrix4x4 RotationAroundAxis( const float angle_inDegrees, Vector3 vector );
 
 	/* In row-major form. */ Matrix4x4 TranslationOnX( const float delta );
 	/* In row-major form. */ Matrix4x4 TranslationOnY( const float delta );

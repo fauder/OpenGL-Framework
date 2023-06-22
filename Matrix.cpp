@@ -144,6 +144,34 @@ namespace Matrix
 		};
 	}
 
+	Matrix4x4 RotationAroundAxis( const float angle_inDegrees, Vector3 vector )
+	{
+		vector.Normalize();
+
+		const auto angle_inRadians = angle_inDegrees * Constants::DEG_TO_RAD;
+
+		const auto nx = vector.X();
+		const auto ny = vector.Y();
+		const auto nz = vector.Z();
+		const auto cosTheta = std::cos( angle_inRadians );
+		const auto sinTheta = std::sin( angle_inRadians );
+		const auto one_minus_cosTheta = 1.0f - cosTheta;
+		const auto nx_times_one_minus_cosTheta = nx * one_minus_cosTheta;
+		const auto ny_times_one_minus_cosTheta = ny * one_minus_cosTheta;
+		const auto nz_times_one_minus_cosTheta = nz * one_minus_cosTheta;
+		const auto nx_sinTheta = nx * sinTheta;
+		const auto ny_sinTheta = ny * sinTheta;
+		const auto nz_sinTheta = nz * sinTheta;
+
+		return Matrix4x4
+		{
+			nx * nx_times_one_minus_cosTheta + cosTheta,		ny * nx_times_one_minus_cosTheta + nz_sinTheta,			nz * nx_times_one_minus_cosTheta - ny_sinTheta,		0.0f,
+			nx * ny_times_one_minus_cosTheta - nz_sinTheta,		ny * ny_times_one_minus_cosTheta + cosTheta,			nz * ny_times_one_minus_cosTheta + nx_sinTheta,		0.0f,
+			nx * nz_times_one_minus_cosTheta + ny_sinTheta,		ny * nz_times_one_minus_cosTheta - nx_sinTheta,			nz * nz_times_one_minus_cosTheta + cosTheta,		0.0f,
+			0.0f,												0.0f,													0.0f,												1.0f
+		};
+	}
+
 	Matrix4x4 Translation( const float delta_x, const float delta_y, const float delta_z )
 	{
 		return Matrix4x4

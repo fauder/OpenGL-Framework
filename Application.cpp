@@ -118,7 +118,7 @@ int main()
 			shader.Bind();
 
 			const float time = static_cast< float >( glfwGetTime() );
-			rotation = Matrix::RotationAroundX( time * 50.0f ) * Matrix::RotationAroundY( time * 50.0f ) * Matrix::RotationAroundZ( time * 50.0f );
+			rotation = Matrix::RotationAroundAxis( time * 50.0f, Vector3{ 0.5f, 1.0f, 0.0f } );
 			shader.SetMatrix( "transformation_world", rotation );
 
 			renderer.Update( window );

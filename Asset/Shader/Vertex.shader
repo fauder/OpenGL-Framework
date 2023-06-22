@@ -16,6 +16,6 @@ void main()
     //out_color_vertex = color_vertex;
     out_tex_coords   = tex_coords;
 
-    vec4 position_world = vec4( position_clip.x, position_clip.y, position_clip.z, 1.0 ) * transformation_world;
+    vec4 position_world = vec4( position_clip.xyz, 1.0 ) * transformation_world;
     gl_Position         = position_world * transformation_view * transformation_projection;
 }
