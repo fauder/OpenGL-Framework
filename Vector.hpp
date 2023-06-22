@@ -84,27 +84,30 @@ public:
 	constexpr unsigned int Dimension() const { return Size; }
 
 /* Arithmetic Operations. */
-	/* With self. */
-	template< typename = std::enable_if_t< Size >= 3 && Size <= 4 > > // Technically, dot product is defined for vectors of all dimensions, but practically we only need it for 3D & 4D.
-	inline Type Dot() const
+	Type Dot( const VectorBase& other ) const // Practically we won't use this for any vectors other than 3D & 4D, but no need to restrict.
 	{
-		if constexpr( Size == 3 )
-			return data[ 0 ] * data[ 0 ] + data[ 1 ] * data[ 1 ] + data[ 2 ] * data[ 2 ];
-		else
-			return data[ 0 ] * data[ 0 ] + data[ 1 ] * data[ 1 ] + data[ 2 ] * data[ 2 ] + data[ 3 ] * data[ 3 ];
+		const Type result( 0 );
+
+		for( int i = 0; i < Size; i++ )
+			result += data[ i ] * other.data[ i ];
 	}
 
-	template< typename = std::enable_if_t< Size >= 3 && Size <= 4 > > // Technically, dot product is defined for vectors of all dimensions, but practically we only need it for 3D & 4D.
-	inline Type Dot( const VectorBase& other ) const
+	/* With self. */
+	Type Dot() const // Practically we won't use this for any vectors other than 3D & 4D, but no need to restrict.
 	{
-		if constexpr( Size == 3 )
-			return data[ 0 ] * other.data[ 0 ] + data[ 1 ] * other.data[ 1 ] + data[ 2 ] * other.data[ 2 ];
-		else
-			return data[ 0 ] * other.data[ 0 ] + data[ 1 ] * other.data[ 1 ] + data[ 2 ] * other.data[ 2 ] + data[ 3 ] * other.data[ 3 ];
+		Type result( 0 );
+
+		for( int i = 0; i < Size; i++ )
+			result += data[ i ] * data[ i ];
+
+		return result;
+	}
+
+	{
 	}
 
 	template< typename = std::enable_if_t< Size == 3 > > // Cross product is only defined for vectors of 3 & 7 dimensions apparently, but practically we only need it for 3D.
-	inline VectorBase Cross( const VectorBase& other ) const
+	VectorBase Cross( const VectorBase& other ) const
 	{
 		// u X v = ( u2v3 - u3v2, u3v1 - u1v3, u1v2 - u2v1 )
 		return VectorBase( data[ 1 ] * other.data[ 2 ] - data[ 2 ] * other.data[ 1 ],
