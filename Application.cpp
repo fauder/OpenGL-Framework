@@ -5,7 +5,7 @@
 #include "Drawable.h"
 #include "IndexBuffer.h"
 #include "Input.h"
-#include "Matrix.hpp"
+#include "Matrix.h"
 #include "Renderer.h"
 #include "Shader.h"
 #include "Texture.h"

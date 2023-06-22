@@ -171,7 +171,8 @@
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="Drawable_Indexed.h" />
     <ClInclude Include="Log.h" />
-    <ClInclude Include="Matrix.hpp" />
+    <ClInclude Include="Matrix.h" />
+    <ClInclude Include="MatrixBase.hpp" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Input.h" />
