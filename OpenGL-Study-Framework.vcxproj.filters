@@ -43,6 +43,9 @@
     <ClCompile Include="Drawable_Indexed.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.hpp">
