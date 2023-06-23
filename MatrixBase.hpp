@@ -97,11 +97,13 @@ public:
 	}
 
 /* Other Queries. */
-	constexpr unsigned int RowCount()     const { return RowSize; }
-	constexpr unsigned int ColumnCount()  const { return ColumnSize; }
-	constexpr unsigned int ElementCount() const { return RowSize * ColumnSize; }
+	static constexpr unsigned int RowCount()     { return RowSize; }
+	static constexpr unsigned int ColumnCount()  { return ColumnSize; }
+	static constexpr unsigned int ElementCount() { return RowSize * ColumnSize; }
 
 /* Arithmetic Operations. */
+
+	/* Matrix-matrix multiplication. */
 	template< unsigned int RowSizeOther, unsigned int ColumnSizeOther >
 	MatrixBase< Type, RowSize, ColumnSizeOther > operator* ( const MatrixBase< Type, RowSizeOther, ColumnSizeOther >& other ) const
 	{

@@ -83,7 +83,7 @@ public:
 	}
 
 /* Other Queries. */
-	constexpr unsigned int Dimension() const { return Size; }
+	static constexpr unsigned int Dimension() { return Size; }
 
 /* Arithmetic Operations. */
 	VectorBase operator* ( const Type scalar ) const
@@ -151,6 +151,7 @@ public:
 		return *this;
 	}
 
+	/* Vector-matrix multiplication. */
 	template< unsigned int ColumnSize >
 	VectorBase< Type, ColumnSize > operator* ( const MatrixBase< Type, Size, ColumnSize >& transform_matrix ) const
 	{
