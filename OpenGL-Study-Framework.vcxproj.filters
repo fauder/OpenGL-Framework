@@ -105,6 +105,12 @@
     <ClInclude Include="Matrix.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Assert.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

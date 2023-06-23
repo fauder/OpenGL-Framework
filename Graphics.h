@@ -3,12 +3,14 @@
 // GLAD Includes.
 #include <glad/glad.h>
 
+// Project Includes.
+#include "Assert.h"
+
 // std Includes.
 #include <iostream>
 
 #define BUFFER_OFFSET(idx) ( static_cast< char* >( 0 ) + ( idx ) )
 
-#define ASSERT( x ) if( !( x ) ) __debugbreak();
 #define GLCALL( x ) GLClearError();\
 x;\
 ASSERT( GLLogCall( #x, __FILE__, __LINE__ ) )
