@@ -63,7 +63,7 @@ int Shader::GetUniformLocation( const char* name )
 	}
 }
 
-std::string Shader::ReadShaderFromFile( const char* fileName, const char* shader_type_string )
+std::string Shader::ReadShaderFromFile( const char* fileName, const char* shader_type_string ) const
 {
 	std::ifstream file;
 	file.exceptions( std::ifstream::failbit | std::ifstream::badbit );
@@ -81,7 +81,7 @@ std::string Shader::ReadShaderFromFile( const char* fileName, const char* shader
 	}
 }
 
-unsigned int Shader::CompileShader( const char* shader_code, const char* shader_type_string, const GLenum shader_type )
+unsigned int Shader::CompileShader( const char* shader_code, const char* shader_type_string, const GLenum shader_type ) const
 {
 	GLClearError();
 	const auto shader_id = glCreateShader( shader_type );
@@ -105,7 +105,7 @@ unsigned int Shader::CompileShader( const char* shader_code, const char* shader_
 	return shader_id;
 }
 
-unsigned int Shader::CreateProgramAndLinkShaders( const unsigned int vertex_shader_id, const unsigned int fragment_shader_id )
+unsigned int Shader::CreateProgramAndLinkShaders( const unsigned int vertex_shader_id, const unsigned int fragment_shader_id ) const
 {
 	GLClearError();
 	const auto program_id = glCreateProgram();

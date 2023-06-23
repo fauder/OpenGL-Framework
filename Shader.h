@@ -61,9 +61,9 @@ public:
 
 private:
 	int GetUniformLocation( const char* name );
-	std::string ReadShaderFromFile( const char* fileName, const char* shader_type_string );
-	unsigned int CompileShader( const char* shader_code, const char* shader_type_string, const GLenum shader_type );
-	unsigned int CreateProgramAndLinkShaders( const unsigned int vertex_shader_id, const unsigned int fragment_shader_id );
+	std::string ReadShaderFromFile( const char* fileName, const char* shader_type_string ) const;
+	unsigned int CompileShader( const char* shader_code, const char* shader_type_string, const GLenum shader_type ) const;
+	unsigned int CreateProgramAndLinkShaders( const unsigned int vertex_shader_id, const unsigned int fragment_shader_id ) const;
 
 private:
 	GLuint program_id;
