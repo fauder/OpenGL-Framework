@@ -1,5 +1,8 @@
 #pragma once
 
+// Project Includes.
+#include "Assert.h"
+
 // std Includes.
 #include <array>
 
@@ -9,6 +12,7 @@ namespace Matrix
 	static constexpr MatrixInitializeZero MATRIX_INITIALIZE_ZERO;
 };
 
+/* Row-major. */
 template< typename Type, unsigned int RowSize, unsigned int ColumnSize,
 		  typename = typename std::enable_if< std::is_arithmetic_v< Type > > >
 class MatrixBase
@@ -108,6 +112,58 @@ public:
 		return *this;
 	}
 
+	template< typename VectorType, 
+			  typename = std::enable_if_t< RowSize == ColumnSize &&
+										   VectorType::Dimension() <= RowSize > >
+	MatrixBase& SetDiagonals( const VectorType& vector )
+	{
+		for( unsigned int i = 0; i < vector.Dimension(); i++ )
+			data[ i ][ i ] = vector[ i ];
+
+		return *this;
+	}
+
+	template< typename VectorType,
+			  typename = std::enable_if_t< VectorType::Dimension() <= RowSize > >
+	MatrixBase& SetRow( const VectorType& vector, const unsigned int row_index = 0, const unsigned int start_index_inRow = 0 )
+	{
+		ASSERT( row_index < RowSize && "Row index out of bounds." );
+		ASSERT( start_index_inRow + VectorType::Dimension() <= ColumnSize && "Given vector does not fit inside the row when starting from start_index_inRow." );
+
+		for( unsigned int i = 0; i < VectorType::Dimension(); i++ )
+			data[ row_index ][ i + start_index_inRow ] = vector[ i ];
+
+		return *this;
+	}
+
+	template< typename VectorType,
+			  typename = std::enable_if_t< VectorType::Dimension() <= ColumnSize > >
+	MatrixBase& SetColumn( const VectorType& vector, const unsigned int column_index = 0, const unsigned int start_index_inColumn = 0 )
+	{
+		ASSERT( column_index < ColumnSize && "Column index out of bounds." );
+		ASSERT( start_index_inColumn + VectorType::Dimension() <= RowSize && "Given vector does not fit inside the column when starting from start_index_inColumn." );
+
+		for( unsigned int i = 0; i < VectorType::Dimension(); i++ )
+			data[ i + start_index_inColumn ][ column_index ] = vector[ i ];
+
+		return *this;
+	}
+
+	template< typename VectorType, 
+			  typename = std::enable_if_t< RowSize == ColumnSize &&
+										   VectorType::Dimension() <= RowSize - 1 > >
+	MatrixBase& SetScaling( const VectorType& vector )
+	{
+		return SetDiagonals( vector );
+	}
+
+	template< typename VectorType,
+			  typename = std::enable_if_t< RowSize == ColumnSize && VectorType::Dimension() <= RowSize - 1 > >
+	MatrixBase& SetTranslation( const VectorType& vector )
+	{
+		return SetRow( vector );
+	}
+
 /* Other Queries. */
 	static constexpr unsigned int RowCount()     { return RowSize; }
 	static constexpr unsigned int ColumnCount()  { return ColumnSize; }
@@ -127,6 +183,9 @@ public:
 
 		return result;
 	}
+
+	// TODO: MatrixBase& Transpose();
+	// TODO: MatrixBase Transposed() const;
 
 protected:
 	/* Row-major. */
