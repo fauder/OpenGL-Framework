@@ -18,6 +18,7 @@ namespace Matrix
 	/* In row-major form. */ Matrix4x4 ScalingOnY( const float newScale );
 	/* In row-major form. */ Matrix4x4 ScalingOnZ( const float newScale );
 
+	/* In row-major form. */ Matrix4x4 GeneralRotation( const Vector3& angles_xyz_inDegrees );
 	/* In row-major form. */ Matrix4x4 RotationAroundX( const float angle_inDegrees );
 	/* In row-major form. */ Matrix4x4 RotationAroundY( const float angle_inDegrees );
 	/* In row-major form. */ Matrix4x4 RotationAroundZ( const float angle_inDegrees );

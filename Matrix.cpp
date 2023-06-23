@@ -99,6 +99,32 @@ namespace Matrix
 		};
 	}
 
+	Matrix4x4 GeneralRotation( const Vector3& angles_xyz_inDegrees )
+	{
+		const auto alpha_inRadians = angles_xyz_inDegrees.X() * Constants::DEG_TO_RAD;
+		const auto  beta_inRadians = angles_xyz_inDegrees.Y() * Constants::DEG_TO_RAD;
+		const auto gamma_inRadians = angles_xyz_inDegrees.Z() * Constants::DEG_TO_RAD;
+
+		const auto sinAlpha = std::sin( alpha_inRadians );
+		const auto sinBeta  = std::sin( beta_inRadians  );
+		const auto sinGamma = std::sin( gamma_inRadians );
+
+		const auto cosAlpha = std::cos( alpha_inRadians );
+		const auto cosBeta  = std::cos( beta_inRadians  );
+		const auto cosGamma = std::cos( gamma_inRadians );
+
+		const auto sinBetaCosGamma = sinBeta * cosGamma;
+		const auto sinBetaSinGamma = sinBeta * sinGamma;
+
+		return Matrix4x4
+		{
+			cosBeta * cosGamma,										cosBeta * sinGamma,										-sinBeta,				0.0f,
+			sinAlpha * sinBetaCosGamma - cosAlpha * sinGamma,		sinAlpha * sinBetaSinGamma + cosAlpha * cosGamma,		sinAlpha * cosBeta,		0.0f,
+			cosAlpha * sinBetaCosGamma + sinAlpha * sinGamma,		cosAlpha * sinBetaSinGamma - sinAlpha * cosGamma,		cosAlpha * cosBeta,		0.0f,
+			0.0f,													0.0f,													0.0f,					1.0f
+		};
+	}
+
 	Matrix4x4 RotationAroundX( const float angle_inDegrees )
 	{
 		const auto angle_inRadians = angle_inDegrees * Constants::DEG_TO_RAD;
