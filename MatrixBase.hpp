@@ -89,9 +89,21 @@ public:
 	template< typename... Values >
 	MatrixBase& Set( Values... values )
 	{
+		static_assert( sizeof...( values ) <= ElementCount(), "More values passed than total element count." );
+
 		// Utilize fold expressions with a lambda to "loop over" the parameter pack.
-		int i = 0;
-		( /* Lambda: */ [&] { data[ i++ ] = values; }( ), ... );
+		int columnIndex = 0;
+		int rowIndex = 0;
+		( /* Lambda: */ [&]
+			{
+				data[ rowIndex ][ columnIndex ] = values;
+				if( ++columnIndex == ColumnSize )
+				{
+					columnIndex = 0;
+					rowIndex++;
+				}
+			}
+		( ), ... );
 
 		return *this;
 	}
