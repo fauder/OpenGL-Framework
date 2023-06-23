@@ -18,24 +18,18 @@ public:
 		data{ 0 }
 	{
 	}
-	template< typename... Values >
-	VectorBase( Values... values )
-		: 
-		data{ values... }
-	{
-	}
 
 	template< typename = std::enable_if_t< Size >= 1 > >
 	VectorBase( const Type x )
 		:
-		data{ x, Type( 0 ), Type( 0 ) }
+		data{ x }
 	{
 	}
 
 	template< typename = std::enable_if_t< Size >= 2 > >
 	VectorBase( const Type x, const Type y )
 		:
-		data{ x, y, Type( 0 ) }
+		data{ x, y }
 	{
 	}
 
@@ -50,6 +44,13 @@ public:
 	VectorBase( const Type x, const Type y, const Type z, const Type w )
 		:
 		data{ x, y, z, w }
+	{
+	}
+
+	template< typename... Values >
+	VectorBase( Values... values )
+		:
+		data{ values... }
 	{
 	}
 
