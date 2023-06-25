@@ -161,7 +161,7 @@ public:
 			  typename = std::enable_if_t< RowSize == ColumnSize && VectorType::Dimension() <= RowSize - 1 > >
 	MatrixBase& SetTranslation( const VectorType& vector )
 	{
-		return SetRow( vector );
+		return SetRow( vector, RowSize - 1 );
 	}
 
 /* Other Queries. */
