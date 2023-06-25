@@ -184,8 +184,21 @@ public:
 		return result;
 	}
 
-	// TODO: MatrixBase& Transpose();
-	// TODO: MatrixBase Transposed() const;
+	MatrixBase& Transpose()
+	{
+		for( auto i = 0; i < RowSize; i++ )
+		{
+			for( auto j = i + 1; j < ColumnSize; j++ )
+				std::swap( data[ i ][ j ], data[ j ][ i ] );
+		}
+
+		return *this;
+	}
+
+	MatrixBase Transposed() const
+	{
+		return MatrixBase( *this ).Transpose();
+	}
 
 protected:
 	/* Row-major. */
