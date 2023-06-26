@@ -47,28 +47,21 @@ namespace Framework
 		template< typename T >
 		void Push( int count )
 		{
-			ASSERT( false );
-		}
-
-		template<>
-		void Push< float >( int count )
-		{
-			attribute_list.push_back( { count, GL_FLOAT, GL_FALSE } );
-			stride += count * VertexAttribute::GetSizeOfType( GL_FLOAT );
-		}
-
-		template<>
-		void Push< int >( int count )
-		{
-			attribute_list.push_back( { count, GL_INT, GL_FALSE } );
-			stride += count * VertexAttribute::GetSizeOfType( GL_INT );
-		}
-
-		template<>
-		void Push< unsigned char >( int count )
-		{
-			attribute_list.push_back( { count, GL_BYTE, GL_TRUE } );
-			stride += count * VertexAttribute::GetSizeOfType( GL_BYTE );
+			if constexpr( std::is_same_v< T, float > )
+			{
+				attribute_list.push_back( { count, GL_FLOAT, GL_FALSE } );
+				stride += count * VertexAttribute::GetSizeOfType( GL_FLOAT );
+			}
+			if constexpr( std::is_same_v< T, int > )
+			{
+				attribute_list.push_back( { count, GL_INT, GL_FALSE } );
+				stride += count * VertexAttribute::GetSizeOfType( GL_INT );
+			}
+			if constexpr( std::is_same_v< T, unsigned char > )
+			{
+				attribute_list.push_back( { count, GL_BYTE, GL_TRUE } );
+				stride += count * VertexAttribute::GetSizeOfType( GL_BYTE );
+			}
 		}
 
 	private:

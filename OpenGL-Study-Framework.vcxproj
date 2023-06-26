@@ -169,6 +169,7 @@
   <ItemGroup>
     <ClInclude Include="Assert.h" />
     <ClInclude Include="Color.hpp" />
+    <ClInclude Include="Concepts.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="Drawable_Indexed.h" />

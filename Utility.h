@@ -1,11 +1,11 @@
 #pragma once
 
 // std Includes.
-#include <type_traits>
+#include "Concepts.h"
 
 namespace Framework::Utility
 {
-	template< class Type, typename = typename std::enable_if_t< std::is_unsigned_v< Type > > >
+	template< std::unsigned_integral Type >
 	int DigitCount( Type number )
 	{
 		int digits = 0;

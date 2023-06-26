@@ -114,6 +114,9 @@
     <ClInclude Include="Assert.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="Concepts.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

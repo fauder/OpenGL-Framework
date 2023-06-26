@@ -2,6 +2,7 @@
 
 // Project Includes.
 #include "Assert.h"
+#include "Concepts.h"
 
 // std Includes.
 #include <array>
@@ -15,8 +16,8 @@ namespace Framework::Matrix
 namespace Framework
 {
 	/* Row-major. */
-	template< typename Type, unsigned int RowSize, unsigned int ColumnSize,
-			  typename = typename std::enable_if< std::is_arithmetic_v< Type > > >
+	template< Concepts::Arithmetic Type, unsigned int RowSize, unsigned int ColumnSize >
+		requires Concepts::Nonzero< RowSize > && Concepts::Nonzero< ColumnSize >
 	class MatrixBase
 	{
 	public:
@@ -114,10 +115,8 @@ namespace Framework
 			return *this;
 		}
 
-		template< typename VectorType, 
-				  typename = std::enable_if_t< RowSize == ColumnSize &&
-											   VectorType::Dimension() <= RowSize > >
-		MatrixBase& SetDiagonals( const VectorType& vector )
+		template< typename VectorType >
+		MatrixBase& SetDiagonals( const VectorType& vector ) requires( RowSize == ColumnSize && VectorType::Dimension() <= RowSize )
 		{
 			for( unsigned int i = 0; i < vector.Dimension(); i++ )
 				data[ i ][ i ] = vector[ i ];
@@ -125,9 +124,8 @@ namespace Framework
 			return *this;
 		}
 
-		template< typename VectorType,
-				  typename = std::enable_if_t< VectorType::Dimension() <= RowSize > >
-		MatrixBase& SetRow( const VectorType& vector, const unsigned int row_index = 0, const unsigned int start_index_inRow = 0 )
+		template< typename VectorType >
+		MatrixBase& SetRow( const VectorType& vector, const unsigned int row_index = 0, const unsigned int start_index_inRow = 0 ) requires( VectorType::Dimension() <= RowSize )
 		{
 			ASSERT( row_index < RowSize && "Row index out of bounds." );
 			ASSERT( start_index_inRow + VectorType::Dimension() <= ColumnSize && "Given vector does not fit inside the row when starting from start_index_inRow." );
@@ -138,9 +136,8 @@ namespace Framework
 			return *this;
 		}
 
-		template< typename VectorType,
-				  typename = std::enable_if_t< VectorType::Dimension() <= ColumnSize > >
-		MatrixBase& SetColumn( const VectorType& vector, const unsigned int column_index = 0, const unsigned int start_index_inColumn = 0 )
+		template< typename VectorType >
+		MatrixBase& SetColumn( const VectorType& vector, const unsigned int column_index = 0, const unsigned int start_index_inColumn = 0 ) requires( VectorType::Dimension() <= ColumnSize )
 		{
 			ASSERT( column_index < ColumnSize && "Column index out of bounds." );
 			ASSERT( start_index_inColumn + VectorType::Dimension() <= RowSize && "Given vector does not fit inside the column when starting from start_index_inColumn." );
@@ -151,17 +148,14 @@ namespace Framework
 			return *this;
 		}
 
-		template< typename VectorType, 
-				  typename = std::enable_if_t< RowSize == ColumnSize &&
-											   VectorType::Dimension() <= RowSize - 1 > >
-		MatrixBase& SetScaling( const VectorType& vector )
+		template< typename VectorType >
+		MatrixBase& SetScaling( const VectorType& vector ) requires( RowSize == ColumnSize && VectorType::Dimension() <= RowSize - 1 )
 		{
 			return SetDiagonals( vector );
 		}
 
-		template< typename VectorType,
-				  typename = std::enable_if_t< RowSize == ColumnSize && VectorType::Dimension() <= RowSize - 1 > >
-		MatrixBase& SetTranslation( const VectorType& vector )
+		template< typename VectorType >
+		MatrixBase& SetTranslation( const VectorType& vector ) requires( RowSize == ColumnSize && VectorType::Dimension() <= RowSize - 1 )
 		{
 			return SetRow( vector, RowSize - 1 );
 		}
@@ -175,7 +169,7 @@ namespace Framework
 
 		/* Matrix-matrix multiplication. */
 		template< unsigned int RowSizeOther, unsigned int ColumnSizeOther >
-		MatrixBase< Type, RowSize, ColumnSizeOther > operator* ( const MatrixBase< Type, RowSizeOther, ColumnSizeOther >& other ) const
+		MatrixBase< Type, RowSize, ColumnSizeOther > operator* ( const MatrixBase< Type, RowSizeOther, ColumnSizeOther >& other ) const requires( ColumnSize == RowSizeOther )
 		{
 			MatrixBase< Type, RowSize, ColumnSizeOther > result( Matrix::MATRIX_INITIALIZE_ZERO );
 			for( auto i = 0; i < RowSize; i++ )

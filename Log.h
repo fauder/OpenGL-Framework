@@ -1,6 +1,7 @@
 #pragma once
 
 // Project Includes.
+#include "Concepts.h"
 #include "MatrixBase.hpp"
 #include "Utility.h"
 #include "Vector.hpp"
@@ -11,9 +12,8 @@
 
 namespace Framework::Log
 {
-	template< typename Type, unsigned int Size,
-			  typename = typename std::enable_if< std::is_arithmetic_v< Type > > >
-	void Dump( const VectorBase< Type, Size >& vector )
+	template< Concepts::Arithmetic Coordinate, unsigned int Size > requires( Concepts::Nonzero< Size > )
+	void Dump( const VectorBase< Coordinate, Size >& vector )
 	{
 		std::cout << '<' << vector[ 0 ];
 
@@ -23,17 +23,16 @@ namespace Framework::Log
 		std::cout << '>';
 	}
 
-	template< typename Type, unsigned int Size,
-			  typename = typename std::enable_if< std::is_arithmetic_v< Type > > >
-	void Dump( const char* debug_name, const VectorBase< Type, Size >& vector )
+	template< Concepts::Arithmetic Coordinate, unsigned int Size > requires( Concepts::Nonzero< Size > )
+	void Dump( const char* debug_name, const VectorBase< Coordinate, Size >& vector )
 	{
 		std::cout << debug_name << ": ";
 		Dump( vector );
 	}
 
-	template< typename Type, unsigned int RowSize, unsigned int ColumnSize,
-			  typename = typename std::enable_if< std::is_arithmetic_v< Type > > >
-	void Dump( const MatrixBase< Type, RowSize, ColumnSize >& matrix )
+	template< Concepts::Arithmetic Coordinate, unsigned int RowSize, unsigned int ColumnSize >
+		requires( Concepts::Nonzero< RowSize > && Concepts::Nonzero< ColumnSize > )
+	void Dump( const MatrixBase< Coordinate, RowSize, ColumnSize >& matrix )
 	{
 		int width = 0;
 		for( auto i = 0; i < RowSize; i++ )
@@ -50,9 +49,9 @@ namespace Framework::Log
 		}
 	}
 
-	template< typename Type, unsigned int RowSize, unsigned int ColumnSize,
-			  typename = typename std::enable_if< std::is_arithmetic_v< Type > > >
-	void Dump( const char* debug_name, const MatrixBase< Type, RowSize, ColumnSize >& matrix )
+	template< Concepts::Arithmetic Coordinate, unsigned int RowSize, unsigned int ColumnSize >
+		requires( Concepts::Nonzero< RowSize >&& Concepts::Nonzero< ColumnSize > )
+	void Dump( const char* debug_name, const MatrixBase< Coordinate, RowSize, ColumnSize >& matrix )
 	{
 		std::cout << debug_name << ":\n";
 		Dump( matrix );

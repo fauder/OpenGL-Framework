@@ -5,6 +5,7 @@
 
 // Project Includes.
 #include "Color.hpp"
+#include "Concepts.h"
 #include "Graphics.h"
 #include "MatrixBase.hpp"
 #include "Vector.hpp"
@@ -24,7 +25,7 @@ namespace Framework
 		void Bind() const;
 
 		/* Only accept square matrices for now. If there a use-case for non-square matrices come up, I'll refactor. */
-		template< unsigned int Size >
+		template< unsigned int Size > requires Concepts::Nonzero< Size >
 		void SetMatrix( const char* name, const MatrixBase< float, Size, Size >& value )
 		{
 			if constexpr( Size == 2U )
@@ -43,7 +44,7 @@ namespace Framework
 		void SetFloat( const char* name, const float value );
 		void SetInt( const char* name, const int value );
 		void SetBool( const char* name, const bool value );
-		template< unsigned int Size >
+		template< unsigned int Size > requires Concepts::Nonzero< Size >
 		void SetVector( const char* name, const VectorBase< float, Size >& value )
 		{
 			if constexpr( Size == 2 )
