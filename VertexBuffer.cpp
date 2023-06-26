@@ -5,17 +5,20 @@
 // std Includes.
 #include <iostream>
 
-VertexBuffer::~VertexBuffer()
+namespace Framework
 {
-	GLCALL( glDeleteBuffers( 1, &id ) );
-}
+	VertexBuffer::~VertexBuffer()
+	{
+		GLCALL( glDeleteBuffers( 1, &id ) );
+	}
 
-void VertexBuffer::Bind() const
-{
-	GLCALL( glBindBuffer( GL_ARRAY_BUFFER, id ) );
-}
+	void VertexBuffer::Bind() const
+	{
+		GLCALL( glBindBuffer( GL_ARRAY_BUFFER, id ) );
+	}
 
-void VertexBuffer::Unbind() const
-{
-	GLCALL( glBindBuffer( GL_ARRAY_BUFFER, 0 ) );
+	void VertexBuffer::Unbind() const
+	{
+		GLCALL( glBindBuffer( GL_ARRAY_BUFFER, 0 ) );
+	}
 }

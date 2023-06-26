@@ -19,6 +19,8 @@
 
 int main()
 {
+	using namespace Framework;
+
 	GLFWwindow* window = nullptr;
 	
 	const auto width_pixels  = 800;

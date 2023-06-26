@@ -10,18 +10,21 @@
 // std Includes.
 #include <vector>
 
-/* Forward Declarations. */
-class VertexArray;
-
-class Drawable
+namespace Framework
 {
-public:
-	Drawable( const Shader& shader, const VertexArray& vertex_array );
-	~Drawable();
+	/* Forward Declarations. */
+	class VertexArray;
 
-	void Draw() const;
+	class Drawable
+	{
+	public:
+		Drawable( const Shader& shader, const VertexArray& vertex_array );
+		~Drawable();
 
-private:
-	const Shader& shader;
-	const VertexArray& vertex_array;
-};
+		void Draw() const;
+
+	private:
+		const Shader& shader;
+		const VertexArray& vertex_array;
+	};
+}

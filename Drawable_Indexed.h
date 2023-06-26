@@ -11,19 +11,22 @@
 // std Includes.
 #include <vector>
 
-/* Forward Declarations. */
-class VertexArray;
-
-class Drawable_Indexed
+namespace Framework
 {
-public:
-	Drawable_Indexed( const Shader& shader, const VertexArray& vertex_array, const IndexBuffer& index_buffer );
-	~Drawable_Indexed();
+	/* Forward Declarations. */
+	class VertexArray;
 
-	void Draw();
+	class Drawable_Indexed
+	{
+	public:
+		Drawable_Indexed( const Shader& shader, const VertexArray& vertex_array, const IndexBuffer& index_buffer );
+		~Drawable_Indexed();
 
-private:
-	const IndexBuffer& index_buffer;
-	const Shader& shader;
-	const VertexArray& vertex_array;
-};
+		void Draw();
+
+	private:
+		const IndexBuffer& index_buffer;
+		const Shader& shader;
+		const VertexArray& vertex_array;
+	};
+}

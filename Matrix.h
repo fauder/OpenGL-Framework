@@ -4,13 +4,13 @@
 #include "MatrixBase.hpp"
 #include "Vector.hpp"
 
-namespace Matrix
+namespace Framework::Matrix
 {
-	/* In row-major form. */ Matrix4x4 OrthographicProjection( const float left_plane_offset, const float right_plane_offset,
+	/* In row-major form. */ Matrix4x4 OrthographicProjection( const float left_plane_offset,   const float right_plane_offset,
 															   const float bottom_plane_offset, const float top_plane_offset,
-															   const float near_plane_offset, const float far_plane_offset );
+															   const float near_plane_offset,   const float far_plane_offset );
 	/* In row-major form. */ Matrix4x4 PerspectiveProjection( const float near_plane_offset, const float far_plane_offset,
-															  const float aspect_ratio, const float field_of_view_inDegrees );
+															  const float aspect_ratio,      const float field_of_view_inDegrees );
 
 	/* In row-major form. */ Matrix4x4 Scaling( const float newScale );
 	/* In row-major form. */ Matrix4x4 Scaling( const float newScale_x, const float newScale_y, const float newScale_z );

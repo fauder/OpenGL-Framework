@@ -5,7 +5,7 @@
 // std Includes.
 #include <cmath>
 
-namespace Matrix
+namespace Framework::Matrix
 {
 	/* In row-major form. */
 	Matrix4x4 OrthographicProjection( const float left_plane_offset, const float right_plane_offset, const float bottom_plane_offset, const float top_plane_offset, const float near_plane_offset, const float far_plane_offset )

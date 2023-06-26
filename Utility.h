@@ -3,7 +3,7 @@
 // std Includes.
 #include <type_traits>
 
-namespace Utility
+namespace Framework::Utility
 {
 	template< class Type, typename = typename std::enable_if_t< std::is_unsigned_v< Type > > >
 	int DigitCount( Type number )

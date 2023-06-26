@@ -9,7 +9,7 @@
 #include <iomanip>
 #include <iostream>
 
-namespace Log
+namespace Framework::Log
 {
 	template< typename Type, unsigned int Size,
 			  typename = typename std::enable_if< std::is_arithmetic_v< Type > > >

@@ -1,8 +1,11 @@
 // Project Includes.
 #include "Input.h"
 
-void Input::Process( GLFWwindow* window )
+namespace Framework::Input
 {
-	if( glfwGetKey( window, GLFW_KEY_ESCAPE ) == GLFW_PRESS )
-		glfwSetWindowShouldClose( window, true );
+	void Process( GLFWwindow* window )
+	{
+		if( glfwGetKey( window, GLFW_KEY_ESCAPE ) == GLFW_PRESS )
+			glfwSetWindowShouldClose( window, true );
+	}
 }
