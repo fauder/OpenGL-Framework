@@ -46,6 +46,9 @@
     <ClCompile Include="Transform.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Math.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.hpp">
@@ -112,6 +115,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Assert.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Concepts.h">

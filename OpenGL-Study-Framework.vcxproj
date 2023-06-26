@@ -156,6 +156,7 @@
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Math.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="Drawable_Indexed.h" />
     <ClInclude Include="Log.h" />
+    <ClInclude Include="Math.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="MatrixBase.hpp" />
     <ClInclude Include="Transform.h" />

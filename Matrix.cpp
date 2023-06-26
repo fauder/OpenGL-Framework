@@ -1,5 +1,6 @@
 // Project Includes.
 #include "Constants.h"
+#include "Math.h"
 #include "Matrix.h"
 
 // std Includes.
@@ -25,7 +26,7 @@ namespace Framework::Matrix
 	/* In row-major form. */
 	Matrix4x4 PerspectiveProjection( const float near_plane_offset, const float far_plane_offset, const float aspect_ratio, const float vertical_fieldOfView_inDegrees )
 	{
-		const auto half_fov_inRadians = ( vertical_fieldOfView_inDegrees / 2.0f ) * Constants::DEG_TO_RAD;
+		const auto half_fov_inRadians = Math::ToRadians( vertical_fieldOfView_inDegrees / 2.0f );
 
 		// tan( half_fov_inRadians ) = half_height / near_plane_offset.
 
@@ -101,9 +102,9 @@ namespace Framework::Matrix
 
 	Matrix4x4 GeneralRotation( const Vector3& angles_xyz_inDegrees )
 	{
-		const auto alpha_inRadians = angles_xyz_inDegrees.X() * Constants::DEG_TO_RAD;
-		const auto  beta_inRadians = angles_xyz_inDegrees.Y() * Constants::DEG_TO_RAD;
-		const auto gamma_inRadians = angles_xyz_inDegrees.Z() * Constants::DEG_TO_RAD;
+		const auto alpha_inRadians = Math::ToRadians( angles_xyz_inDegrees.X() );
+		const auto  beta_inRadians = Math::ToRadians( angles_xyz_inDegrees.Y() );
+		const auto gamma_inRadians = Math::ToRadians( angles_xyz_inDegrees.Z() );
 
 		const auto sinAlpha = std::sin( alpha_inRadians );
 		const auto sinBeta  = std::sin( beta_inRadians  );
@@ -127,7 +128,7 @@ namespace Framework::Matrix
 
 	Matrix4x4 RotationAroundX( const float angle_inDegrees )
 	{
-		const auto angle_inRadians = angle_inDegrees * Constants::DEG_TO_RAD;
+		const auto angle_inRadians = Math::ToRadians( angle_inDegrees );
 		const auto cosine_term = std::cos( angle_inRadians );
 		const auto   sine_term = std::sin( angle_inRadians );
 
@@ -142,7 +143,7 @@ namespace Framework::Matrix
 
 	Matrix4x4 RotationAroundY( const float angle_inDegrees )
 	{
-		const auto angle_inRadians = angle_inDegrees * Constants::DEG_TO_RAD;
+		const auto angle_inRadians = Math::ToRadians( angle_inDegrees );
 		const auto cosine_term = std::cos( angle_inRadians );
 		const auto   sine_term = std::sin( angle_inRadians );
 
@@ -157,7 +158,7 @@ namespace Framework::Matrix
 
 	Matrix4x4 RotationAroundZ( const float angle_inDegrees )
 	{
-		const auto angle_inRadians = angle_inDegrees * Constants::DEG_TO_RAD;
+		const auto angle_inRadians = Math::ToRadians( angle_inDegrees );
 		const auto cosine_term = std::cos( angle_inRadians );
 		const auto   sine_term = std::sin( angle_inRadians );
 
@@ -174,7 +175,7 @@ namespace Framework::Matrix
 	{
 		vector.Normalize();
 
-		const auto angle_inRadians = angle_inDegrees * Constants::DEG_TO_RAD;
+		const auto angle_inRadians = Math::ToRadians( angle_inDegrees );
 
 		const auto nx = vector.X();
 		const auto ny = vector.Y();
