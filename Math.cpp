@@ -12,15 +12,37 @@ namespace Framework::Math
 		return Polar2( cartesian.Magnitude(), ToDegrees( std::atan2( cartesian.Y(), cartesian.X() ) ) );
 	}
 
-	Vector2 ToVector2( const Polar2& polar )
+	Vector2 ToVector2( const Polar2& polar2 )
 	{
-		const auto r = polar.R();
+		const auto r = polar2.R();
 
 		if( IsZero( r ) )
 			return Vector2{};
 
-		const auto theta_inRadians = ToRadians( polar.Angle() );
+		const auto theta_inRadians = ToRadians( polar2.Angle() );
 
 		return Vector2( std::cos( theta_inRadians ) * r, std::sin( theta_inRadians ) * r );
+	}
+
+	Polar3_Cylindrical ToPolar3_Cylindrical( const Vector3& cartesian )
+	{
+		const auto x = cartesian.X(), y = cartesian.Y(), z = cartesian.Z();
+
+		if( cartesian.IsZero() )
+			return Polar3_Cylindrical{};
+
+		return Polar3_Cylindrical( Math::Hypothenuse( x, y ), ToDegrees( std::atan2( y, x ) ), z );
+	}
+
+	Vector3 ToVector3( const Polar3_Cylindrical& polar3 )
+	{
+		const auto r = polar3.R(), z = polar3.Z();
+
+		if( IsZero( r ) && IsZero( z ) )
+			return Vector3{};
+
+		const auto theta_inRadians = ToRadians( polar3.Angle() );
+
+		return Vector3( r * std::cos( theta_inRadians ), r * std::sin( theta_inRadians ), z );
 	}
 }
