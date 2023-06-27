@@ -2,7 +2,9 @@
 
 // Project Includes.
 #include "Concepts.h"
+#include "Math.h"
 #include "MatrixBase.hpp"
+#include "Utility.h"
 
 // std Includes.
 #include <array>
@@ -78,6 +80,16 @@ namespace Framework
 
 	/* Other Queries. */
 		static constexpr size_t Dimension() { return Size; }
+		bool IsZero() const
+		{
+			bool nonZero_component_encountered = false;
+			if constexpr( std::is_integral_v< Coordinate > )
+				Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { nonZero_component_encountered |= data[ index ] != 0; } );
+			else
+				Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { nonZero_component_encountered |= !Math::IsZero( data[ index ] ); } );
+
+			return !nonZero_component_encountered;
+		}
 
 	/* Arithmetic Operations. */
 		VectorBase operator* ( const Coordinate scalar ) const
