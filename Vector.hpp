@@ -70,15 +70,14 @@ namespace Framework
 		template< typename... Values >
 		VectorBase& Set( Values... values )
 		{
-			// Utilize fold expressions with a lambda to "loop over" the parameter pack.
 			int i = 0;
-			( /* Lambda: */ [&] { data[ i++ ] = values; }( ), ... );
+			( /* Lambda: */ [ & ]{ data[ i++ ] = values; }(), ... ); // Utilize fold expressions with a lambda to "loop over" the parameter pack.
 
 			return *this;
 		}
 
 	/* Other Queries. */
-		static constexpr unsigned int Dimension() { return Size; }
+		static constexpr size_t Dimension() { return Size; }
 
 	/* Arithmetic Operations. */
 		VectorBase operator* ( const Coordinate scalar ) const
@@ -143,7 +142,7 @@ namespace Framework
 		}
 
 		/* Vector-matrix multiplication. */
-		template< unsigned int ColumnSize >
+		template< size_t ColumnSize >
 		VectorBase< Coordinate, ColumnSize > operator* ( const MatrixBase< Coordinate, Size, ColumnSize >& transform_matrix ) const
 		{
 			VectorBase< Coordinate, ColumnSize > vector_transformed;

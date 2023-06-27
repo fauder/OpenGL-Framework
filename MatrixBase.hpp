@@ -16,7 +16,7 @@ namespace Framework::Matrix
 namespace Framework
 {
 	/* Row-major. */
-	template< Concepts::Arithmetic Type, unsigned int RowSize, unsigned int ColumnSize >
+	template< Concepts::Arithmetic Type, size_t RowSize, size_t ColumnSize >
 		requires Concepts::Nonzero< RowSize > && Concepts::Nonzero< ColumnSize >
 	class MatrixBase
 	{
@@ -118,7 +118,7 @@ namespace Framework
 		template< typename VectorType >
 		MatrixBase& SetDiagonals( const VectorType& vector ) requires( RowSize == ColumnSize && VectorType::Dimension() <= RowSize )
 		{
-			for( unsigned int i = 0; i < vector.Dimension(); i++ )
+			for( auto i = 0; i < vector.Dimension(); i++ )
 				data[ i ][ i ] = vector[ i ];
 
 			return *this;
@@ -161,14 +161,14 @@ namespace Framework
 		}
 
 	/* Other Queries. */
-		static constexpr unsigned int RowCount()     { return RowSize; }
-		static constexpr unsigned int ColumnCount()  { return ColumnSize; }
-		static constexpr unsigned int ElementCount() { return RowSize * ColumnSize; }
+		static constexpr size_t RowCount()     { return RowSize; }
+		static constexpr size_t ColumnCount()  { return ColumnSize; }
+		static constexpr size_t ElementCount() { return RowSize * ColumnSize; }
 
 	/* Arithmetic Operations. */
 
 		/* Matrix-matrix multiplication. */
-		template< unsigned int RowSizeOther, unsigned int ColumnSizeOther >
+		template< size_t RowSizeOther, size_t ColumnSizeOther >
 		MatrixBase< Type, RowSize, ColumnSizeOther > operator* ( const MatrixBase< Type, RowSizeOther, ColumnSizeOther >& other ) const requires( ColumnSize == RowSizeOther )
 		{
 			MatrixBase< Type, RowSize, ColumnSizeOther > result( Matrix::MATRIX_INITIALIZE_ZERO );
