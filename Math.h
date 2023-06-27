@@ -11,6 +11,7 @@ namespace Framework
 {
 	class Polar2;
 	class Polar3_Cylindrical;
+	class Polar3_Spherical;
 	template< Concepts::Arithmetic Coordinate, size_t Size > requires Concepts::Nonzero< Size >
 	class VectorBase;
 	using Vector2 = VectorBase< float, 2 >;
@@ -66,4 +67,6 @@ namespace Framework::Math
 	Vector2 ToVector2( const Polar2& polar2 );
 	Polar3_Cylindrical ToPolar3_Cylindrical( const Vector3& cartesian );
 	Vector3 ToVector3( const Polar3_Cylindrical& polar3 );
+	Polar3_Spherical ToPolar3_Spherical( const Vector3& cartesian );
+	Vector3 ToVector3( const Polar3_Spherical& polar3 );
 }
