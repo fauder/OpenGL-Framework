@@ -120,6 +120,9 @@
     <ClInclude Include="Math.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="Polar.hpp">
+      <Filter>Header</Filter>
+    </ClInclude>
     <ClInclude Include="Concepts.h">
       <Filter>Header</Filter>
     </ClInclude>

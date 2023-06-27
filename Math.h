@@ -7,6 +7,14 @@
 // std Includes.
 #include <cmath>
 
+namespace Framework
+{
+	class Polar2;
+	template< Concepts::Arithmetic Coordinate, size_t Size > requires Concepts::Nonzero< Size >
+	class VectorBase;
+	using Vector2 = VectorBase< float, 2 >;
+}
+
 namespace Framework::Math
 {
 /* Forward Declarations. */
@@ -51,4 +59,7 @@ namespace Framework::Math
 	template< std::floating_point Value >
 	Value SquareOf( Value val ) { return std::pow( val, 2 ); }
 
+/* Other. */
+	Polar2 ToPolar2( const Vector2& cartesian );
+	Vector2 ToVector2( const Polar2& polar );
 }
