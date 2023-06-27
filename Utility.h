@@ -19,4 +19,14 @@ namespace Framework::Utility
 		}
 		return digits;
 	}
+
+	template< auto Start, auto End, auto Increment, class Func >
+	constexpr void constexpr_for( Func&& f )
+	{
+		if constexpr( Start < End )
+		{
+			f( std::integral_constant< decltype( Start ), Start >() );
+			constexpr_for< Start + Increment, End, Increment >( f );
+		}
+	}
 }
