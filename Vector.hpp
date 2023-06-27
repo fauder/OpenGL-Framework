@@ -153,6 +153,13 @@ namespace Framework
 			return vector_transformed;
 		}
 
+		/* Vector-matrix multiplication. */
+		template< size_t ColumnSize >
+		VectorBase< Coordinate, ColumnSize >& operator*= ( const MatrixBase< Coordinate, Size, ColumnSize >& transform_matrix )
+		{
+			return *this = *this * transform_matrix;
+		}
+
 	protected:
 		Coordinate data[ Size ];
 	};
