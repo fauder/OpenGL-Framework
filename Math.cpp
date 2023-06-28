@@ -71,4 +71,30 @@ namespace Framework::Math
 
 		return Vector3( xy_plane_distance * std::cos( theta_inRadians ), xy_plane_distance * std::sin( theta_inRadians ), r * std::sin( latitude_inRadians ) );
 	}
+
+	Polar3_Spherical_Game ToPolar3_Spherical_Game( const Vector3& cartesian )
+	{
+		const auto x = cartesian.X(), y = cartesian.Y(), z = cartesian.Z();
+
+		if( cartesian.IsZero() )
+			return Polar3_Spherical_Game{};
+
+		const auto xz_projection_of_r = Math::Hypothenuse( x, z );
+
+		return Polar3_Spherical_Game( cartesian.Magnitude(), ToDegrees( std::atan2( x, z ) ), ToDegrees( std::atan2( -y, xz_projection_of_r ) ) );
+	}
+
+	Vector3 ToVector3( const Polar3_Spherical_Game& polar3 )
+	{
+		const auto r = polar3.R();
+
+		if( IsZero( r ) )
+			return Vector3{};
+
+		const auto heading_inRadians  = ToRadians( polar3.Heading() );
+		const auto pitch_inRadians    = ToRadians( polar3.Pitch() );
+		const auto xz_projection_of_r = r * std::cos( pitch_inRadians );
+
+		return Vector3( xz_projection_of_r * std::sin( heading_inRadians ), r * -std::sin( pitch_inRadians ), xz_projection_of_r * std::cos( heading_inRadians ) );
+	}
 }
