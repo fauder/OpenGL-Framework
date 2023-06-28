@@ -65,10 +65,10 @@ namespace Framework::Math
 		if( IsZero( r ) )
 			return Vector3{};
 
-		const auto theta_inRadians   = ToRadians( polar3.Theta() );
-		const auto heading_inRadians = ToRadians( 90.0f - polar3.Phi() );
-		const auto xy_plane_distance = r * std::cos( heading_inRadians );
+		const auto theta_inRadians    = ToRadians( polar3.Theta() );
+		const auto latitude_inRadians = ToRadians( 90.0f - polar3.Phi() ); // Latitude is also called the Angle of Inclination.
+		const auto xy_plane_distance  = r * std::cos( latitude_inRadians );
 
-		return Vector3( xy_plane_distance * std::cos( theta_inRadians ), xy_plane_distance * std::sin( theta_inRadians ), r * std::sin( heading_inRadians ) );
+		return Vector3( xy_plane_distance * std::cos( theta_inRadians ), xy_plane_distance * std::sin( theta_inRadians ), r * std::sin( latitude_inRadians ) );
 	}
 }
