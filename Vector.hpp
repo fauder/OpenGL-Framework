@@ -80,6 +80,7 @@ namespace Framework
 
 	/* Other Queries. */
 		static constexpr size_t Dimension() { return Size; }
+
 		bool IsZero() const
 		{
 			bool nonZero_component_encountered = false;
@@ -89,6 +90,14 @@ namespace Framework
 				Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { nonZero_component_encountered |= !Math::IsZero( data[ index ] ); } );
 
 			return !nonZero_component_encountered;
+		}
+
+		bool IsNormalized() const requires( std::is_integral_v< Coordinate > == false )
+		{
+			Coordinate sum_of_squares( 0 );
+			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { sum_of_squares += data[ index ] * data[ index]; } );
+
+			return Math::IsEqualTo( sum_of_squares, Coordinate( 1 ) );
 		}
 
 	/* Arithmetic Operations. */
