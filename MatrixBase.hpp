@@ -3,15 +3,10 @@
 // Project Includes.
 #include "Assert.h"
 #include "Concepts.h"
+#include "Initialization.h"
 
 // std Includes.
 #include <array>
-
-namespace Framework::Matrix
-{
-	struct MatrixInitializeZero {};
-	static constexpr MatrixInitializeZero MATRIX_INITIALIZE_ZERO;
-};
 
 namespace Framework
 {
@@ -31,7 +26,7 @@ namespace Framework
 					data[ i ][ i ] = Type( 1 );
 		}
 
-		MatrixBase( Matrix::MatrixInitializeZero )
+		MatrixBase( Initialization::InitializeZero )
 			:
 			data{ 0 }
 		{
@@ -171,7 +166,7 @@ namespace Framework
 		template< size_t RowSizeOther, size_t ColumnSizeOther >
 		MatrixBase< Type, RowSize, ColumnSizeOther > operator* ( const MatrixBase< Type, RowSizeOther, ColumnSizeOther >& other ) const requires( ColumnSize == RowSizeOther )
 		{
-			MatrixBase< Type, RowSize, ColumnSizeOther > result( Matrix::MATRIX_INITIALIZE_ZERO );
+			MatrixBase< Type, RowSize, ColumnSizeOther > result( INITIALIZE_ZERO );
 			for( auto i = 0; i < RowSize; i++ )
 				for( auto j = 0; j < ColumnSizeOther; j++ )
 					for( auto k = 0; k < ColumnSize; k++ )
