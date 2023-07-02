@@ -4,6 +4,7 @@
 #include "Assert.h"
 #include "Concepts.h"
 #include "Initialization.h"
+#include "Math.h"
 
 // std Includes.
 #include <array>
@@ -69,6 +70,26 @@ namespace Framework
 			for( auto i = 0; i < RowSize; i++ )
 				for( auto j = 0; j < ColumnSize; j++ )
 					data[ i ][ j ] = values[ i * ColumnSize + j ];
+		}
+
+	/* Comparison operators. */
+		bool operator== ( const MatrixBase& right_hand_side ) const
+		{
+			bool result = true;
+
+			for( auto i = 0; i < RowSize; i++ )
+				for( auto j = 0; j < ColumnSize; j++ )
+					if constexpr( std::is_integral_v< Type > )
+						result &= data[ i ][ j ] == right_hand_side.data[ i ][ j ];
+					else
+						result &= Math::IsEqualTo( data[ i ][ j ], right_hand_side.data[ i ][ j ] );
+			
+			return result;
+		}
+
+		bool operator!= ( const MatrixBase& right_hand_side ) const
+		{
+			return !operator==( right_hand_side );
 		}
 
 	/* Getters & Setters. */
