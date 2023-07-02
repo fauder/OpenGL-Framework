@@ -170,7 +170,7 @@ namespace Framework
 			for( auto i = 0; i < RowSize; i++ )
 				for( auto j = 0; j < ColumnSizeOther; j++ )
 					for( auto k = 0; k < ColumnSize; k++ )
-						result[ i ][ j ] += data[ i ][ k ] * other[ k ][ j ];
+						result.data[ i ][ j ] += data[ i ][ k ] * other.data[ k ][ j ];
 
 			return result;
 		}
