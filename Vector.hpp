@@ -122,8 +122,7 @@ namespace Framework
 		{
 			Coordinate result( 0 );
 
-			for( int i = 0; i < Size; i++ )
-				result += data[ i ] * other.data[ i ];
+			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result += data[ index ] * other.data[ index ]; } );
 
 			return result;
 		}
@@ -133,8 +132,7 @@ namespace Framework
 		{
 			Coordinate result( 0 );
 
-			for( int i = 0; i < Size; i++ )
-				result += data[ i ] * data[ i ];
+			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result += data[ index ] * data[ index ]; } );
 
 			return result;
 		}
