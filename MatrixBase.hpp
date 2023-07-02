@@ -26,7 +26,7 @@ namespace Framework
 					data[ i ][ i ] = Type( 1 );
 		}
 
-		MatrixBase( Initialization::InitializeZero )
+		MatrixBase( Initialization::ZeroInitialization )
 			:
 			data{ 0 }
 		{
@@ -166,7 +166,7 @@ namespace Framework
 		template< size_t RowSizeOther, size_t ColumnSizeOther >
 		MatrixBase< Type, RowSize, ColumnSizeOther > operator* ( const MatrixBase< Type, RowSizeOther, ColumnSizeOther >& other ) const requires( ColumnSize == RowSizeOther )
 		{
-			MatrixBase< Type, RowSize, ColumnSizeOther > result( INITIALIZE_ZERO );
+			MatrixBase< Type, RowSize, ColumnSizeOther > result( ZERO_INITIALIZATION );
 			for( auto i = 0; i < RowSize; i++ )
 				for( auto j = 0; j < ColumnSizeOther; j++ )
 					for( auto k = 0; k < ColumnSize; k++ )

@@ -4,10 +4,10 @@ namespace Framework
 {
 	namespace Initialization
 	{
-		struct InitializeZero {};
+		struct ZeroInitialization {};
 		struct NoInitialization {};
 	}
 
-	static constexpr Initialization::InitializeZero INITIALIZE_ZERO;
-	static constexpr Initialization::NoInitialization NO_INITIALIZATION;
+	static constexpr Initialization::ZeroInitialization ZERO_INITIALIZATION;
+	static constexpr Initialization::NoInitialization   NO_INITIALIZATION;
 }
