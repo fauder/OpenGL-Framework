@@ -10,55 +10,61 @@
 
 namespace Framework
 {
-	/* Row-major. */
+	/* Row-major. Post-multiplies a row vector to transform it. */
 	template< Concepts::Arithmetic Type, size_t RowSize, size_t ColumnSize >
 		requires Concepts::Nonzero< RowSize > && Concepts::Nonzero< ColumnSize >
 	class MatrixBase
 	{
 	public:
 	/* Constructors. */
-		MatrixBase()
+		constexpr MatrixBase( const MatrixBase& other )             = default;
+		constexpr MatrixBase( MatrixBase&& donor )                  = default;
+		constexpr MatrixBase& operator= ( const MatrixBase& other ) = default;
+		constexpr MatrixBase& operator= ( MatrixBase&& donor )      = default;
+
+		constexpr ~MatrixBase() = default;
+
+		/* Initializes to identity matrix. */
+		constexpr MatrixBase()
 			:
-			data{ 0 }
+			data{}
 		{
 			if constexpr( RowSize == ColumnSize ) // Do not initialize non-square matrices to identity.
 				for( auto i = 0; i < RowSize; i++ )
 					data[ i ][ i ] = Type( 1 );
 		}
 
-		MatrixBase( Initialization::ZeroInitialization )
+		constexpr explicit MatrixBase( Initialization::ZeroInitialization )
 			:
-			data{ 0 }
-		{
-		}
+			data{}
+		{}
 
 #pragma warning(disable:26495) // Suppress "variable is uninitialized" warning, as not initializing it is the whole point of this constructor.
 		explicit MatrixBase( Initialization::NoInitialization )
 		{}
 #pragma warning(default:26495)
 
-		MatrixBase( const Type( &values )[ RowSize ][ ColumnSize ] )
+		constexpr explicit MatrixBase( const Type( &values )[ RowSize ][ ColumnSize ] )
+		{
+			for( auto i = 0; i < RowSize; i++ )
+				for( auto j = 0; j < ColumnSize; j++ )
+					data[ i ][ j ] = values[ i ][ j ];
+		}
+		constexpr explicit MatrixBase( Type( &&values )[ RowSize ][ ColumnSize ] )
 		{
 			for( auto i = 0; i < RowSize; i++ )
 				for( auto j = 0; j < ColumnSize; j++ )
 					data[ i ][ j ] = values[ i ][ j ];
 		}
 
-		MatrixBase( Type( &&values )[ RowSize ][ ColumnSize ] )
-		{
-			for( auto i = 0; i < RowSize; i++ )
-				for( auto j = 0; j < ColumnSize; j++ )
-					data[ i ][ j ] = values[ i ][ j ];
-		}
-
-		MatrixBase( const Type( &values )[ RowSize * ColumnSize ] )
+		constexpr explicit MatrixBase( const Type( &values )[ RowSize * ColumnSize ] ) // 1D array version.
 		{
 			for( auto i = 0; i < RowSize; i++ )
 				for( auto j = 0; j < ColumnSize; j++ )
 					data[ i ][ j ] = values[ i * ColumnSize + j ];
 		}
 
-		MatrixBase( Type( && values )[ RowSize * ColumnSize ] )
+		constexpr explicit MatrixBase( Type( && values )[ RowSize * ColumnSize ] ) // 1D array version.
 		{
 			for( auto i = 0; i < RowSize; i++ )
 				for( auto j = 0; j < ColumnSize; j++ )
