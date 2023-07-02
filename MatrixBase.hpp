@@ -152,7 +152,7 @@ namespace Framework
 
 		/* Matrix-matrix multiplication. */
 		template< size_t RowSizeOther, size_t ColumnSizeOther >
-		MatrixBase< Type, RowSize, ColumnSizeOther > operator* ( const MatrixBase< Type, RowSizeOther, ColumnSizeOther >& other ) const requires( ColumnSize == RowSizeOther )
+		constexpr MatrixBase< Type, RowSize, ColumnSizeOther > operator* ( const MatrixBase< Type, RowSizeOther, ColumnSizeOther >& other ) const requires( ColumnSize == RowSizeOther )
 		{
 			MatrixBase< Type, RowSize, ColumnSizeOther > result( ZERO_INITIALIZATION );
 			for( auto i = 0; i < RowSize; i++ )
