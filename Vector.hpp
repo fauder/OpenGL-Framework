@@ -18,56 +18,54 @@ namespace Framework
 	{
 	public:
 	/* Constructors. */
-		VectorBase()
-			:
-			data{ 0 }
-		{
-		}
+		constexpr VectorBase()                          = default;
+		constexpr VectorBase( const VectorBase& other ) = default;
+		constexpr VectorBase( VectorBase && donor )     = default;
+		constexpr VectorBase& operator                  = ( const VectorBase & other ) = default;
+		constexpr VectorBase& operator                  = ( VectorBase && donor ) = default;
 
-		VectorBase( const Coordinate x )
+		constexpr ~VectorBase() = default;
+
+		constexpr explicit VectorBase( const Coordinate x )
 			:
 			data{ x }
 		{
 		}
 
-		VectorBase( const Coordinate x, const Coordinate y ) requires( Size >= 2 )
+		constexpr VectorBase( const Coordinate x, const Coordinate y ) requires( Size >= 2 )
 			:
 			data{ x, y }
 		{
 		}
 
-		VectorBase( const Coordinate x, const Coordinate y, const Coordinate z ) requires( Size >= 3 )
+		constexpr VectorBase( const Coordinate x, const Coordinate y, const Coordinate z ) requires( Size >= 3 )
 			:
 			data{ x, y, z }
 		{
 		}
 
-		VectorBase( const Coordinate x, const Coordinate y, const Coordinate z, const Coordinate w ) requires( Size >= 4 )
+		constexpr VectorBase( const Coordinate x, const Coordinate y, const Coordinate z, const Coordinate w ) requires( Size >= 4 )
 			:
 			data{ x, y, z, w }
 		{
 		}
 
 		template< typename... Values >
-		VectorBase( Values... values )
+		constexpr VectorBase( Values... values )
 			:
 			data{ values... }
-		{
-		}
-
-		~VectorBase()
 		{
 		}
 
 	/* Getters & Setters. */
 		const Coordinate* Data() const { return data; };
 		Coordinate& operator[] ( const unsigned int index ) { return data[ index ]; }
-		const Coordinate& operator[] ( const unsigned int index ) const { return data[ index ]; }
+		constexpr const Coordinate& operator[] ( const unsigned int index ) const { return data[ index ]; }
 		
-		Coordinate X() const requires( Size >= 1 ) { return data[ 0 ]; };
-		Coordinate Y() const requires( Size >= 2 ) { return data[ 1 ]; };
-		Coordinate Z() const requires( Size >= 3 ) { return data[ 2 ]; };
-		Coordinate W() const requires( Size >= 4 ) { return data[ 3 ]; };
+		constexpr Coordinate X() const requires( Size >= 1 ) { return data[ 0 ]; };
+		constexpr Coordinate Y() const requires( Size >= 2 ) { return data[ 1 ]; };
+		constexpr Coordinate Z() const requires( Size >= 3 ) { return data[ 2 ]; };
+		constexpr Coordinate W() const requires( Size >= 4 ) { return data[ 3 ]; };
 
 		VectorBase& SetX( const Coordinate value ) requires( Size >= 1 ) { data[ 0 ] = value; return *this; };
 		VectorBase& SetY( const Coordinate value ) requires( Size >= 2 ) { data[ 1 ] = value; return *this; };
@@ -86,7 +84,7 @@ namespace Framework
 	/* Other Queries. */
 		static constexpr size_t Dimension() { return Size; }
 
-		bool IsZero() const
+		constexpr bool IsZero() const
 		{
 			bool nonZero_component_encountered = false;
 			if constexpr( std::is_integral_v< Coordinate > )
@@ -97,7 +95,7 @@ namespace Framework
 			return !nonZero_component_encountered;
 		}
 
-		bool IsNormalized() const requires( std::is_integral_v< Coordinate > == false )
+		constexpr bool IsNormalized() const requires( std::is_integral_v< Coordinate > == false )
 		{
 			Coordinate sum_of_squares( 0 );
 			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { sum_of_squares += data[ index ] * data[ index]; } );
@@ -106,7 +104,7 @@ namespace Framework
 		}
 
 	/* Arithmetic Operations. */
-		VectorBase operator* ( const Coordinate scalar ) const
+		constexpr VectorBase operator* ( const Coordinate scalar ) const
 		{
 			VectorBase result( *this );
 			for( int i = 0; i < Size; i++ )
