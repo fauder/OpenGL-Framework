@@ -120,10 +120,12 @@ namespace Framework
 
 		Coordinate Dot( const VectorBase& other ) const // Practically we won't use this for any vectors other than 3D & 4D, but no need to restrict.
 		{
-			const Coordinate result( 0 );
+			Coordinate result( 0 );
 
 			for( int i = 0; i < Size; i++ )
 				result += data[ i ] * other.data[ i ];
+
+			return result;
 		}
 
 		/* With self. */
