@@ -31,10 +31,10 @@ namespace Framework::Math
 	Value NonHyptothenuseEdge( const Value edge, const Value hyptothenuse ) { return std::sqrt( hyptothenuse * hyptothenuse - edge * edge ); }
 
 	template< std::floating_point Value >
-	Value ToDegrees( const Value angle_inRadians ) { return angle_inRadians * Constants::RAD_TO_DEG; }
+	constexpr Value ToDegrees( const Value angle_inRadians ) { return angle_inRadians * Constants::RAD_TO_DEG; }
 
 	template< std::floating_point Value >
-	Value ToRadians( const Value angle_inDegrees ) { return angle_inDegrees * Constants::DEG_TO_RAD; }
+	constexpr Value ToRadians( const Value angle_inDegrees ) { return angle_inDegrees * Constants::DEG_TO_RAD; }
 
 	/* Wraps a given angle (in degrees) between (-180, +180] range (degrees). */
 	template< std::floating_point Value >
@@ -48,7 +48,7 @@ namespace Framework::Math
 	bool IsEqualTo( Value lhs, Value rhs ) { return std::abs( lhs - rhs ) < epsilon; }
 
 	template< std::floating_point Value, auto epsilon = std::numeric_limits< Value >::epsilon() >
-	bool IsGreaterThan( Value lhs, Value rhs ) { return lhs - rhs > epsilon; }
+	constexpr bool IsGreaterThan( Value lhs, Value rhs ) { return lhs - rhs > epsilon; }
 
 	template< std::floating_point Value, auto epsilon = std::numeric_limits< Value >::epsilon() >
 	bool IsGreaterThanOrEqual( Value lhs, Value rhs ) {
@@ -56,7 +56,7 @@ namespace Framework::Math
 			lhs - rhs > epsilon;
 	}
 	template< std::floating_point Value, auto epsilon = std::numeric_limits< Value >::epsilon() >
-	bool IsLessThan( Value lhs, Value rhs ) { return rhs - lhs > epsilon; }
+	constexpr bool IsLessThan( Value lhs, Value rhs ) { return rhs - lhs > epsilon; }
 
 	template< std::floating_point Value, auto epsilon = std::numeric_limits< Value >::epsilon() >
 	bool IsLessThanOrEqual( Value lhs, Value rhs ) {
