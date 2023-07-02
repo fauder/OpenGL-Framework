@@ -69,6 +69,11 @@ namespace Framework
 		Coordinate Z() const requires( Size >= 3 ) { return data[ 2 ]; };
 		Coordinate W() const requires( Size >= 4 ) { return data[ 3 ]; };
 
+		VectorBase& SetX( const Coordinate value ) requires( Size >= 1 ) { data[ 0 ] = value; return *this; };
+		VectorBase& SetY( const Coordinate value ) requires( Size >= 2 ) { data[ 1 ] = value; return *this; };
+		VectorBase& SetZ( const Coordinate value ) requires( Size >= 3 ) { data[ 2 ] = value; return *this; };
+		VectorBase& SetW( const Coordinate value ) requires( Size >= 4 ) { data[ 3 ] = value; return *this; };
+
 		template< typename... Values >
 		VectorBase& Set( Values... values )
 		{
