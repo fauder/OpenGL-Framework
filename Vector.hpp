@@ -67,10 +67,10 @@ namespace Framework
 		constexpr Coordinate Z() const requires( Size >= 3 ) { return data[ 2 ]; };
 		constexpr Coordinate W() const requires( Size >= 4 ) { return data[ 3 ]; };
 
-		VectorBase& SetX( const Coordinate value ) requires( Size >= 1 ) { data[ 0 ] = value; return *this; };
-		VectorBase& SetY( const Coordinate value ) requires( Size >= 2 ) { data[ 1 ] = value; return *this; };
-		VectorBase& SetZ( const Coordinate value ) requires( Size >= 3 ) { data[ 2 ] = value; return *this; };
-		VectorBase& SetW( const Coordinate value ) requires( Size >= 4 ) { data[ 3 ] = value; return *this; };
+		Coordinate& X() requires( Size >= 1 ) { return data[ 0 ]; };
+		Coordinate& Y() requires( Size >= 2 ) { return data[ 1 ]; };
+		Coordinate& Z() requires( Size >= 3 ) { return data[ 2 ]; };
+		Coordinate& W() requires( Size >= 4 ) { return data[ 3 ]; };
 
 		template< typename... Values >
 		VectorBase& Set( Values... values )
