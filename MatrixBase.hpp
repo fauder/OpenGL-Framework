@@ -32,6 +32,11 @@ namespace Framework
 		{
 		}
 
+#pragma warning(disable:26495) // Suppress "variable is uninitialized" warning, as not initializing it is the whole point of this constructor.
+		explicit MatrixBase( Initialization::NoInitialization )
+		{}
+#pragma warning(default:26495)
+
 		MatrixBase( const Type( &values )[ RowSize ][ ColumnSize ] )
 		{
 			for( auto i = 0; i < RowSize; i++ )
@@ -58,29 +63,6 @@ namespace Framework
 			for( auto i = 0; i < RowSize; i++ )
 				for( auto j = 0; j < ColumnSize; j++ )
 					data[ i ][ j ] = values[ i * ColumnSize + j ];
-		}
-
-		MatrixBase( std::initializer_list< Type > initializer_list )
-		{
-			int i = 0, j = 0;
-			for( auto& value : initializer_list )
-			{
-				data[ i ][ j ] = value;
-				j++;
-				if( j > ColumnSize - 1 )
-				{
-					i++;
-					j = 0;
-				}
-			}
-		}
-
-		MatrixBase( const MatrixBase& other ) = default;
-		MatrixBase( MatrixBase&& donor ) = default;
-		MatrixBase& operator= ( const MatrixBase& right_hand_side ) = default;
-
-		~MatrixBase()
-		{
 		}
 
 	/* Getters & Setters. */
