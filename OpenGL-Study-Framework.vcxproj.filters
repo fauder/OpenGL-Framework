@@ -96,7 +96,7 @@
     <ClInclude Include="Utility.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="MatrixBase.hpp">
+    <ClInclude Include="Matrix.hpp">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Log.h">
