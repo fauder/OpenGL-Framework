@@ -168,6 +168,7 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Angle.h" />
     <ClInclude Include="Assert.h" />
     <ClInclude Include="Color.hpp" />
     <ClInclude Include="Concepts.h" />

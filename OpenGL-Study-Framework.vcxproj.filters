@@ -129,6 +129,9 @@
     <ClInclude Include="Initialization.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="Angle.h">
+      <Filter>Header</Filter>
+    </ClInclude>
     <ClInclude Include="Unit.h">
       <Filter>Header</Filter>
     </ClInclude>
