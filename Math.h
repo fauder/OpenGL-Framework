@@ -28,19 +28,6 @@ namespace Framework::Math
 	template< std::floating_point Value >
 	Value NonHyptothenuseEdge( const Value edge, const Value hyptothenuse ) { return std::sqrt( hyptothenuse * hyptothenuse - edge * edge ); }
 
-	template< std::floating_point Value >
-	constexpr Value ToDegrees( const Value angle_inRadians ) { return angle_inRadians * Constants::RAD_TO_DEG; }
-
-	template< std::floating_point Value >
-	constexpr Value ToRadians( const Value angle_inDegrees ) { return angle_inDegrees * Constants::DEG_TO_RAD; }
-
-	/* Wraps a given angle (in degrees) between (-180, +180] range (degrees). */
-	template< std::floating_point Value >
-	Value Wrap180( const Value angle_inDegrees )
-	{ 
-		return angle_inDegrees - Value( 360 ) * std::floor( ( angle_inDegrees + Value( 180 ) ) / Value( 360 ) );
-	}
-
 /* Floating point comparisons. */
 	template< std::floating_point Value, auto epsilon = std::numeric_limits< Value >::epsilon() >
 	bool IsEqual( Value lhs, Value rhs ) { return std::abs( lhs - rhs ) < epsilon; }

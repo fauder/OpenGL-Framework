@@ -2,8 +2,9 @@
 
 // Project Includes.
 #include "Concepts.h"
-#include "Utility.h"
 #include "Initialization.h"
+#include "Math.h"
+#include "Utility.h"
 
 namespace Framework
 {
@@ -174,7 +175,7 @@ namespace Framework
 	/* Other Operators. */
 		constexpr explicit operator Type() const { return value; }
 
-	private:
+	protected:
 		Type value;
 	};
 }

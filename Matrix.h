@@ -1,6 +1,7 @@
 #pragma once
 
 // Project Includes.
+#include "Angle.hpp"
 #include "Matrix.hpp"
 #include "Vector.hpp"
 
@@ -10,7 +11,7 @@ namespace Framework::Matrix
 
 	/* In row-major form. */
 	constexpr Matrix4x4 OrthographicProjection( const float left_plane_offset, const float right_plane_offset, const float bottom_plane_offset, const float top_plane_offset, 
-									  const float near_plane_offset, const float far_plane_offset )
+												const float near_plane_offset, const float far_plane_offset )
 	{
 		const float f_plus_n = far_plane_offset + near_plane_offset;
 		const float f_minus_n = far_plane_offset - near_plane_offset;
@@ -27,7 +28,7 @@ namespace Framework::Matrix
 	}
 
 	/* In row-major form. */ Matrix4x4 PerspectiveProjection( const float near_plane_offset, const float far_plane_offset,
-															  const float aspect_ratio,      const float field_of_view_inDegrees );
+															  const float aspect_ratio,      const Degrees field_of_view );
 
 	/* In row-major form. */ constexpr Matrix4x4 Scaling( const float newScale )
 	{
@@ -94,11 +95,11 @@ namespace Framework::Matrix
 		);
 	}
 
-	/* In row-major form. */ Matrix4x4 GeneralRotation( const Vector3& angles_xyz_inDegrees );
-	/* In row-major form. */ Matrix4x4 RotationAroundX( const float angle_inDegrees );
-	/* In row-major form. */ Matrix4x4 RotationAroundY( const float angle_inDegrees );
-	/* In row-major form. */ Matrix4x4 RotationAroundZ( const float angle_inDegrees );
-	/* In row-major form. */ Matrix4x4 RotationAroundAxis( const float angle_inDegrees, Vector3 vector );
+	/* In row-major form. */ Matrix4x4 GeneralRotation( Degrees around_x, Degrees around_y, Degrees around_z );
+	/* In row-major form. */ Matrix4x4 RotationAroundX( Degrees angle );
+	/* In row-major form. */ Matrix4x4 RotationAroundY( Degrees angle );
+	/* In row-major form. */ Matrix4x4 RotationAroundZ( Degrees angle );
+	/* In row-major form. */ Matrix4x4 RotationAroundAxis( Degrees angle, Vector3 vector );
 
 	/* In row-major form. */ constexpr Matrix4x4 TranslationOnX( const float delta )
 	{

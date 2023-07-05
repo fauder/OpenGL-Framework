@@ -1,6 +1,7 @@
 #pragma once
 
 // Project Includes.
+#include "Angle.hpp"
 #include "Matrix.hpp"
 #include "Vector.hpp"
 
@@ -12,12 +13,12 @@ namespace Framework
 		Transform();
 		Transform( const Vector3& scale );
 		Transform( const Vector3& scale, const Vector3& translation );
-		Transform( const Vector3& scale, const Vector3& rotation_euler, const Vector3& translation );
+		Transform( const Vector3& scale, const Vector3& rotation_euler_inDegrees, const Vector3& translation );
 		~Transform();
 
 		Transform& SetScaling( const Vector3& scale );
-		Transform& SetRotation( const Vector3& rotation_euler );
-		Transform& SetRotation( const float angle_inDegrees, const Vector3& axis );
+		Transform& SetRotation( const Vector3& rotation_euler_inDegrees );
+		Transform& SetRotation( Degrees angle, const Vector3& axis );
 		Transform& SetTranslation( const Vector3& translation );
 
 		const Vector3& GetScaling() const;
@@ -26,7 +27,7 @@ namespace Framework
 		const Vector3& GetRotationEuler() const;
 		/* Usage: First query whether using this representation or not.
 			Angle is in degrees. */
-		float GetRotationAngleAroundAxis() const;
+		Degrees GetRotationAngleAroundAxis() const;
 		/* Usage: First query whether using this representation or not. */
 		const Vector3& GetRotationAxis() const;
 		const Vector3& GetTranslation() const;
@@ -39,11 +40,11 @@ namespace Framework
 	private:
 		Vector3 scale;
 		// TODO: Switch to quaternions instead of euler angle triplets so we can represent both euler-angles & angle-axis representations uniformly and also query for both from the quaternion.
-		Vector3 rotation_euler;
+		Vector3 rotation_euler_inDegrees;
 		Vector3 translation;
 
 		Vector3 rotation_axis;
-		float rotation_angle_inDegrees;
+		Degrees rotation_angle;
 
 		bool rotation_usingRepresentation_eulerAngles;
 

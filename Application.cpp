@@ -105,7 +105,7 @@ int main()
 		/* Putting the "camera" on z +3 means moving the world to z -3.*/
 		const auto view = Matrix::Translation( 0.0f, 0.0f, -3.0f );
 
-		const auto projection = Matrix::PerspectiveProjection( 0.1f, 100.0f, aspect_ratio, 45.0f );
+		const auto projection = Matrix::PerspectiveProjection( 0.1f, 100.0f, aspect_ratio, Degrees( 45.0f ) );
 
 		shader.SetMatrix( "transformation_view",		view );
 		shader.SetMatrix( "transformation_projection",	projection );
@@ -119,7 +119,7 @@ int main()
 			shader.Bind();
 
 			const float time = static_cast< float >( glfwGetTime() );
-			cube_transform.SetRotation( time * 50.0f, Vector3( 0.5f, 1.0f, 0.0f ) );
+			cube_transform.SetRotation( Degrees( time * 50.0f ), Vector3( 0.5f, 1.0f, 0.0f ) );
 			shader.SetMatrix( "transformation_world", cube_transform.GetFinalMatrix() );
 
 			renderer.Update( window );

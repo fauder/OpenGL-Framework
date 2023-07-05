@@ -7,7 +7,6 @@
 #include "Utility.h"
 
 // std Includes.
-#include <array>
 #include <cmath>
 #include <utility>
 

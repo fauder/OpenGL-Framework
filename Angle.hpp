@@ -32,6 +32,20 @@ namespace Framework
 
 			/* Construct from Radians. */
 			constexpr Degrees( const Unit< FloatType, Radians >& radians ) : Base( FloatType( radians * Constants::RAD_TO_DEG ) ) {}
+			
+		/* Trigonometric Functions. */
+			/* Wraps a given angle between (-180, +180] range. */
+			Degrees Wrapped180( Degrees angle ) const
+			{
+				return Degrees( angle - FloatType( 360 ) * std::floor( ( angle + FloatType( 180 ) ) / FloatType( 360 ) ) );
+			}
+
+			/* Wraps a given angle between (-180, +180] range. Returns self for daisy-chaining. */
+			Degrees& Wrap180( Degrees angle )
+			{
+				Base::value = angle - FloatType( 360 ) * std::floor( ( angle + FloatType( 180 ) ) / FloatType( 360 ) );
+				return *this;
+			}
 		};
 
 		template< std::floating_point FloatType >
@@ -54,6 +68,20 @@ namespace Framework
 
 			/* Construct from Degrees. */
 			constexpr Radians( const Unit< FloatType, Degrees >& degrees ) : Base( FloatType( degrees * Constants::DEG_TO_RAD ) ) {}
+		
+		/* Trigonometric Functions. */
+			/* Wraps a given angle between (-PI, +PI] range. */
+			Radians Wrapped180( Radians angle ) const
+			{
+				return Radians( angle - FloatType( Constants::TWO_PI ) * std::floor( ( angle + FloatType( Constants::PI ) ) / FloatType( Constants::TWO_PI ) ) );
+			}
+
+			/* Wraps a given angle between (-PI, +PI] range. Returns self for daisy-chaining. */
+			Radians& Wrap180( Radians angle )
+			{
+				Base::value = angle - FloatType( Constants::TWO_PI ) * std::floor( ( angle + FloatType( Constants::PI ) ) / FloatType( Constants::TWO_PI ) );
+				return *this;
+			}
 		};
 
 		namespace Literals
