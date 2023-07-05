@@ -21,8 +21,6 @@ namespace Framework
 
 namespace Framework::Math
 {
-/* Forward Declarations. */
-
 /* Trigonometry. */
 	template< std::floating_point Value >
 	Value Hypothenuse( const Value x, const Value y ) { return std::sqrt( x * x + y * y ); }
@@ -55,6 +53,7 @@ namespace Framework::Math
 		return std::abs( lhs - rhs ) < epsilon ||
 			lhs - rhs > epsilon;
 	}
+
 	template< std::floating_point Value, auto epsilon = std::numeric_limits< Value >::epsilon() >
 	constexpr bool IsLessThan( Value lhs, Value rhs ) { return rhs - lhs > epsilon; }
 
@@ -63,12 +62,13 @@ namespace Framework::Math
 		return std::abs( rhs - lhs ) < epsilon ||
 			rhs - lhs > epsilon;
 	}
-	template< std::floating_point Value, auto epsilon = std::numeric_limits< Value >::epsilon() >
-	bool IsZero( Value val ) { return std::abs( val ) < epsilon; }
+
+	template< std::floating_point Value >
+	bool IsZero( Value value, const float epsilon = std::numeric_limits< Value >::epsilon() ) { return std::abs( value ) < epsilon; }
 
 /* Arithmetic. */
 	template< std::floating_point Value >
-	Value SquareOf( Value val ) { return std::pow( val, 2 ); }
+	Value SquareOf( Value value ) { return std::pow( value, 2 ); }
 
 /* Other. */
 	Polar2 ToPolar2( const Vector2& cartesian );
