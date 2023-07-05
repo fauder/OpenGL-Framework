@@ -6,6 +6,7 @@
 namespace Framework::Constants
 {
 	constexpr float PI         = std::numbers::pi_v< float >;
+	constexpr float TWO_PI     = PI * 2.0f;
 	constexpr float DEG_TO_RAD = PI / 180.0f;
 	constexpr float RAD_TO_DEG = 180.0f / PI;
 }
