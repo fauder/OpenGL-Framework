@@ -46,7 +46,7 @@ namespace Framework
 		GLCALL( glUniform1i( GetUniformLocation( name ), ( int )value ) );
 	}
 
-	void Shader::SetColor( const char* name, const Color& value )
+	void Shader::SetColor( const char* name, const Color4& value )
 	{
 		GLCALL( glUniform4fv( GetUniformLocation( name ), 1, value.Data() ) );
 	}

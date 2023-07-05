@@ -92,8 +92,6 @@ int main()
 		renderer.AddDrawable( cube );
 		renderer.SetPolygonMode( PolygonMode::FILL );
 
-		Color color;
-
 		Texture texture_container( "Asset/Texture/container.jpg", GL_RGB );
 		Texture texture_awesome_face( "Asset/Texture/awesomeface.png", GL_RGBA );
 

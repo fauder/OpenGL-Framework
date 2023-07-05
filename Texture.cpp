@@ -7,7 +7,7 @@
 namespace Framework
 {
 	/* Static member variable initializations. */
-	const Framework::Color Texture::DEFAULT_BORDER_COLOR{ 1.0f, 1.0f, 0.0f, 1.0f };
+	const Framework::Color4 Texture::DEFAULT_BORDER_COLOR{ 1.0f, 1.0f, 0.0f, 1.0f };
 
 	Texture::Texture( const char* file_path, GLenum color_format )
 		:

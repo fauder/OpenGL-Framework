@@ -21,7 +21,7 @@ namespace Framework
 		inline int ChannelsInFile() const { return channels_in_file; }
 
 	public:
-		static const Color DEFAULT_BORDER_COLOR;
+		static const Color4 DEFAULT_BORDER_COLOR;
 
 	private:
 		unsigned int id;

@@ -60,7 +60,7 @@ namespace Framework
 				GLCALL( glUniform4fv( GetUniformLocation( name ), Size, value.Data() ) );
 			}
 		}
-		void SetColor( const char* name, const Color& value );
+		void SetColor( const char* name, const Color4& value );
 
 	private:
 		int GetUniformLocation( const char* name );
