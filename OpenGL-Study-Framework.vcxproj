@@ -181,6 +181,7 @@
     <ClInclude Include="Matrix.hpp" />
     <ClInclude Include="Polar.hpp" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="Unit.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Input.h" />
