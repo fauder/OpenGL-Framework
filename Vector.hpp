@@ -194,31 +194,6 @@ namespace Framework
 			return *this;
 		}
 
-	/* Arithmetic Operations: Binary operators (with a scalar), of the the form scalar-operator-vector. */
-		friend VectorBase operator + ( const Coordinate scalar, const VectorBase& vector )
-		{
-			VectorBase result( UNIFORM_INITIALIZATION, scalar );
-			return result + vector;
-		}
-
-		friend VectorBase operator - ( const Coordinate scalar, const VectorBase& vector )
-		{
-			VectorBase result( UNIFORM_INITIALIZATION, scalar );
-			return result - vector;
-		}
-
-		friend VectorBase operator * ( const Coordinate scalar, const VectorBase& vector )
-		{
-			VectorBase result( UNIFORM_INITIALIZATION, scalar );
-			return result * vector;
-		}
-
-		friend VectorBase operator / ( const Coordinate scalar, const VectorBase& vector )
-		{
-			VectorBase result( UNIFORM_INITIALIZATION, scalar );
-			return result / vector;
-		}
-
 	/* Arithmetic Operations: Binary operators (with a scalar), of the the form vector-operator-scalar. */
 		constexpr VectorBase operator+ ( const Coordinate scalar ) const
 		{
@@ -290,6 +265,31 @@ namespace Framework
 			}
 
 			return *this;
+		}
+
+	/* Arithmetic Operations: Binary operators (with a scalar), of the the form scalar-operator-vector. */
+		friend VectorBase operator + ( const Coordinate scalar, const VectorBase& vector )
+		{
+			VectorBase result( UNIFORM_INITIALIZATION, scalar );
+			return result + vector;
+		}
+
+		friend VectorBase operator - ( const Coordinate scalar, const VectorBase& vector )
+		{
+			VectorBase result( UNIFORM_INITIALIZATION, scalar );
+			return result - vector;
+		}
+
+		friend VectorBase operator * ( const Coordinate scalar, const VectorBase& vector )
+		{
+			VectorBase result( UNIFORM_INITIALIZATION, scalar );
+			return result * vector;
+		}
+
+		friend VectorBase operator / ( const Coordinate scalar, const VectorBase& vector )
+		{
+			VectorBase result( UNIFORM_INITIALIZATION, scalar );
+			return result / vector;
 		}
 
 	/* Other Arithmetic Operations. */
