@@ -14,7 +14,7 @@
 namespace Framework
 {
 	template< Concepts::Arithmetic Coordinate, size_t Size >
-		requires Concepts::Nonzero< Size >
+		requires Concepts::NonZero< Size >
 	class VectorBase
 	{
 	public:

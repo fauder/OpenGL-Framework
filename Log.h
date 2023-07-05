@@ -12,7 +12,7 @@
 
 namespace Framework::Log
 {
-	template< Concepts::Arithmetic Coordinate, unsigned int Size > requires( Concepts::Nonzero< Size > )
+	template< Concepts::Arithmetic Coordinate, unsigned int Size > requires( Concepts::NonZero< Size > )
 	void Dump( const VectorBase< Coordinate, Size >& vector )
 	{
 		std::cout << '<' << vector[ 0 ];
@@ -23,7 +23,7 @@ namespace Framework::Log
 		std::cout << '>';
 	}
 
-	template< Concepts::Arithmetic Coordinate, unsigned int Size > requires( Concepts::Nonzero< Size > )
+	template< Concepts::Arithmetic Coordinate, unsigned int Size > requires( Concepts::NonZero< Size > )
 	void Dump( const char* debug_name, const VectorBase< Coordinate, Size >& vector )
 	{
 		std::cout << debug_name << ": ";
@@ -31,7 +31,7 @@ namespace Framework::Log
 	}
 
 	template< Concepts::Arithmetic Coordinate, unsigned int RowSize, unsigned int ColumnSize >
-		requires( Concepts::Nonzero< RowSize > && Concepts::Nonzero< ColumnSize > )
+		requires( Concepts::NonZero< RowSize > && Concepts::NonZero< ColumnSize > )
 	void Dump( const MatrixBase< Coordinate, RowSize, ColumnSize >& matrix )
 	{
 		int width = 0;
@@ -50,7 +50,7 @@ namespace Framework::Log
 	}
 
 	template< Concepts::Arithmetic Coordinate, unsigned int RowSize, unsigned int ColumnSize >
-		requires( Concepts::Nonzero< RowSize >&& Concepts::Nonzero< ColumnSize > )
+		requires( Concepts::NonZero< RowSize >&& Concepts::NonZero< ColumnSize > )
 	void Dump( const char* debug_name, const MatrixBase< Coordinate, RowSize, ColumnSize >& matrix )
 	{
 		std::cout << debug_name << ":\n";

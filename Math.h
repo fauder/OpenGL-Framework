@@ -13,7 +13,7 @@ namespace Framework
 	class Polar3_Cylindrical;
 	class Polar3_Spherical;
 	class Polar3_Spherical_Game;
-	template< Concepts::Arithmetic Coordinate, size_t Size > requires Concepts::Nonzero< Size >
+	template< Concepts::Arithmetic Coordinate, size_t Size > requires Concepts::NonZero< Size >
 	class VectorBase;
 	using Vector2 = VectorBase< float, 2 >;
 	using Vector3 = VectorBase< float, 3 >;

@@ -13,7 +13,7 @@ namespace Framework
 {
 	/* Row-major. Post-multiplies a row vector to transform it. */
 	template< Concepts::Arithmetic Type, size_t RowSize, size_t ColumnSize >
-		requires Concepts::Nonzero< RowSize > && Concepts::Nonzero< ColumnSize >
+		requires Concepts::NonZero< RowSize > && Concepts::NonZero< ColumnSize >
 	class MatrixBase
 	{
 	public:
