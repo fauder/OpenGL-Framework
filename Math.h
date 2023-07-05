@@ -45,7 +45,7 @@ namespace Framework::Math
 
 /* Floating point comparisons. */
 	template< std::floating_point Value, auto epsilon = std::numeric_limits< Value >::epsilon() >
-	bool IsEqualTo( Value lhs, Value rhs ) { return std::abs( lhs - rhs ) < epsilon; }
+	bool IsEqual( Value lhs, Value rhs ) { return std::abs( lhs - rhs ) < epsilon; }
 
 	template< std::floating_point Value, auto epsilon = std::numeric_limits< Value >::epsilon() >
 	constexpr bool IsGreaterThan( Value lhs, Value rhs ) { return lhs - rhs > epsilon; }

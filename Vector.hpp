@@ -65,9 +65,9 @@ namespace Framework
 
 			for( auto i = 0; i < Size; i++ )
 				if constexpr( std::is_integral_v< Coordinate > )
-					Utility::constexpr_for< 0, Size, 1 >( [&]( const auto index ) { result &= data[ index ] == right_hand_side.data[ index ]; } );
+					Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result &= data[ index ] == right_hand_side.data[ index ]; } );
 				else
-					Utility::constexpr_for< 0, Size, 1 >( [&]( const auto index ) { result &= Math::IsEqualTo( data[ index ], right_hand_side.data[ index ] ); } );
+					Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result &= Math::IsEqual( data[ index ], right_hand_side.data[ index ] ); } );
 
 			return result;
 		}
@@ -120,7 +120,7 @@ namespace Framework
 			Coordinate sum_of_squares( 0 );
 			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { sum_of_squares += data[ index ] * data[ index]; } );
 
-			return Math::IsEqualTo( sum_of_squares, Coordinate( 1 ) );
+			return Math::IsEqual( sum_of_squares, Coordinate( 1 ) );
 		}
 
 	/* Arithmetic Operations. */

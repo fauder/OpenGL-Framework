@@ -82,7 +82,7 @@ namespace Framework
 					if constexpr( std::is_integral_v< Type > )
 						result &= data[ i ][ j ] == right_hand_side.data[ i ][ j ];
 					else
-						result &= Math::IsEqualTo( data[ i ][ j ], right_hand_side.data[ i ][ j ] );
+						result &= Math::IsEqual( data[ i ][ j ], right_hand_side.data[ i ][ j ] );
 			
 			return result;
 		}
