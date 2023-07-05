@@ -29,6 +29,18 @@
     <DisplayString IncludeView="simple">{{ {data[0],g}, {data[1],g}, {data[2],g}, {data[3],g} }}</DisplayString>
     <DisplayString ExcludeView="simple">{{ [r]: {data[0],g} [g]: {data[1],g} [b]: {data[2],g} [a]: {data[3],g} }}</DisplayString>
   </Type>
+
+  <!-- Degrees -->
+  <Type Name="Framework::Math::Degrees&lt;*&gt;">
+    <DisplayString IncludeView="simple">{{ {value,g} }}</DisplayString>
+    <DisplayString ExcludeView="simple">{{ {value,g} }}</DisplayString>
+  </Type>
+
+  <!-- Radians -->
+  <Type Name="Framework::Math::Radians&lt;*&gt;">
+    <DisplayString IncludeView="simple">{{ {value,g} }}</DisplayString>
+    <DisplayString ExcludeView="simple">{{ {value,g} }}</DisplayString>
+  </Type>
   
   <!-- Matrix -->
   <Type Name="Framework::MatrixBase&lt;*&gt;">
