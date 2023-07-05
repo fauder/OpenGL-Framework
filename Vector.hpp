@@ -26,6 +26,11 @@ namespace Framework
 
 		constexpr ~VectorBase() = default;
 
+		constexpr explicit VectorBase( Initialization::UniformInitialization, const Coordinate value )
+		{
+			std::fill_n( data, Size, value );
+		}
+
 		constexpr explicit VectorBase( const Coordinate x )
 			:
 			data{ x }
