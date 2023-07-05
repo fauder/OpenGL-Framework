@@ -19,11 +19,12 @@ namespace Framework
 	{
 	public:
 	/* Constructors. */
-		constexpr VectorBase()                          = default;
-		constexpr VectorBase( const VectorBase& other ) = default;
-		constexpr VectorBase( VectorBase && donor )     = default;
-		constexpr VectorBase& operator                  = ( const VectorBase & other ) = default;
-		constexpr VectorBase& operator                  = ( VectorBase && donor ) = default;
+		constexpr VectorBase() : data{} {}
+
+		constexpr VectorBase( const VectorBase& other )					= default;
+		constexpr VectorBase( VectorBase && donor )						= default;
+		constexpr VectorBase& operator = ( const VectorBase & other )	= default;
+		constexpr VectorBase& operator = ( VectorBase && donor )		= default;
 
 		constexpr ~VectorBase() = default;
 
