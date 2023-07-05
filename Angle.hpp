@@ -18,6 +18,7 @@ namespace Framework
 			using Base = Unit< FloatType, Degrees >;
 
 		public:
+		/* Constructors. */
 			constexpr Degrees() : Base() {}
 			constexpr Degrees( const Degrees& other ) : Base( other ) {}
 			
@@ -39,6 +40,7 @@ namespace Framework
 			using Base = Unit< FloatType, Radians >;
 
 		public:
+		/* Constructors. */
 			constexpr Radians() : Base() {}
 			constexpr Radians( const Radians& other ) : Base( other ) {}
 
