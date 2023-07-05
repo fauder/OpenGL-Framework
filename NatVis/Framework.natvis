@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <!-- Vector2 -->
+  <Type Name="Framework::VectorBase&lt;*,2&gt;">
+      <DisplayString IncludeView="simple">{{ {data[0],g}, {data[1],g} }}</DisplayString>
+      <DisplayString ExcludeView="simple">{{ [x]: {data[0],g} [y]: {data[1],g} }}</DisplayString>
+  </Type>
+  
+  <!-- Vector3 -->
+  <Type Name="Framework::VectorBase&lt;*,3&gt;">
+      <DisplayString IncludeView="simple">{{ {data[0],g}, {data[1],g}, {data[2],g} }}</DisplayString>
+      <DisplayString ExcludeView="simple">{{ [x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g} }}</DisplayString>
+  </Type>
+  
+  <!-- Vector4 -->
+  <Type Name="Framework::VectorBase&lt;*,4&gt;">
+      <DisplayString IncludeView="simple">{{ {data[0],g}, {data[1],g}, {data[2],g}, {data[3],g} }}</DisplayString>
+      <DisplayString ExcludeView="simple">{{ [x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g} [w]: {data[3],g} }}</DisplayString>
+  </Type>
+    
+  <!-- Color3 -->
+  <Type Name="Framework::Color3;">
+    <DisplayString IncludeView="simple">{{ {data[0],g}, {data[1],g}, {data[2],g} }}</DisplayString>
+    <DisplayString ExcludeView="simple">{{ [r]: {data[0],g} [g]: {data[1],g} [b]: {data[2],g} }}</DisplayString>
+  </Type>
+  
+  <!-- Color4 -->
+  <Type Name="Framework::Color4;">
+    <DisplayString IncludeView="simple">{{ {data[0],g}, {data[1],g}, {data[2],g}, {data[3],g} }}</DisplayString>
+    <DisplayString ExcludeView="simple">{{ [r]: {data[0],g} [g]: {data[1],g} [b]: {data[2],g} [a]: {data[3],g} }}</DisplayString>
+  </Type>
+  
+  <!-- Matrix -->
+  <Type Name="Framework::MatrixBase&lt;*&gt;">
+    <DisplayString>{($T1 *)data,[$T2*$T3]nag}</DisplayString>
+    <Expand>
+      <ArrayItems>
+        <Direction>Forward</Direction>
+        <Rank>2</Rank>
+        <Size>$i == 0 ? $T2 : $T3</Size>
+        <ValuePointer>($T1 *)data</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+</AutoVisualizer>

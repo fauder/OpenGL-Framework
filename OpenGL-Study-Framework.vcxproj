@@ -203,6 +203,9 @@
     <Image Include="Asset\Texture\awesomeface.png" />
     <Image Include="Asset\Texture\container.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="NatVis\Framework.natvis" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -149,6 +149,9 @@
     <Filter Include="Vendor">
       <UniqueIdentifier>{dd826d64-cb3f-4e67-bb28-1989a4b0aa41}</UniqueIdentifier>
     </Filter>
+    <Filter Include="_NatVis">
+      <UniqueIdentifier>{85873892-b746-46ac-b611-01ae68eb7958}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Asset\Shader\Fragment.shader">
@@ -165,5 +168,10 @@
     <Image Include="Asset\Texture\awesomeface.png">
       <Filter>Asset\Texture</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="NatVis\Framework.natvis">
+      <Filter>_NatVis</Filter>
+    </Natvis>
   </ItemGroup>
 </Project>
