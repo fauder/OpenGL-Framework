@@ -9,6 +9,7 @@
 // std Includes.
 #include <array>
 #include <cmath>
+#include <utility>
 
 namespace Framework
 {
@@ -132,16 +133,17 @@ namespace Framework
 		constexpr VectorBase operator* ( const Coordinate scalar ) const
 		{
 			VectorBase result( *this );
-			for( int i = 0; i < Size; i++ )
-				result.data[ i ] *= scalar;
+			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result.data[ index ] *= scalar; } );
 
 			return result;
 		}
 
 		VectorBase& operator*= ( const Coordinate scalar )
 		{
-			for( int i = 0; i < Size; i++ )
-				data[ i ] *= scalar;
+			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] *= scalar; } );
+
+			return *this;
+		}
 
 			return *this;
 		}
