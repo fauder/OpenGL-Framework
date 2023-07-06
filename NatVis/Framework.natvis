@@ -42,6 +42,12 @@
     <DisplayString ExcludeView="simple">{{ {value,g} }}</DisplayString>
   </Type>
   
+  <!-- Quaternion --><!--
+  <Type Name="Framework::Quaternion&lt;*&gt;">
+      <DisplayString IncludeView="simple">{{ {_vector.data[0],g}, {_vector.data[1],g}, {_vector.data[2],g}, {_scalar,g} }}</DisplayString>
+      <DisplayString ExcludeView="simple">{{ [x]: {_vector.data[0],g} [y]: {_vector.data[1],g} [z]: {_vector.data[2],g} [w]: {_scalar,g} }}</DisplayString>
+  </Type>-->
+  
   <!-- Matrix -->
   <Type Name="Framework::MatrixBase&lt;*&gt;">
     <DisplayString>{($T1 *)data,[$T2*$T3]nag}</DisplayString>
