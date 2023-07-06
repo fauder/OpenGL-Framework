@@ -182,6 +182,7 @@
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Matrix.hpp" />
     <ClInclude Include="Polar.hpp" />
+    <ClInclude Include="Quaternion.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="Utility.h" />

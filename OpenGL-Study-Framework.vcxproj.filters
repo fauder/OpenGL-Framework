@@ -135,6 +135,9 @@
     <ClInclude Include="Unit.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="Quaternion.h">
+      <Filter>Header</Filter>
+    </ClInclude>
     <ClInclude Include="ConditionalCompilation.h">
       <Filter>Header</Filter>
     </ClInclude>
