@@ -26,6 +26,13 @@ namespace Framework
 			xyz()
 		{}
 
+		constexpr QuaternionBase( const QuaternionBase& other )					= default;
+		constexpr QuaternionBase( QuaternionBase && donor )						= default;
+		constexpr QuaternionBase& operator = ( const QuaternionBase & other )	= default;
+		constexpr QuaternionBase& operator = ( QuaternionBase && donor )		= default;
+
+		constexpr ~QuaternionBase() = default;
+
 		CONSTEXPR_ON_RELEASE QuaternionBase( const ComponentType w, const ComponentType x, const ComponentType y, const ComponentType z )
 			:
 			w( w ),
