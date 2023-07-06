@@ -19,6 +19,7 @@ namespace Framework
 		using VectorType  = VectorBase< ComponentType, 3 >;
 		using RadiansType = Math::Radians< ComponentType >;
 	public:
+	/* Constructors. */
 		/* Identity quaternion w=1 & n=<0,0,0>. */
 		constexpr QuaternionBase()
 			:
