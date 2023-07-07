@@ -60,7 +60,7 @@ namespace Framework
 			return DerivedType{ value + right_hand_side.value };
 		}
 
-		DerivedType& operator+= ( const DerivedType right_hand_side )
+		constexpr DerivedType& operator+= ( const DerivedType right_hand_side )
 		{
 			value += right_hand_side.value;
 
@@ -72,7 +72,7 @@ namespace Framework
 			return DerivedType{ value - right_hand_side.value };
 		}
 
-		DerivedType& operator-= ( const DerivedType right_hand_side )
+		constexpr DerivedType& operator-= ( const DerivedType right_hand_side )
 		{
 			value -= right_hand_side;
 
@@ -95,7 +95,7 @@ namespace Framework
 			return result;
 		}
 
-		DerivedType& operator/= ( const DerivedType right_hand_side )
+		constexpr DerivedType& operator/= ( const DerivedType right_hand_side )
 		{
 			if constexpr( std::is_integral_v< Type > )
 				value /= right_hand_side.value; // Divide directly as division of 1/right_hand_side will give zero when right_hand_side > 1.
@@ -154,22 +154,22 @@ namespace Framework
 		}
 
 	/* Arithmetic Operations: Binary operators (with a scalar), of the the form scalar-operator-unit. */
-		friend DerivedType operator+ ( const Type left_hand_side_value, const DerivedType& right_hand_side_unit )
+		constexpr friend DerivedType operator+ ( const Type left_hand_side_value, const DerivedType& right_hand_side_unit )
 		{
 			return DerivedType( left_hand_side_value + right_hand_side_unit.value );
 		}
 
-		friend DerivedType operator- ( const Type left_hand_side_value, const DerivedType& right_hand_side_unit )
+		constexpr friend DerivedType operator- ( const Type left_hand_side_value, const DerivedType& right_hand_side_unit )
 		{
 			return DerivedType( left_hand_side_value - right_hand_side_unit.value );
 		}
 
-		friend DerivedType operator* ( const Type left_hand_side_value, const DerivedType& right_hand_side_unit )
+		constexpr friend DerivedType operator* ( const Type left_hand_side_value, const DerivedType& right_hand_side_unit )
 		{
 			return DerivedType( left_hand_side_value * right_hand_side_unit.value );
 		}
 
-		friend DerivedType operator/ ( const Type left_hand_side_value, const DerivedType& right_hand_side_unit )
+		constexpr friend DerivedType operator/ ( const Type left_hand_side_value, const DerivedType& right_hand_side_unit )
 		{
 			return DerivedType( left_hand_side_value / right_hand_side_unit.value );
 		}

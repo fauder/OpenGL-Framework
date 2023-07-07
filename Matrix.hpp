@@ -98,7 +98,7 @@ namespace Framework
 		constexpr const Type* operator[] ( const unsigned int row_index ) const { return data[ row_index ]; }
 
 		template< typename... Values >
-		MatrixBase& Set( Values... values )
+		constexpr MatrixBase& Set( Values... values )
 		{
 			static_assert( sizeof...( values ) <= ElementCount(), "More values passed than total element count." );
 
@@ -120,16 +120,16 @@ namespace Framework
 		}
 
 		template< typename VectorType >
-		MatrixBase& SetDiagonals( const VectorType& vector ) requires( RowSize == ColumnSize && VectorType::Dimension() <= RowSize )
+		constexpr MatrixBase& SetDiagonals( const VectorType& vector ) requires( RowSize == ColumnSize && VectorType::Dimension() <= RowSize )
 		{
-			for( auto i = 0; i < vector.Dimension(); i++ )
+			for( auto i = 0; i < VectorType::Dimension(); i++ )
 				data[ i ][ i ] = vector[ i ];
 
 			return *this;
 		}
 
 		template< typename VectorType >
-		MatrixBase& SetRow( const VectorType& vector, const unsigned int row_index = 0, const unsigned int start_index_inRow = 0 ) requires( VectorType::Dimension() <= RowSize )
+		constexpr MatrixBase& SetRow( const VectorType& vector, const unsigned int row_index = 0, const unsigned int start_index_inRow = 0 ) requires( VectorType::Dimension() <= RowSize )
 		{
 			ASSERT( row_index < RowSize && "Row index out of bounds." );
 			ASSERT( start_index_inRow + VectorType::Dimension() <= ColumnSize && "Given vector does not fit inside the row when starting from start_index_inRow." );
@@ -141,7 +141,7 @@ namespace Framework
 		}
 
 		template< typename VectorType >
-		MatrixBase& SetColumn( const VectorType& vector, const unsigned int column_index = 0, const unsigned int start_index_inColumn = 0 ) requires( VectorType::Dimension() <= ColumnSize )
+		constexpr MatrixBase& SetColumn( const VectorType& vector, const unsigned int column_index = 0, const unsigned int start_index_inColumn = 0 ) requires( VectorType::Dimension() <= ColumnSize )
 		{
 			ASSERT( column_index < ColumnSize && "Column index out of bounds." );
 			ASSERT( start_index_inColumn + VectorType::Dimension() <= RowSize && "Given vector does not fit inside the column when starting from start_index_inColumn." );
@@ -153,21 +153,21 @@ namespace Framework
 		}
 
 		template< typename VectorType >
-		MatrixBase& SetScaling( const VectorType& vector ) requires( RowSize == ColumnSize && VectorType::Dimension() <= RowSize - 1 )
+		constexpr MatrixBase& SetScaling( const VectorType& vector ) requires( RowSize == ColumnSize && VectorType::Dimension() <= RowSize - 1 )
 		{
 			return SetDiagonals( vector );
 		}
 
 		template< typename VectorType >
-		MatrixBase& SetTranslation( const VectorType& vector ) requires( RowSize == ColumnSize && VectorType::Dimension() <= RowSize - 1 )
+		constexpr MatrixBase& SetTranslation( const VectorType& vector ) requires( RowSize == ColumnSize && VectorType::Dimension() <= RowSize - 1 )
 		{
 			return SetRow( vector, RowSize - 1 );
 		}
 
 	/* Other Queries. */
-		static constexpr size_t RowCount()     { return RowSize; }
-		static constexpr size_t ColumnCount()  { return ColumnSize; }
-		static constexpr size_t ElementCount() { return RowSize * ColumnSize; }
+		static consteval size_t RowCount()     { return RowSize; }
+		static consteval size_t ColumnCount()  { return ColumnSize; }
+		static consteval size_t ElementCount() { return RowSize * ColumnSize; }
 
 	/* Arithmetic Operations. */
 
