@@ -292,17 +292,8 @@ namespace Framework
 		}
 
 	/* Other Arithmetic Operations. */
-		Coordinate Dot( const VectorBase& other ) const // Practically we won't use this for any vectors other than 3D & 4D, but no need to restrict.
-		{
-			Coordinate result( 0 );
-
-			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result += data[ index ] * other.data[ index ]; } );
-
-			return result;
-		}
-
 		/* With self. */
-		Coordinate Dot() const
+		constexpr Coordinate Dot() const
 		{
 			Coordinate result( 0 );
 
@@ -311,13 +302,22 @@ namespace Framework
 			return result;
 		}
 
+		constexpr friend Coordinate Dot( const VectorBase& u, const VectorBase& v ) // Practically we won't use this for any vectors other than 3D & 4D, but no need to restrict.
+		{
+			Coordinate result( 0 );
+
+			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result += u.data[ index ] * v.data[ index ]; } );
+
+			return result;
+		}
+
 		// Cross product is only defined for vectors of 3 & 7 dimensions apparently, but practically we only need it for 3D.
-		VectorBase Cross( const VectorBase& other ) const requires( Size == 3 )
+		constexpr friend VectorBase Cross( const VectorBase& u, const VectorBase& v ) requires( Size == 3 )
 		{
 			// u X v = ( u2v3 - u3v2, u3v1 - u1v3, u1v2 - u2v1 )
-			return VectorBase( data[ 1 ] * other.data[ 2 ] - data[ 2 ] * other.data[ 1 ],
-							   data[ 2 ] * other.data[ 0 ] - data[ 0 ] * other.data[ 2 ],
-							   data[ 0 ] * other.data[ 1 ] - data[ 1 ] * other.data[ 0 ] );
+			return VectorBase( u.data[ 1 ] * v.data[ 2 ] - u.data[ 2 ] * v.data[ 1 ],
+							   u.data[ 2 ] * v.data[ 0 ] - u.data[ 0 ] * v.data[ 2 ],
+							   u.data[ 0 ] * v.data[ 1 ] - u.data[ 1 ] * v.data[ 0 ] );
 		}
 
 		Coordinate SquareMagnitude() const { return Dot(); }

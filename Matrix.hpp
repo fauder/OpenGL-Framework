@@ -94,8 +94,8 @@ namespace Framework
 
 	/* Getters & Setters. */
 		const Type* Data() const { return &data[ 0 ][ 0 ]; };
-		Type* operator[] ( const unsigned int row_index ) { return data[ row_index ]; }
-		const Type* operator[] ( const unsigned int row_index ) const { return data[ row_index ]; }
+		constexpr Type* operator[] ( const unsigned int row_index ) { return data[ row_index ]; }
+		constexpr const Type* operator[] ( const unsigned int row_index ) const { return data[ row_index ]; }
 
 		template< typename... Values >
 		MatrixBase& Set( Values... values )
