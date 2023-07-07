@@ -47,6 +47,8 @@ namespace Framework
 		}
 
 	/* Arithmetic Operations: Unary operators. */
+		/* Return the value as-is. */
+		constexpr DerivedType operator+ () const { return *this; }
 		constexpr DerivedType operator- () const requires( std::is_floating_point_v< Type > || std::is_signed_v< Type > )
 		{
 			return DerivedType( Type( -1 ) * value );
