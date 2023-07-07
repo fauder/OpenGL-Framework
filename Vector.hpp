@@ -86,7 +86,7 @@ namespace Framework
 
 	/* Getters & Setters. */
 		const Coordinate* Data() const { return data; };
-		Coordinate& operator[] ( const unsigned int index ) { return data[ index ]; }
+		constexpr Coordinate& operator[] ( const unsigned int index ) { return data[ index ]; }
 		constexpr const Coordinate& operator[] ( const unsigned int index ) const { return data[ index ]; }
 		
 		constexpr Coordinate X() const requires( Size >= 1 ) { return data[ 0 ]; };
@@ -94,13 +94,13 @@ namespace Framework
 		constexpr Coordinate Z() const requires( Size >= 3 ) { return data[ 2 ]; };
 		constexpr Coordinate W() const requires( Size >= 4 ) { return data[ 3 ]; };
 
-		Coordinate& X() requires( Size >= 1 ) { return data[ 0 ]; };
-		Coordinate& Y() requires( Size >= 2 ) { return data[ 1 ]; };
-		Coordinate& Z() requires( Size >= 3 ) { return data[ 2 ]; };
-		Coordinate& W() requires( Size >= 4 ) { return data[ 3 ]; };
+		constexpr Coordinate& X() requires( Size >= 1 ) { return data[ 0 ]; };
+		constexpr Coordinate& Y() requires( Size >= 2 ) { return data[ 1 ]; };
+		constexpr Coordinate& Z() requires( Size >= 3 ) { return data[ 2 ]; };
+		constexpr Coordinate& W() requires( Size >= 4 ) { return data[ 3 ]; };
 
 		template< typename... Values >
-		VectorBase& Set( Values... values )
+		constexpr VectorBase& Set( Values... values )
 		{
 			int i = 0;
 			( /* Lambda: */ [ & ]{ data[ i++ ] = values; }(), ... ); // Utilize fold expressions with a lambda to "loop over" the parameter pack.
@@ -109,7 +109,7 @@ namespace Framework
 		}
 
 	/* Other Queries. */
-		static constexpr size_t Dimension() { return Size; }
+		static consteval size_t Dimension() { return Size; }
 
 		constexpr bool IsZero() const
 		{
@@ -144,7 +144,7 @@ namespace Framework
 			return result;
 		}
 
-		VectorBase& operator+= ( const VectorBase& right_hand_side )
+		constexpr VectorBase& operator+= ( const VectorBase& right_hand_side )
 		{
 			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] += right_hand_side.data[ index ]; } );
 
@@ -158,7 +158,7 @@ namespace Framework
 			return result;
 		}
 
-		VectorBase& operator-= ( const VectorBase& right_hand_side )
+		constexpr VectorBase& operator-= ( const VectorBase& right_hand_side )
 		{
 			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] -= right_hand_side.data[ index ]; } );
 
@@ -172,7 +172,7 @@ namespace Framework
 			return result;
 		}
 
-		VectorBase& operator*= ( const VectorBase& right_hand_side )
+		constexpr VectorBase& operator*= ( const VectorBase& right_hand_side )
 		{
 			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] *= right_hand_side.data[ index ]; } );
 
@@ -186,7 +186,7 @@ namespace Framework
 			return result;
 		}
 
-		VectorBase& operator/= ( const VectorBase& right_hand_side )
+		constexpr VectorBase& operator/= ( const VectorBase& right_hand_side )
 		{
 			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] /= right_hand_side.data[ index ]; } );
 
@@ -202,7 +202,7 @@ namespace Framework
 			return result;
 		}
 
-		VectorBase& operator+= ( const Coordinate scalar )
+		constexpr VectorBase& operator+= ( const Coordinate scalar )
 		{
 			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] += scalar; } );
 
@@ -217,7 +217,7 @@ namespace Framework
 			return result;
 		}
 
-		VectorBase& operator-= ( const Coordinate scalar )
+		constexpr VectorBase& operator-= ( const Coordinate scalar )
 		{
 			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] -= scalar; } );
 
@@ -232,7 +232,7 @@ namespace Framework
 			return result;
 		}
 
-		VectorBase& operator*= ( const Coordinate scalar )
+		constexpr VectorBase& operator*= ( const Coordinate scalar )
 		{
 			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] *= scalar; } );
 
@@ -253,7 +253,7 @@ namespace Framework
 			return result;
 		}
 
-		VectorBase& operator/= ( const Coordinate scalar )
+		constexpr VectorBase& operator/= ( const Coordinate scalar )
 		{
 			if constexpr( std::is_integral_v< Coordinate > )
 				Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] /= scalar; } ); // Divide directly as division of 1/scalar will give zero when scalar > 1.
@@ -267,25 +267,25 @@ namespace Framework
 		}
 
 	/* Arithmetic Operations: Binary operators (with a scalar), of the the form scalar-operator-vector. */
-		friend VectorBase operator + ( const Coordinate scalar, const VectorBase& vector )
+		constexpr friend VectorBase operator + ( const Coordinate scalar, const VectorBase& vector )
 		{
 			VectorBase result( UNIFORM_INITIALIZATION, scalar );
 			return result + vector;
 		}
 
-		friend VectorBase operator - ( const Coordinate scalar, const VectorBase& vector )
+		constexpr friend VectorBase operator - ( const Coordinate scalar, const VectorBase& vector )
 		{
 			VectorBase result( UNIFORM_INITIALIZATION, scalar );
 			return result - vector;
 		}
 
-		friend VectorBase operator * ( const Coordinate scalar, const VectorBase& vector )
+		constexpr friend VectorBase operator * ( const Coordinate scalar, const VectorBase& vector )
 		{
 			VectorBase result( UNIFORM_INITIALIZATION, scalar );
 			return result * vector;
 		}
 
-		friend VectorBase operator / ( const Coordinate scalar, const VectorBase& vector )
+		constexpr friend VectorBase operator / ( const Coordinate scalar, const VectorBase& vector )
 		{
 			VectorBase result( UNIFORM_INITIALIZATION, scalar );
 			return result / vector;
@@ -320,7 +320,7 @@ namespace Framework
 							   u.data[ 0 ] * v.data[ 1 ] - u.data[ 1 ] * v.data[ 0 ] );
 		}
 
-		Coordinate SquareMagnitude() const { return Dot(); }
+		constexpr Coordinate SquareMagnitude() const { return Dot(); }
 		Coordinate Magnitude() const requires( std::floating_point< Coordinate > ) { return std::sqrt( SquareMagnitude() ); }
 
 		VectorBase Normalized() const requires( std::floating_point< Coordinate > )
@@ -338,7 +338,7 @@ namespace Framework
 
 		/* Vector-matrix multiplication. */
 		template< size_t ColumnSize >
-		VectorBase< Coordinate, ColumnSize > operator* ( const MatrixBase< Coordinate, Size, ColumnSize >& transform_matrix ) const
+		constexpr VectorBase< Coordinate, ColumnSize > operator* ( const MatrixBase< Coordinate, Size, ColumnSize >& transform_matrix ) const
 		{
 			VectorBase< Coordinate, ColumnSize > vector_transformed;
 			for( auto j = 0; j < ColumnSize; j++ )
@@ -350,7 +350,7 @@ namespace Framework
 
 		/* Vector-matrix multiplication. */
 		template< size_t ColumnSize >
-		VectorBase< Coordinate, ColumnSize >& operator*= ( const MatrixBase< Coordinate, Size, ColumnSize >& transform_matrix )
+		constexpr VectorBase< Coordinate, ColumnSize >& operator*= ( const MatrixBase< Coordinate, Size, ColumnSize >& transform_matrix )
 		{
 			return *this = *this * transform_matrix;
 		}
