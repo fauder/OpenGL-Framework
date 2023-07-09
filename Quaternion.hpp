@@ -70,6 +70,34 @@ namespace Framework
 	#endif // _DEBUG
 		}
 
+	/* Other Queries. */
+		constexpr ComponentType SquareMagnitude() const { return Dot(); }
+		ComponentType Magnitude() const { return std::sqrt( SquareMagnitude() ); }
+
+		constexpr bool IsIdentity() const
+		{
+			return Math::IsEqual( std::abs( w ), ComponentType( 1 ) ) && xyz.IsZero();
+		}
+
+		constexpr bool IsNormalized() const
+		{
+			return Math::IsEqual( SquareMagnitude(), ComponentType( 1 ) );
+		}
+
+	/* Other Arithmetic Operations. */
+		/* With self. */
+		constexpr ComponentType Dot() const
+		{
+			ComponentType result( 0 );
+
+			return w * w + xyz.Dot();
+		}
+
+		constexpr friend ComponentType Dot( const QuaternionBase& q1, const QuaternionBase& q2 )
+		{
+			return q1.w * q2.w + Dot( q1.xyz, q2.xyz );
+		}
+
 	private:
 		ComponentType w;
 		VectorType xyz;
