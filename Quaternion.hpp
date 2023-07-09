@@ -12,7 +12,7 @@
 
 namespace Framework
 {
-	template< std::floating_point ComponentType = float >
+	template< std::floating_point ComponentType >
 	class QuaternionBase
 	{
 	private:

@@ -33,7 +33,7 @@ namespace Framework
 	/* Comparison Operators. */
 		constexpr auto operator<=> ( const DerivedType& ) const = default;
 
-		bool operator== ( const DerivedType & right_hand_side ) const
+		bool operator== ( const DerivedType& right_hand_side ) const
 		{
 			if constexpr( std::is_integral_v< Type > )
 				return value == right_hand_side.value;
@@ -41,7 +41,7 @@ namespace Framework
 				return Math::IsEqual( value, right_hand_side.value );
 		}
 
-		bool operator!= ( const DerivedType & right_hand_side ) const
+		bool operator!= ( const DerivedType& right_hand_side ) const
 		{
 			return !operator== ( right_hand_side );
 		}
