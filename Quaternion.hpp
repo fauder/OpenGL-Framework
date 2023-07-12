@@ -95,9 +95,21 @@ namespace Framework
 			return RadiansType( std::acos( w ) );
 		}
 
+		// Returns half the angular displacement between *this Quaternion and the other.
+		constexpr RadiansType HalfAngleBetween( const QuaternionBase& other ) const
+		{
+			return RadiansType( std::acos( Framework::Dot( *this, other ) ) );
+		}
+
 		constexpr RadiansType Angle() const
 		{
 			return ComponentType{ 2 } * HalfAngle();
+		}
+
+		// Returns the angular displacement between *this Quaternion and the other.
+		constexpr RadiansType AngleBetween( const QuaternionBase& other ) const
+		{
+			return ComponentType{ 2 } * HalfAngleBetween( other );
 		}
 
 		constexpr VectorType Axis() const
@@ -125,13 +137,6 @@ namespace Framework
 								   w * other.w - Framework::Dot( xyz, other.xyz ) );
 		}
 
-		/* Returns a quaternion d such that d*a=b (where a = this Quaternion (i.e., *this)).
-		 * Here, d is the angular displacement between this Quaternion and the other. */
-		constexpr QuaternionBase Difference( const QuaternionBase& b ) const
-		{
-			return b * Inverse();
-		}
-
 		constexpr QuaternionBase Conjugate() const
 		{
 			return QuaternionBase( -xyz, w );
@@ -155,6 +160,13 @@ namespace Framework
 		constexpr QuaternionBase& Invert()
 		{
 			return SetToConjugate();
+		}
+
+		/* Returns a quaternion d such that d*a=b (where a = this Quaternion (i.e., *this)).
+		 * Here, d is the angular displacement between this Quaternion and the other. */
+		constexpr QuaternionBase Difference( const QuaternionBase& b ) const
+		{
+			return b * Inverse();
 		}
 
 	/* Other Arithmetic Operations. */
