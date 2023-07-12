@@ -146,15 +146,19 @@ namespace Framework
 			return w * w + xyz.Dot();
 		}
 
-		constexpr friend ComponentType Dot( const QuaternionBase& q1, const QuaternionBase& q2 )
-		{
-			return q1.w * q2.w + Dot( q1.xyz, q2.xyz );
-		}
+		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
+		constexpr friend ComponentType_ Dot( const QuaternionBase< ComponentType_ >& q1, const QuaternionBase< ComponentType_ >& q2 );
 
 	private:
 		VectorType xyz;
 		ComponentType w;
 	};
+
+	template< std::floating_point ComponentType >
+	constexpr ComponentType Dot( const QuaternionBase< ComponentType >& q1, const QuaternionBase< ComponentType >& q2 )
+	{
+		return q1.w * q2.w + Dot( q1.xyz, q2.xyz );
+	}
 
 	using Quaternion  = QuaternionBase< float  >;
 	using QuaternionD = QuaternionBase< double >;
