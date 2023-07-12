@@ -29,33 +29,54 @@ namespace Framework::Math
 	Value NonHyptothenuseEdge( const Value edge, const Value hyptothenuse ) { return std::sqrt( hyptothenuse * hyptothenuse - edge * edge ); }
 
 /* Floating point comparisons. */
-	template< std::floating_point Value, auto epsilon = std::numeric_limits< Value >::epsilon() >
-	bool IsEqual( Value lhs, Value rhs ) { return std::abs( lhs - rhs ) < epsilon; }
+	/* Based on Magnum's TypeTraits::Equals(). */
+	template< std::floating_point Value >
+	constexpr bool IsEqual( Value lhs, Value rhs, const float epsilon = Constants::Epsilon< Value >() )
+	{
+		if( lhs == rhs ) // Check for binary and infinity equalities.
+			return true;
 
-	template< std::floating_point Value, auto epsilon = std::numeric_limits< Value >::epsilon() >
-	constexpr bool IsGreaterThan( Value lhs, Value rhs ) { return lhs - rhs > epsilon; }
+		Value abs_lhs    = std::abs( lhs );
+		Value abs_rhs    = std::abs( rhs );
+		Value difference = std::abs( lhs - rhs );
 
-	template< std::floating_point Value, auto epsilon = std::numeric_limits< Value >::epsilon() >
-	bool IsGreaterThanOrEqual( Value lhs, Value rhs ) {
+		/* Do not use relative error if one of the values is zero or the difference is smaller than the epsilon. */
+		if( lhs == Value{} || rhs == Value{} || difference < epsilon )
+			return true;
+
+		return difference / std::abs( lhs + rhs ) < epsilon;
+	}
+
+	template< std::floating_point Value >
+	bool IsEqualSquared( Value lhs, Value rhs, const float epsilon = Constants::TwoEpsilon< Value >() )
+	{
+		return IsEqual( lhs, rhs, epsilon );
+	}
+
+	template< std::floating_point Value >
+	constexpr bool IsGreaterThan( Value lhs, Value rhs, const float epsilon = Constants::Epsilon< Value >() ) { return lhs - rhs > epsilon; }
+
+	template< std::floating_point Value >
+	bool IsGreaterThanOrEqual( Value lhs, Value rhs, const float epsilon = Constants::Epsilon< Value >() ) {
 		return std::abs( lhs - rhs ) < epsilon ||
 			lhs - rhs > epsilon;
 	}
 
-	template< std::floating_point Value, auto epsilon = std::numeric_limits< Value >::epsilon() >
-	constexpr bool IsLessThan( Value lhs, Value rhs ) { return rhs - lhs > epsilon; }
+	template< std::floating_point Value >
+	constexpr bool IsLessThan( Value lhs, Value rhs, const float epsilon = Constants::Epsilon< Value >() ) { return rhs - lhs > epsilon; }
 
-	template< std::floating_point Value, auto epsilon = std::numeric_limits< Value >::epsilon() >
-	bool IsLessThanOrEqual( Value lhs, Value rhs ) {
+	template< std::floating_point Value >
+	bool IsLessThanOrEqual( Value lhs, Value rhs, const float epsilon = Constants::Epsilon< Value >() ) {
 		return std::abs( rhs - lhs ) < epsilon ||
 			rhs - lhs > epsilon;
 	}
 
 	template< std::floating_point Value >
-	bool IsZero( Value value, const float epsilon = std::numeric_limits< Value >::epsilon() ) { return std::abs( value ) < epsilon; }
+	bool IsZero( Value value, const float epsilon = Constants::Epsilon< Value >() ) { return std::abs( value ) < epsilon; }
 
 /* Arithmetic. */
 	template< std::floating_point Value >
-	Value SquareOf( Value value ) { return std::pow( value, 2 ); }
+	Value SquareOf( Value value ) { return std::pow( value, Value{ 2 } ); }
 
 /* Other. */
 	Polar2 ToPolar2( const Vector2& cartesian );
