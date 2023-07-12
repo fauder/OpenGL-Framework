@@ -68,14 +68,14 @@
 
   <!-- Degrees -->
   <Type Name="Framework::Math::Degrees&lt;*&gt;">
-    <DisplayString IncludeView="simple">{{ {value,g} }}</DisplayString>
-    <DisplayString ExcludeView="simple">{{ {value,g} }}</DisplayString>
+    <DisplayString IncludeView="simple">{{ {value,g}° ({value * 0.0174532924,g} radians) }}</DisplayString>
+    <DisplayString ExcludeView="simple">{{ {value,g}° ({value * 0.0174532924,g} radians) }}</DisplayString>
   </Type>
 
   <!-- Radians -->
   <Type Name="Framework::Math::Radians&lt;*&gt;">
-    <DisplayString IncludeView="simple">{{ {value,g} }}</DisplayString>
-    <DisplayString ExcludeView="simple">{{ {value,g} }}</DisplayString>
+    <DisplayString IncludeView="simple">{{ {value,g} radians ({value * 57.2957764,g}°) }}</DisplayString>
+    <DisplayString ExcludeView="simple">{{ {value,g} radians ({value * 57.2957764,g}°) }}</DisplayString>
   </Type>
   
   <!-- Quaternion --><!--
