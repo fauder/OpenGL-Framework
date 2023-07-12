@@ -96,11 +96,14 @@
     <DisplayString ExcludeView="simple">{value,g} radians ({value * 57.2957764,g}°)</DisplayString>
   </Type>
   
-  <!-- Quaternion --><!--
-  <Type Name="Framework::Quaternion&lt;*&gt;">
-      <DisplayString IncludeView="simple">{{ {_vector.data[0],g}, {_vector.data[1],g}, {_vector.data[2],g}, {_scalar,g} }}</DisplayString>
-      <DisplayString ExcludeView="simple">{{ [x]: {_vector.data[0],g} [y]: {_vector.data[1],g} [z]: {_vector.data[2],g} [w]: {_scalar,g} }}</DisplayString>
-  </Type>-->
+  <!-- Quaternion -->
+  <Type Name="Framework::QuaternionBase&lt;*&gt;">
+  <Intrinsic Name="Dot" Expression="w*w+xyz.data[0]*xyz.data[0]+xyz.data[1]*xyz.data[1]+xyz.data[2]*xyz.data[2]"></Intrinsic>
+  <Intrinsic Name="IsNormalized" Expression="Dot()&gt;0.99980000000500002&amp;Dot()&lt;1.0001999999950000"></Intrinsic>
+    <DisplayString IncludeView="simple">&lt;{w,g} {xyz}&gt;</DisplayString>
+    <DisplayString ExcludeView="simple" Condition="IsNormalized()">Unit Quaternion [w]: {w,g} [x]: {xyz.data[0],g} [y]: {xyz.data[1],g} [z]: {xyz.data[2],g}</DisplayString>
+    <DisplayString ExcludeView="simple" Condition="!IsNormalized()">[w]: {w,g} [x]: {xyz.data[0],g} [y]: {xyz.data[1],g} [z]: {xyz.data[2],g}</DisplayString>
+  </Type>
   
   <!-- Matrix -->
   <Type Name="Framework::MatrixBase&lt;*&gt;">
