@@ -12,7 +12,7 @@
 
 /* Assumption: A quaternion is always used for rotation and should therefore be normalized.
  * Results of this assumption: 
- * 1) On debug configuration: All non-default and user defined constructors (even the w,x,y,z & w,xyz constructors) warn the user if the values passed do not construct a unit quaternion.
+ * 1) On debug configuration: All non-default and user defined constructors (even the x,y,z,w & xyz,w constructors) warn the user if the values passed do not construct a unit quaternion.
  * 2) Inverse() simply returns the Conjugate().
  */
 namespace Framework
@@ -23,13 +23,14 @@ namespace Framework
 	private:
 		using VectorType  = VectorBase< ComponentType, 3 >;
 		using RadiansType = Math::Radians< ComponentType >;
+
 	public:
 	/* Constructors. */
 		/* Identity quaternion w=1 & n=<0,0,0>. */
 		constexpr QuaternionBase()
 			:
-			w( 1 ),
-			xyz()
+			xyz(),
+			w( 1 )
 		{}
 
 		constexpr QuaternionBase( const QuaternionBase& other )					= default;
@@ -39,10 +40,10 @@ namespace Framework
 
 		constexpr ~QuaternionBase() = default;
 
-		CONSTEXPR_ON_RELEASE QuaternionBase( const ComponentType w, const ComponentType x, const ComponentType y, const ComponentType z )
+		CONSTEXPR_ON_RELEASE QuaternionBase( const ComponentType x, const ComponentType y, const ComponentType z, const ComponentType w )
 			:
-			w( w ),
-			xyz( x, y, z )
+			xyz( x, y, z ),
+			w( w )
 		{
 	#ifdef _DEBUG
 			if( IsIdentity() )
@@ -54,10 +55,10 @@ namespace Framework
 	#endif // _DEBUG
 		}
 
-		CONSTEXPR_ON_RELEASE QuaternionBase( const ComponentType w, const VectorType& xyz )
+		CONSTEXPR_ON_RELEASE QuaternionBase( const VectorType& xyz, const ComponentType w )
 			:
-			w( w ),
-			xyz( xyz )
+			xyz( xyz ),
+			w( w )
 		{
 	#ifdef _DEBUG
 			if( IsIdentity() )
@@ -113,10 +114,10 @@ namespace Framework
 	/* Arithmetic Operations. */
 		constexpr QuaternionBase Conjugate() const
 		{
-			return QuaternionBase( w, -xyz );
+			return QuaternionBase( -xyz, w );
 		}
 
-		/* Sets this quaternion equal to its conjugate (i.e, [w -x -y -z]). */
+		/* Sets this quaternion equal to its conjugate (i.e, [-x -y -z w]). */
 		constexpr QuaternionBase& SetToConjugate()
 		{
 			xyz = -xyz;
@@ -151,8 +152,8 @@ namespace Framework
 		}
 
 	private:
-		ComponentType w;
 		VectorType xyz;
+		ComponentType w;
 	};
 
 	using Quaternion  = QuaternionBase< float  >;
