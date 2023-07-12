@@ -13,6 +13,7 @@
 /* Assumption: A quaternion is always used for rotation and should therefore be normalized.
  * Results of this assumption: 
  * 1) On debug configuration: All non-default and user defined constructors (even the w,x,y,z & w,xyz constructors) warn the user if the values passed do not construct a unit quaternion.
+ * 2) Inverse() simply returns the Conjugate().
  */
 namespace Framework
 {
@@ -92,6 +93,32 @@ namespace Framework
 		constexpr bool IsNormalized() const
 		{
 			return Math::IsEqual( SquareMagnitude(), ComponentType( 1 ) );
+		}
+
+	/* Arithmetic Operations. */
+		constexpr QuaternionBase Conjugate() const
+		{
+			return QuaternionBase( w, -xyz );
+		}
+
+		/* Sets this quaternion equal to its conjugate (i.e, [w -x -y -z]). */
+		constexpr QuaternionBase& SetToConjugate()
+		{
+			xyz = -xyz;
+
+			return *this;
+		}
+
+		/* Assumes a unit quaternion, hence, returns the conjugate since inverse = conjugate / magnitude, where magnitude = 1 for a unit quaternion. */
+		constexpr QuaternionBase Inverse() const
+		{
+			return Conjugate();
+		}
+
+		/* Sets this quaternion equal to its inverse, which is its conjugate since a unit quaternion is assumed. (i.e, [w -x -y -z]). */
+		constexpr QuaternionBase& Invert()
+		{
+			return SetToConjugate();
 		}
 
 	/* Other Arithmetic Operations. */
