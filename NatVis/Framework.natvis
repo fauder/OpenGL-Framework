@@ -4,78 +4,78 @@
   <Type Name="Framework::VectorBase&lt;float,2&gt;">
     <Intrinsic Name="Dot" Expression="data[0]*data[0]+data[1]*data[1]"></Intrinsic>
     <Intrinsic Name="IsNormalized" Expression="Dot()&gt;0.99980000000500002&amp;Dot()&lt;1.0001999999950000"></Intrinsic>
-    <DisplayString IncludeView="simple">{{ {data[0],g}, {data[1],g} }}</DisplayString>
-    <DisplayString ExcludeView="simple" Condition="IsNormalized()">{{ UNIT VECTOR [x]: {data[0],g} [y]: {data[1],g} }}</DisplayString>
-    <DisplayString ExcludeView="simple" Condition="!IsNormalized()">{{ [x]: {data[0],g} [y]: {data[1],g} }}</DisplayString>
+    <DisplayString IncludeView="simple">&lt;{data[0],g}, {data[1],g}&gt;</DisplayString>
+    <DisplayString ExcludeView="simple" Condition="IsNormalized()">Unit Vector [x]: {data[0],g} [y]: {data[1],g}</DisplayString>
+    <DisplayString ExcludeView="simple" Condition="!IsNormalized()">[x]: {data[0],g} [y]: {data[1],g}</DisplayString>
   </Type>
 
   <!-- Vector2< double > -->
   <Type Name="Framework::VectorBase&lt;double,2&gt;">
     <Intrinsic Name="Dot" Expression="data[0]*data[0]+data[1]*data[1]"></Intrinsic>
     <Intrinsic Name="IsNormalized" Expression="Dot()&gt;0.99999999999998002&amp;Dot()&lt;1.0000000000000200"></Intrinsic>
-    <DisplayString IncludeView="simple">{{ {data[0],g}, {data[1],g} }}</DisplayString>
-    <DisplayString ExcludeView="simple" Condition="IsNormalized()">{{ UNIT VECTOR [x]: {data[0],g} [y]: {data[1],g} }}</DisplayString>
-    <DisplayString ExcludeView="simple" Condition="!IsNormalized()">{{ [x]: {data[0],g} [y]: {data[1],g} }}</DisplayString>
+    <DisplayString IncludeView="simple">&lt;{data[0],g}, {data[1],g}&gt;</DisplayString>
+    <DisplayString ExcludeView="simple" Condition="IsNormalized()">Unit Vector [x]: {data[0],g} [y]: {data[1],g}</DisplayString>
+    <DisplayString ExcludeView="simple" Condition="!IsNormalized()">[x]: {data[0],g} [y]: {data[1],g}</DisplayString>
   </Type>
   
   <!-- Vector3< float > -->
   <Type Name="Framework::VectorBase&lt;float,3&gt;">
     <Intrinsic Name="Dot" Expression="data[0]*data[0]+data[1]*data[1]+data[2]*data[2]"></Intrinsic>
     <Intrinsic Name="IsNormalized" Expression="Dot()&gt;0.99980000000500002&amp;Dot()&lt;1.0001999999950000"></Intrinsic>
-    <DisplayString IncludeView="simple">{{ [x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g} }}"</DisplayString>
-    <DisplayString ExcludeView="simple" Condition="IsNormalized()">{{ UNIT VECTOR [x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g} }}</DisplayString>
-    <DisplayString ExcludeView="simple" Condition="!IsNormalized()">{{ [x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g} }}"</DisplayString>
+    <DisplayString IncludeView="simple">&lt;[x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g} &gt;</DisplayString>
+    <DisplayString ExcludeView="simple" Condition="IsNormalized()">Unit Vector [x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g}</DisplayString>
+    <DisplayString ExcludeView="simple" Condition="!IsNormalized()">[x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g}</DisplayString>
   </Type>
 
   <!-- Vector3< double > -->
   <Type Name="Framework::VectorBase&lt;double,3&gt;">
     <Intrinsic Name="Dot" Expression="data[0]*data[0]+data[1]*data[1]+data[2]*data[2]"></Intrinsic>
     <Intrinsic Name="IsNormalized" Expression="Dot()&gt;0.99999999999998002&amp;Dot()&lt;1.0000000000000200"></Intrinsic>
-    <DisplayString IncludeView="simple">{{ [x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g} }}"</DisplayString>
-    <DisplayString ExcludeView="simple" Condition="IsNormalized()">{{ UNIT VECTOR [x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g} }}</DisplayString>
-    <DisplayString ExcludeView="simple" Condition="!IsNormalized()">{{ [x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g} }}"</DisplayString>
+    <DisplayString IncludeView="simple">&lt;[x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g} &gt;</DisplayString>
+    <DisplayString ExcludeView="simple" Condition="IsNormalized()">Unit Vector [x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g}</DisplayString>
+    <DisplayString ExcludeView="simple" Condition="!IsNormalized()">[x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g}</DisplayString>
   </Type>
   
   <!-- Vector4< float > -->
   <Type Name="Framework::VectorBase&lt;float,4&gt;">
     <Intrinsic Name="Dot" Expression="data[0]*data[0]+data[1]*data[1]+data[2]*data[2]+data[3]*data[3]"></Intrinsic>
     <Intrinsic Name="IsNormalized" Expression="Dot()&gt;0.99980000000500002&amp;Dot()&lt;1.0001999999950000"></Intrinsic>
-    <DisplayString IncludeView="simple">{{ {data[0],g}, {data[1],g}, {data[2],g}, {data[3],g} }}</DisplayString>
-    <DisplayString ExcludeView="simple" Condition="IsNormalized()">{{ [x]: UNIT VECTOR {data[0],g} [y]: {data[1],g} [z]: {data[2],g} [w]: {data[3],g} }}</DisplayString>
-    <DisplayString ExcludeView="simple" Condition="!IsNormalized()">{{ [x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g} [w]: {data[3],g} }}</DisplayString>
+    <DisplayString IncludeView="simple">&lt;{data[0],g}, {data[1],g}, {data[2],g}, {data[3],g}&gt;</DisplayString>
+    <DisplayString ExcludeView="simple" Condition="IsNormalized()">Unit Vector {data[0],g} [y]: {data[1],g} [z]: {data[2],g} [w]: {data[3],g}</DisplayString>
+    <DisplayString ExcludeView="simple" Condition="!IsNormalized()">[x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g} [w]: {data[3],g}</DisplayString>
   </Type>
 
   <!-- Vector4< double > -->
   <Type Name="Framework::VectorBase&lt;double,4&gt;">
     <Intrinsic Name="Dot" Expression="data[0]*data[0]+data[1]*data[1]+data[2]*data[2]+data[3]*data[3]"></Intrinsic>
     <Intrinsic Name="IsNormalized" Expression="Dot()&gt;0.99999999999998002&amp;Dot()&lt;1.0000000000000200"></Intrinsic>
-    <DisplayString IncludeView="simple">{{ {data[0],g}, {data[1],g}, {data[2],g}, {data[3],g} }}</DisplayString>
-    <DisplayString ExcludeView="simple" Condition="IsNormalized()">{{ [x]: UNIT VECTOR {data[0],g} [y]: {data[1],g} [z]: {data[2],g} [w]: {data[3],g} }}</DisplayString>
-    <DisplayString ExcludeView="simple" Condition="!IsNormalized()">{{ [x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g} [w]: {data[3],g} }}</DisplayString>
+    <DisplayString IncludeView="simple">&lt;{data[0],g}, {data[1],g}, {data[2],g}, {data[3],g}&gt;</DisplayString>
+    <DisplayString ExcludeView="simple" Condition="IsNormalized()">Unit Vector {data[0],g} [y]: {data[1],g} [z]: {data[2],g} [w]: {data[3],g}</DisplayString>
+    <DisplayString ExcludeView="simple" Condition="!IsNormalized()">[x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g} [w]: {data[3],g}</DisplayString>
   </Type>
     
   <!-- Color3 -->
   <Type Name="Framework::Color3;">
-    <DisplayString IncludeView="simple">{{ {data[0],g}, {data[1],g}, {data[2],g} }}</DisplayString>
-    <DisplayString ExcludeView="simple">{{ [r]: {data[0],g} [g]: {data[1],g} [b]: {data[2],g} }}</DisplayString>
+    <DisplayString IncludeView="simple">&lt;{data[0],g}, {data[1],g}, {data[2],g}&gt;</DisplayString>
+    <DisplayString ExcludeView="simple">[r]: {data[0],g} [g]: {data[1],g} [b]: {data[2],g}</DisplayString>
   </Type>
   
   <!-- Color4 -->
   <Type Name="Framework::Color4;">
-    <DisplayString IncludeView="simple">{{ {data[0],g}, {data[1],g}, {data[2],g}, {data[3],g} }}</DisplayString>
-    <DisplayString ExcludeView="simple">{{ [r]: {data[0],g} [g]: {data[1],g} [b]: {data[2],g} [a]: {data[3],g} }}</DisplayString>
+    <DisplayString IncludeView="simple">&lt;{data[0],g}, {data[1],g}, {data[2],g}, {data[3],g}&gt;</DisplayString>
+    <DisplayString ExcludeView="simple">[r]: {data[0],g} [g]: {data[1],g} [b]: {data[2],g} [a]: {data[3],g}</DisplayString>
   </Type>
 
   <!-- Degrees -->
   <Type Name="Framework::Math::Degrees&lt;*&gt;">
-    <DisplayString IncludeView="simple">{{ {value,g}° ({value * 0.0174532924,g} radians) }}</DisplayString>
-    <DisplayString ExcludeView="simple">{{ {value,g}° ({value * 0.0174532924,g} radians) }}</DisplayString>
+    <DisplayString IncludeView="simple">{value,g}° ({value * 0.0174532924,g} radians)</DisplayString>
+    <DisplayString ExcludeView="simple">{value,g}° ({value * 0.0174532924,g} radians)</DisplayString>
   </Type>
 
   <!-- Radians -->
   <Type Name="Framework::Math::Radians&lt;*&gt;">
-    <DisplayString IncludeView="simple">{{ {value,g} radians ({value * 57.2957764,g}°) }}</DisplayString>
-    <DisplayString ExcludeView="simple">{{ {value,g} radians ({value * 57.2957764,g}°) }}</DisplayString>
+    <DisplayString IncludeView="simple">{value,g} radians ({value * 57.2957764,g}°)</DisplayString>
+    <DisplayString ExcludeView="simple">{value,g} radians ({value * 57.2957764,g}°)</DisplayString>
   </Type>
   
   <!-- Quaternion --><!--
