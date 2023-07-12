@@ -10,6 +10,10 @@
 #include "Assert.h"
 #endif // _DEBUG
 
+/* Assumption: A quaternion is always used for rotation and should therefore be normalized.
+ * Results of this assumption: 
+ * 1) On debug configuration: All non-default and user defined constructors (even the w,x,y,z & w,xyz constructors) warn the user if the values passed do not construct a unit quaternion.
+ */
 namespace Framework
 {
 	template< std::floating_point ComponentType >
@@ -40,8 +44,11 @@ namespace Framework
 			xyz( x, y, z )
 		{
 	#ifdef _DEBUG
-			const RadiansType theta( std::acos( w ) );
-			const VectorType rotation_axis( xyz / std::sin( ComponentType( theta ) ) );
+			if( IsIdentity() )
+				return;
+
+			const RadiansType half_angle( std::acos( w ) );
+			const VectorType rotation_axis( xyz / std::sin( ComponentType( half_angle ) ) );
 			ASSERT( rotation_axis.IsNormalized() && "QuaternionBase::QuaternionBase( angle, axis ): The axis vector provided is not normalized!" );
 	#endif // _DEBUG
 		}
@@ -52,8 +59,11 @@ namespace Framework
 			xyz( xyz )
 		{
 	#ifdef _DEBUG
-			const RadiansType theta( std::acos( w ) );
-			const VectorType rotation_axis( xyz / std::sin( ComponentType( theta ) ) );
+			if( IsIdentity() )
+				return;
+
+			const RadiansType half_angle( std::acos( w ) );
+			const VectorType rotation_axis( xyz / std::sin( ComponentType( half_angle ) ) );
 			ASSERT( rotation_axis.IsNormalized() && "QuaternionBase::QuaternionBase( angle, axis ): The axis vector provided is not normalized!" );
 	#endif // _DEBUG
 		}
