@@ -72,7 +72,7 @@ namespace Framework::Math
 	}
 
 	template< std::floating_point Value >
-	bool IsZero( Value value, const float epsilon = Constants::Epsilon< Value >() ) { return std::abs( value ) < epsilon; }
+	bool IsZero( Value value, const float epsilon = Constants::Epsilon< Value >() ) { return IsEqual( value, Value{ 0 } ); }
 
 /* Arithmetic. */
 	template< std::floating_point Value >
