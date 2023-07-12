@@ -17,6 +17,13 @@
  */
 namespace Framework
 {
+/* Forward Declarations. */
+	template< std::floating_point ComponentType >
+	class QuaternionBase;
+
+	template< std::floating_point ComponentType >
+	constexpr ComponentType Dot( const QuaternionBase< ComponentType >& q1, const QuaternionBase< ComponentType >& q2 );
+
 	template< std::floating_point ComponentType >
 	class QuaternionBase
 	{
