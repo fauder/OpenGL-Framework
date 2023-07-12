@@ -169,6 +169,26 @@ namespace Framework
 			return b * Inverse();
 		}
 
+		/* Taken from https://gamemath.com/book/orient.html#quaternions. */
+		constexpr QuaternionBase Exp( const ComponentType exponent ) const
+		{
+			QuaternionBase result( *this );
+
+			// Check for the case of an identity quaternion. This will protect against divide by zero.
+			if( std::abs( result.w ) < ComponentType{ 0.9999 } )
+			{
+				// Extract the half angle alpha (alpha = theta/2).
+				ComponentType alpha = std::acos( result.w );
+
+				// Compute new alpha, w & xyz values.
+				ComponentType newAlpha = alpha * exponent;
+				result.w = std::cos( newAlpha );
+				result.xyz *= std::sin( newAlpha ) / std::sin( alpha );
+			}
+
+			return result;
+		}
+
 	/* Other Arithmetic Operations. */
 		/* With self. */
 		constexpr ComponentType Dot() const
