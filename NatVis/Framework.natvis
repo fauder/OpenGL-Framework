@@ -17,6 +17,12 @@
     <DisplayString ExcludeView="simple" Condition="IsNormalized()">Unit Vector [x]: {data[0],g} [y]: {data[1],g}</DisplayString>
     <DisplayString ExcludeView="simple" Condition="!IsNormalized()">[x]: {data[0],g} [y]: {data[1],g}</DisplayString>
   </Type>
+
+  <!-- Vector2< int > -->
+  <Type Name="Framework::VectorBase&lt;int,2&gt;">
+    <DisplayString IncludeView="simple">&lt;{data[0],d}, {data[1],d}&gt;</DisplayString>
+    <DisplayString ExcludeView="simple">[x]: {data[0],d} [y]: {data[1],d}</DisplayString>
+  </Type>
   
   <!-- Vector3< float > -->
   <Type Name="Framework::VectorBase&lt;float,3&gt;">
@@ -35,6 +41,12 @@
     <DisplayString ExcludeView="simple" Condition="IsNormalized()">Unit Vector [x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g}</DisplayString>
     <DisplayString ExcludeView="simple" Condition="!IsNormalized()">[x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g}</DisplayString>
   </Type>
+
+  <!-- Vector3< int > -->
+  <Type Name="Framework::VectorBase&lt;int,3&gt;">
+    <DisplayString IncludeView="simple">&lt;{data[0],d}, {data[1],d} {data[2],d}&gt;</DisplayString>
+    <DisplayString ExcludeView="simple">[x]: {data[0],d} [y]: {data[1],d} [z]: {data[2],d}</DisplayString>
+  </Type>
   
   <!-- Vector4< float > -->
   <Type Name="Framework::VectorBase&lt;float,4&gt;">
@@ -52,6 +64,12 @@
     <DisplayString IncludeView="simple">&lt;{data[0],g}, {data[1],g}, {data[2],g}, {data[3],g}&gt;</DisplayString>
     <DisplayString ExcludeView="simple" Condition="IsNormalized()">Unit Vector {data[0],g} [y]: {data[1],g} [z]: {data[2],g} [w]: {data[3],g}</DisplayString>
     <DisplayString ExcludeView="simple" Condition="!IsNormalized()">[x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g} [w]: {data[3],g}</DisplayString>
+  </Type>
+
+  <!-- Vector4< int > -->
+  <Type Name="Framework::VectorBase&lt;int,4&gt;">
+    <DisplayString IncludeView="simple">&lt;{data[0],d}, {data[1],d} {data[2],d} {data[3],d}&gt;</DisplayString>
+    <DisplayString ExcludeView="simple">[x]: {data[0],d} [y]: {data[1],d} [z]: {data[2],d} [w]: {data[3],d}</DisplayString>
   </Type>
     
   <!-- Color3 -->
