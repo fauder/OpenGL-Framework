@@ -101,8 +101,8 @@
   <Intrinsic Name="Dot" Expression="w*w+xyz.data[0]*xyz.data[0]+xyz.data[1]*xyz.data[1]+xyz.data[2]*xyz.data[2]"></Intrinsic>
   <Intrinsic Name="IsNormalized" Expression="Dot()&gt;0.99980000000500002&amp;Dot()&lt;1.0001999999950000"></Intrinsic>
     <DisplayString IncludeView="simple">&lt;{w,g} {xyz}&gt;</DisplayString>
-    <DisplayString ExcludeView="simple" Condition="IsNormalized()">Unit Quaternion [w]: {w,g} [x]: {xyz.data[0],g} [y]: {xyz.data[1],g} [z]: {xyz.data[2],g}</DisplayString>
-    <DisplayString ExcludeView="simple" Condition="!IsNormalized()">[w]: {w,g} [x]: {xyz.data[0],g} [y]: {xyz.data[1],g} [z]: {xyz.data[2],g}</DisplayString>
+    <DisplayString ExcludeView="simple" Condition="IsNormalized()">Unit Quaternion [x]: {xyz.data[0],g} [y]: {xyz.data[1],g} [z]: {xyz.data[2],g} [w]: {w,g}</DisplayString>
+    <DisplayString ExcludeView="simple" Condition="!IsNormalized()">[x]: {xyz.data[0],g} [y]: {xyz.data[1],g} [z]: {xyz.data[2],g} [w]: {w,g}</DisplayString>
   </Type>
   
   <!-- Matrix -->
