@@ -136,10 +136,7 @@ namespace Framework
 
 		constexpr bool IsNormalized() const requires( std::is_integral_v< Coordinate > == false )
 		{
-			Coordinate sum_of_squares( 0 );
-			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { sum_of_squares += data[ index ] * data[ index]; } );
-
-			return Math::IsEqual( sum_of_squares, Coordinate( 1 ) );
+			return Math::IsEqualSquared( SquareMagnitude(), Coordinate( 1 ) );
 		}
 
 	/* Arithmetic Operations: Unary operators. */
