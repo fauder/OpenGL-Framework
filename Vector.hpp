@@ -311,14 +311,9 @@ namespace Framework
 			return result;
 		}
 
-		constexpr friend Coordinate Dot( const VectorBase& u, const VectorBase& v ) // Practically we won't use this for any vectors other than 3D & 4D, but no need to restrict.
-		{
-			Coordinate result( 0 );
-
-			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result += u.data[ index ] * v.data[ index ]; } );
-
-			return result;
-		}
+		// Practically we won't use this for any vectors other than 3D & 4D, but no need to restrict.
+		template< Concepts::Arithmetic Coordinate_, size_t Size_ > // Have to use different template parameters here because C++...
+		friend constexpr Coordinate_ Dot( const VectorBase< Coordinate_, Size_ >& u, const VectorBase< Coordinate_, Size_ >& v );
 
 		// Cross product is only defined for vectors of 3 & 7 dimensions apparently, but practically we only need it for 3D.
 		constexpr friend VectorBase Cross( const VectorBase& u, const VectorBase& v ) requires( Size == 3 )
@@ -372,6 +367,17 @@ namespace Framework
 	protected:
 		Coordinate data[ Size ];
 	};
+
+	template< Concepts::Arithmetic Coordinate, size_t Size >
+		requires Concepts::NonZero< Size >
+	constexpr Coordinate Dot( const VectorBase< Coordinate, Size >& u, const VectorBase< Coordinate, Size >& v ) // Practically we won't use this for any vectors other than 3D & 4D, but no need to restrict.
+	{
+		Coordinate result( 0 );
+
+		Utility::constexpr_for< 0, Size, 1 >( [&]( const auto index ) { result += u.data[ index ] * v.data[ index ]; } );
+
+		return result;
+	}
 
 	using Vector2  = VectorBase< float,  2 >;
 	using Vector3  = VectorBase< float,  3 >;
