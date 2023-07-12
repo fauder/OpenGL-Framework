@@ -82,6 +82,21 @@ namespace Framework
 		}
 
 	/* Other Queries. */
+		constexpr RadiansType HalfAngle() const
+		{
+			return RadiansType( std::acos( w ) );
+		}
+
+		constexpr RadiansType Angle() const
+		{
+			return ComponentType{ 2 } * HalfAngle();
+		}
+
+		constexpr VectorType Axis() const
+		{
+			return VectorType( xyz / std::sin( ComponentType( HalfAngle() ) ) );
+		}
+
 		constexpr ComponentType SquareMagnitude() const { return Dot(); }
 		ComponentType Magnitude() const { return std::sqrt( SquareMagnitude() ); }
 
