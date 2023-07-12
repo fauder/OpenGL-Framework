@@ -112,6 +112,12 @@ namespace Framework
 		}
 
 	/* Arithmetic Operations. */
+		constexpr QuaternionBase operator*( const QuaternionBase& other ) const
+		{
+			return QuaternionBase( w * other.xyz + other.w * xyz + Cross( xyz, other.xyz ),
+								   w * other.w - Framework::Dot( xyz, other.xyz ) );
+		}
+
 		constexpr QuaternionBase Conjugate() const
 		{
 			return QuaternionBase( -xyz, w );
