@@ -118,6 +118,13 @@ namespace Framework
 								   w * other.w - Framework::Dot( xyz, other.xyz ) );
 		}
 
+		/* Returns a quaternion d such that d*a=b (where a = this Quaternion (i.e., *this)).
+		 * Here, d is the angular displacement between this Quaternion and the other. */
+		constexpr QuaternionBase Difference( const QuaternionBase& b ) const
+		{
+			return b * Inverse();
+		}
+
 		constexpr QuaternionBase Conjugate() const
 		{
 			return QuaternionBase( -xyz, w );
