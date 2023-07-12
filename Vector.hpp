@@ -109,7 +109,19 @@ namespace Framework
 		}
 
 	/* Other Queries. */
-		static consteval size_t Dimension() { return Size; }
+		static consteval size_t Dimension()		{ return Size; }
+
+		static constexpr VectorBase Zero()		{ return VectorBase{}; }
+		static constexpr VectorBase One()		{ return VectorBase{ Coordinate( 1 ) }; }
+
+		static consteval VectorBase Left()		requires( Size >= 1 ) { return VectorBase{ -1.0f }; }
+		static consteval VectorBase Right()		requires( Size >= 1 ) { return VectorBase{ +1.0f }; }
+		static consteval VectorBase Bottom()	requires( Size >= 2 ) { return VectorBase{ 0.0f, -1.0f }; }
+		static consteval VectorBase Top()		requires( Size >= 2 ) { return VectorBase{ 0.0f, +1.0f }; }
+		/* Using right-handed coordinate system. */
+		static consteval VectorBase Backward()	requires( Size >= 3 ) { return VectorBase{ 0.0f, 0.0f, +1.0f }; }
+		/* Using right-handed coordinate system. */
+		static consteval VectorBase Forward()	requires( Size >= 3 ) { return VectorBase{ 0.0f, 0.0f, -1.0f }; }
 
 		constexpr bool IsZero() const
 		{
