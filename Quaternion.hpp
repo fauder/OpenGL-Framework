@@ -189,6 +189,11 @@ namespace Framework
 			return result;
 		}
 
+		constexpr QuaternionBase SlerpNaive( const QuaternionBase& other, const ComponentType t ) const
+		{
+			return Difference( other ).Exp( t ) * *this;
+		}
+
 	/* Other Arithmetic Operations. */
 		/* With self. */
 		constexpr ComponentType Dot() const
