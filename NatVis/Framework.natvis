@@ -13,9 +13,9 @@
   <Type Name="Framework::VectorBase&lt;double,2&gt;">
     <Intrinsic Name="Dot" Expression="data[0]*data[0]+data[1]*data[1]"></Intrinsic>
     <Intrinsic Name="IsNormalized" Expression="Dot()&gt;0.99999999999998002&amp;Dot()&lt;1.0000000000000200"></Intrinsic>
-    <DisplayString IncludeView="simple">&lt;{data[0],g}, {data[1],g}&gt;</DisplayString>
-    <DisplayString ExcludeView="simple" Condition="IsNormalized()">[x]: {data[0],g} [y]: {data[1],g} (normalized)</DisplayString>
-    <DisplayString ExcludeView="simple" Condition="!IsNormalized()">[x]: {data[0],g} [y]: {data[1],g}</DisplayString>
+    <DisplayString IncludeView="simple">&lt;{data[0],h}, {data[1],h}&gt;</DisplayString>
+    <DisplayString ExcludeView="simple" Condition="IsNormalized()">[x]: {data[0],h} [y]: {data[1],h} (normalized)</DisplayString>
+    <DisplayString ExcludeView="simple" Condition="!IsNormalized()">[x]: {data[0],h} [y]: {data[1],h}</DisplayString>
   </Type>
 
   <!-- Vector2< int > -->
@@ -37,9 +37,9 @@
   <Type Name="Framework::VectorBase&lt;double,3&gt;">
     <Intrinsic Name="Dot" Expression="data[0]*data[0]+data[1]*data[1]+data[2]*data[2]"></Intrinsic>
     <Intrinsic Name="IsNormalized" Expression="Dot()&gt;0.99999999999998002&amp;Dot()&lt;1.0000000000000200"></Intrinsic>
-    <DisplayString IncludeView="simple">&lt;[x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g} &gt;</DisplayString>
-    <DisplayString ExcludeView="simple" Condition="IsNormalized()">[x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g} (normalized)</DisplayString>
-    <DisplayString ExcludeView="simple" Condition="!IsNormalized()">[x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g}</DisplayString>
+    <DisplayString IncludeView="simple">&lt;[x]: {data[0],h} [y]: {data[1],h} [z]: {data[2],h} &gt;</DisplayString>
+    <DisplayString ExcludeView="simple" Condition="IsNormalized()">[x]: {data[0],h} [y]: {data[1],h} [z]: {data[2],h} (normalized)</DisplayString>
+    <DisplayString ExcludeView="simple" Condition="!IsNormalized()">[x]: {data[0],h} [y]: {data[1],h} [z]: {data[2],h}</DisplayString>
   </Type>
 
   <!-- Vector3< int > -->
@@ -61,9 +61,9 @@
   <Type Name="Framework::VectorBase&lt;double,4&gt;">
     <Intrinsic Name="Dot" Expression="data[0]*data[0]+data[1]*data[1]+data[2]*data[2]+data[3]*data[3]"></Intrinsic>
     <Intrinsic Name="IsNormalized" Expression="Dot()&gt;0.99999999999998002&amp;Dot()&lt;1.0000000000000200"></Intrinsic>
-    <DisplayString IncludeView="simple">&lt;{data[0],g}, {data[1],g}, {data[2],g}, {data[3],g}&gt;</DisplayString>
-    <DisplayString ExcludeView="simple" Condition="IsNormalized()">{data[0],g} [y]: {data[1],g} [z]: {data[2],g} [w]: {data[3],g} (normalized)</DisplayString>
-    <DisplayString ExcludeView="simple" Condition="!IsNormalized()">[x]: {data[0],g} [y]: {data[1],g} [z]: {data[2],g} [w]: {data[3],g}</DisplayString>
+    <DisplayString IncludeView="simple">&lt;{data[0],h}, {data[1],h}, {data[2],h}, {data[3],h}&gt;</DisplayString>
+    <DisplayString ExcludeView="simple" Condition="IsNormalized()">{data[0],h} [y]: {data[1],h} [z]: {data[2],h} [w]: {data[3],h} (normalized)</DisplayString>
+    <DisplayString ExcludeView="simple" Condition="!IsNormalized()">[x]: {data[0],h} [y]: {data[1],h} [z]: {data[2],h} [w]: {data[3],h}</DisplayString>
   </Type>
 
   <!-- Vector4< int > -->
