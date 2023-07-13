@@ -84,16 +84,28 @@
     <DisplayString ExcludeView="simple">[r]: {data[0],g} [g]: {data[1],g} [b]: {data[2],g} [a]: {data[3],g}</DisplayString>
   </Type>
 
-  <!-- Degrees -->
-  <Type Name="Framework::Math::Degrees&lt;*&gt;">
-    <DisplayString IncludeView="simple">{value,g}° ({value * 0.0174532924,g} radians)</DisplayString>
-    <DisplayString ExcludeView="simple">{value,g}° ({value * 0.0174532924,g} radians)</DisplayString>
+   <!-- Degrees< Float > -->
+  <Type Name="Framework::Math::Degrees&lt;float&gt;">
+    <DisplayString IncludeView="simple">{value,g}° ({value * 3.14159274f / 180.0f,g} radians)</DisplayString>
+    <DisplayString ExcludeView="simple">{value,g}° ({value * 3.14159274f / 180.0f,g} radians)</DisplayString>
   </Type>
-
-  <!-- Radians -->
-  <Type Name="Framework::Math::Radians&lt;*&gt;">
-    <DisplayString IncludeView="simple">{value,g} radians ({value * 57.2957764,g}°)</DisplayString>
-    <DisplayString ExcludeView="simple">{value,g} radians ({value * 57.2957764,g}°)</DisplayString>
+  
+  <!-- Degrees< Double > -->
+  <Type Name="Framework::Math::Degrees&lt;double&gt;">
+    <DisplayString IncludeView="simple">{value,h}° ({value * 3.1415926535897931 / 180.0,h} radians)</DisplayString>
+    <DisplayString ExcludeView="simple">{value,h}° ({value * 3.1415926535897931 / 180.0,h} radians)</DisplayString>
+  </Type>
+  
+  <!--Radians< Float > -->
+  <Type Name="Framework::Math::Radians&lt;float&gt;">
+    <DisplayString IncludeView="simple">{value,g} radians ({180.0f * value / 3.14159274f,g}°)</DisplayString>
+    <DisplayString ExcludeView="simple">{value,g} radians ({180.0f * value / 3.14159274f,g}°)</DisplayString>
+  </Type>
+  
+  <!--Radians< Double > -->
+  <Type Name="Framework::Math::Radians&lt;double&gt;">
+    <DisplayString IncludeView="simple">{value,h} radians ({180.0 * value / 3.1415926535897931,h}°)</DisplayString>
+    <DisplayString ExcludeView="simple">{value,h} radians ({180.0 * value / 3.1415926535897931,h}°)</DisplayString>
   </Type>
   
   <!-- Quaternion -->
