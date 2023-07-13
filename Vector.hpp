@@ -329,7 +329,7 @@ namespace Framework
 
 		VectorBase Normalized() const requires( std::floating_point< Coordinate > )
 		{
-			if( const auto magnitude = Magnitude(); magnitude > Constants::Epsilon< Coordinate >() )
+			if( const auto magnitude = Magnitude(); magnitude > Constants< Coordinate >::Epsilon() )
 			{
 				const Coordinate one_over_magnitude = 1.0f / Magnitude();
 				return *this * one_over_magnitude;

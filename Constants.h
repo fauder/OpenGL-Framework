@@ -3,22 +3,47 @@
 // std Includes.
 #include <numbers>
 
-namespace Framework::Constants
+namespace Framework
 {
-	constexpr float PI         = std::numbers::pi_v< float >;
-	constexpr float TWO_PI     = PI * 2.0f;
-	constexpr float DEG_TO_RAD = PI / 180.0f;
-	constexpr float RAD_TO_DEG = 180.0f / PI;
+	template< typename T > struct Constants
+	{};
 
-	template< std::floating_point T >
-	constexpr T Epsilon()
+	template<> struct Constants< float >
 	{
-		if constexpr( std::is_same_v< T, float > )
-			return 10e-5f;
-		else
-			return 10e-15;
-	}
+		Constants() = delete;
 
-	template< std::floating_point T >
-	constexpr T TwoEpsilon() { return 2 * Epsilon< T >(); }
+		static constexpr float Epsilon()		{ return 10e-5f;						}
+		static constexpr float TwoEpsilon()		{ return Epsilon() * 2.0f;				}
+
+
+		static constexpr float Pi()				{ return std::numbers::pi_v< float >;	}
+		static constexpr float Half_Pi()		{ return Pi() / 2.0f;					}
+		static constexpr float Quarter_Pi()		{ return Pi() / 4.0f;					}
+		static constexpr float Two_Pi()			{ return Pi() * 2.0f;					}
+		static constexpr float Deg_To_Rad()		{ return Pi() / 180.0f;					}
+		static constexpr float Rad_To_Deg()		{ return 180.0f / Pi();					}
+
+		static constexpr float Sqrt_2()			{ return 1.414213562f;					}
+		static constexpr float Sqrt_3()			{ return 1.732050808f;					}
+		static constexpr float Sqrt_Half()		{ return 0.707106781f;					}
+	};
+
+	template<> struct Constants< double >
+	{
+		Constants() = delete;
+	
+		static constexpr double Epsilon()		{ return 10e-15;						}
+		static constexpr double TwoEpsilon()	{ return Epsilon() * 2.0;				}
+
+		static constexpr double Pi()			{ return std::numbers::pi_v< double >;	}
+		static constexpr double Half_Pi()		{ return Pi() / 2.0;					}
+		static constexpr double Quarter_Pi()	{ return Pi() / 4.0;					}
+		static constexpr double Two_Pi()		{ return Pi() * 2.0;					}
+		static constexpr double Deg_To_Rad()	{ return Pi() / 180.0;					}
+		static constexpr double Rad_To_Deg()	{ return 180.0 / Pi();					}
+
+		static constexpr double Sqrt_2()		{ return 1.4142135623730950;			}
+		static constexpr double Sqrt_3()		{ return 1.7320508075688773;			}
+		static constexpr double Sqrt_Half()		{ return 0.7071067811865475;			}
+	};
 }

@@ -31,7 +31,7 @@ namespace Framework::Math
 /* Floating point comparisons. */
 	/* Based on Magnum's TypeTraits::Equals(). */
 	template< std::floating_point Value >
-	constexpr bool IsEqual( Value lhs, Value rhs, const float epsilon = Constants::Epsilon< Value >() )
+	constexpr bool IsEqual( Value lhs, Value rhs, const float epsilon = Constants< Value >::Epsilon() )
 	{
 		if( lhs == rhs ) // Check for binary and infinity equalities.
 			return true;
@@ -48,31 +48,31 @@ namespace Framework::Math
 	}
 
 	template< std::floating_point Value >
-	bool IsEqualSquared( Value lhs, Value rhs, const float epsilon = Constants::TwoEpsilon< Value >() )
+	bool IsEqualSquared( Value lhs, Value rhs, const float epsilon = Constants< Value >::TwoEpsilon() )
 	{
 		return IsEqual( lhs, rhs, epsilon );
 	}
 
 	template< std::floating_point Value >
-	constexpr bool IsGreaterThan( Value lhs, Value rhs, const float epsilon = Constants::Epsilon< Value >() ) { return lhs - rhs > epsilon; }
+	constexpr bool IsGreaterThan( Value lhs, Value rhs, const float epsilon = Constants< Value >::Epsilon() ) { return lhs - rhs > epsilon; }
 
 	template< std::floating_point Value >
-	bool IsGreaterThanOrEqual( Value lhs, Value rhs, const float epsilon = Constants::Epsilon< Value >() ) {
+	bool IsGreaterThanOrEqual( Value lhs, Value rhs, const float epsilon = Constants< Value >::Epsilon() ) {
 		return std::abs( lhs - rhs ) < epsilon ||
 			lhs - rhs > epsilon;
 	}
 
 	template< std::floating_point Value >
-	constexpr bool IsLessThan( Value lhs, Value rhs, const float epsilon = Constants::Epsilon< Value >() ) { return rhs - lhs > epsilon; }
+	constexpr bool IsLessThan( Value lhs, Value rhs, const float epsilon = Constants< Value >::Epsilon() ) { return rhs - lhs > epsilon; }
 
 	template< std::floating_point Value >
-	bool IsLessThanOrEqual( Value lhs, Value rhs, const float epsilon = Constants::Epsilon< Value >() ) {
+	bool IsLessThanOrEqual( Value lhs, Value rhs, const float epsilon = Constants< Value >::Epsilon() ) {
 		return std::abs( rhs - lhs ) < epsilon ||
 			rhs - lhs > epsilon;
 	}
 
 	template< std::floating_point Value >
-	bool IsZero( Value value, const float epsilon = Constants::Epsilon< Value >() ) { return IsEqual( value, Value{ 0 } ); }
+	bool IsZero( Value value, const float epsilon = Constants< Value >::Epsilon() ) { return IsEqual( value, Value{ 0 } ); }
 
 /* Arithmetic. */
 	template< std::floating_point Value >
