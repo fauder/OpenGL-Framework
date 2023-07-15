@@ -153,7 +153,7 @@ namespace Framework
 	/* Other Arithmetic Operations. */
 		constexpr QuaternionBase operator*( const QuaternionBase& other ) const
 		{
-			return QuaternionBase( w * other.xyz + other.w * xyz + Cross( xyz, other.xyz ),
+			return QuaternionBase( w * other.xyz + other.w * xyz + Framework::Cross( xyz, other.xyz ),
 								   w * other.w - Framework::Dot( xyz, other.xyz ) );
 		}
 

@@ -316,13 +316,8 @@ namespace Framework
 		friend constexpr Coordinate_ Dot( const VectorBase< Coordinate_, Size_ >& u, const VectorBase< Coordinate_, Size_ >& v );
 
 		// Cross product is only defined for vectors of 3 & 7 dimensions apparently, but practically we only need it for 3D.
-		constexpr friend VectorBase Cross( const VectorBase& u, const VectorBase& v ) requires( Size == 3 )
-		{
-			// u X v = ( u2v3 - u3v2, u3v1 - u1v3, u1v2 - u2v1 )
-			return VectorBase( u.data[ 1 ] * v.data[ 2 ] - u.data[ 2 ] * v.data[ 1 ],
-							   u.data[ 2 ] * v.data[ 0 ] - u.data[ 0 ] * v.data[ 2 ],
-							   u.data[ 0 ] * v.data[ 1 ] - u.data[ 1 ] * v.data[ 0 ] );
-		}
+		template< Concepts::Arithmetic Coordinate_ > // Have to use different template parameters here because C++...
+		friend constexpr VectorBase< Coordinate_, 3 > Cross( const VectorBase< Coordinate_, 3 >& u, const VectorBase< Coordinate_, 3 >& v );
 
 		constexpr Coordinate SquareMagnitude() const { return Dot(); }
 		Coordinate Magnitude() const requires( std::floating_point< Coordinate > ) { return std::sqrt( SquareMagnitude() ); }
@@ -369,7 +364,6 @@ namespace Framework
 	};
 
 	template< Concepts::Arithmetic Coordinate, size_t Size >
-		requires Concepts::NonZero< Size >
 	constexpr Coordinate Dot( const VectorBase< Coordinate, Size >& u, const VectorBase< Coordinate, Size >& v ) // Practically we won't use this for any vectors other than 3D & 4D, but no need to restrict.
 	{
 		Coordinate result( 0 );
@@ -377,6 +371,16 @@ namespace Framework
 		Utility::constexpr_for< 0, Size, 1 >( [&]( const auto index ) { result += u.data[ index ] * v.data[ index ]; } );
 
 		return result;
+	}
+
+	// Cross product is only defined for vectors of 3 & 7 dimensions apparently, but practically we only need it for 3D.
+	template< Concepts::Arithmetic Coordinate >
+	constexpr VectorBase< Coordinate, 3 > Cross( const VectorBase< Coordinate, 3 >& u, const VectorBase< Coordinate, 3 >& v )
+	{
+		// u X v = ( u2v3 - u3v2, u3v1 - u1v3, u1v2 - u2v1 )
+		return VectorBase< Coordinate, 3 >( u.data[ 1 ] * v.data[ 2 ] - u.data[ 2 ] * v.data[ 1 ],
+											u.data[ 2 ] * v.data[ 0 ] - u.data[ 0 ] * v.data[ 2 ],
+											u.data[ 0 ] * v.data[ 1 ] - u.data[ 1 ] * v.data[ 0 ] );
 	}
 
 	using Vector2  = VectorBase< float,  2 >;
