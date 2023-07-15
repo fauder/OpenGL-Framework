@@ -10,11 +10,6 @@
 #include "Assert.h"
 #endif // _DEBUG
 
-/* Assumption: A quaternion is always used for rotation and should therefore be normalized.
- * Results of this assumption: 
- * 1) On debug configuration: All non-default and user defined constructors (even the x,y,z,w & xyz,w constructors) warn the user if the values passed do not construct a unit quaternion.
- * 2) Inverse() simply returns the Conjugate().
- */
 namespace Framework
 {
 /* Forward Declarations. */
@@ -47,35 +42,17 @@ namespace Framework
 
 		constexpr ~QuaternionBase() = default;
 
-		CONSTEXPR_ON_RELEASE QuaternionBase( const ComponentType x, const ComponentType y, const ComponentType z, const ComponentType w )
+		constexpr QuaternionBase( const ComponentType x, const ComponentType y, const ComponentType z, const ComponentType w )
 			:
 			xyz( x, y, z ),
 			w( w )
-		{
-	#ifdef _DEBUG
-			if( IsIdentity() )
-				return;
+		{}
 
-			const RadiansType half_angle( std::acos( w ) );
-			const VectorType rotation_axis( xyz / std::sin( ComponentType( half_angle ) ) );
-			ASSERT( rotation_axis.IsNormalized() && "QuaternionBase::QuaternionBase( angle, axis ): The axis vector provided is not normalized!" );
-	#endif // _DEBUG
-		}
-
-		CONSTEXPR_ON_RELEASE QuaternionBase( const VectorType& xyz, const ComponentType w )
+		constexpr QuaternionBase( const VectorType& xyz, const ComponentType w )
 			:
 			xyz( xyz ),
 			w( w )
-		{
-	#ifdef _DEBUG
-			if( IsIdentity() )
-				return;
-
-			const RadiansType half_angle( std::acos( w ) );
-			const VectorType rotation_axis( xyz / std::sin( ComponentType( half_angle ) ) );
-			ASSERT( rotation_axis.IsNormalized() && "QuaternionBase::QuaternionBase( angle, axis ): The axis vector provided is not normalized!" );
-	#endif // _DEBUG
-		}
+		{}
 
 		/* Expects a unit vector for the axis! */
 		QuaternionBase( RadiansType angle, const VectorType& rotation_axis_normalized )
@@ -92,12 +69,21 @@ namespace Framework
 	/* Other Queries. */
 		constexpr RadiansType HalfAngle() const
 		{
+		#ifdef _DEBUG
+			ASSERT( IsNormalized() && R"(QuaternionBase::HaflAngle(): The quaternion "*this" is not normalized!)" );
+		#endif // _DEBUG
+
 			return RadiansType( std::acos( w ) );
 		}
 
 		// Returns half the angular displacement between *this Quaternion and the other.
 		constexpr RadiansType HalfAngleBetween( const QuaternionBase& other ) const
 		{
+		#ifdef _DEBUG
+			ASSERT( this->IsNormalized() && R"(Quaternion::HalfAngleBetween(other) : The quaternion "*this" is not normalized!)" );
+			ASSERT( other.IsNormalized() && R"(Quaternion::HalfAngleBetween(other) : The quaternion "other" is not normalized!)" );
+		#endif
+
 			return RadiansType( std::acos( Framework::Dot( *this, other ) ) );
 		}
 
@@ -112,8 +98,13 @@ namespace Framework
 			return ComponentType{ 2 } * HalfAngleBetween( other );
 		}
 
+		/* Returns a NaN vector when the half angle represented by *this is zero. */
 		constexpr VectorType Axis() const
 		{
+		#ifdef _DEBUG
+			ASSERT( IsNormalized() && R"(QuaternionBase::Axis(): The quaternion "*this" is not normalized!)" );
+		#endif // _DEBUG
+
 			return VectorType( xyz / std::sin( ComponentType( HalfAngle() ) ) );
 		}
 
@@ -179,14 +170,29 @@ namespace Framework
 			return *this;
 		}
 
-		/* Assumes a unit quaternion, hence, returns the conjugate since inverse = conjugate / magnitude, where magnitude = 1 for a unit quaternion. */
 		constexpr QuaternionBase Inverse() const
 		{
+			return Conjugate() / Dot();
+		}
+
+		/* Assumes *this is a unit quaternion. Faster than Inverse().
+		 * Simply returns the conjugate since inverse = conjugate / magnitude, where magnitude = 1 for a unit quaternion. */
+		constexpr QuaternionBase Inverse_Normalized() const
+		{
+		#ifdef _DEBUG
+			ASSERT( IsNormalized() && R"(Quaternion::Inverse_Normalized() : The quaternion "*this" is not normalized!)" );
+		#endif
+
 			return Conjugate();
 		}
 
-		/* Sets this quaternion equal to its inverse, which is its conjugate since a unit quaternion is assumed. (i.e, [w -x -y -z]). */
 		constexpr QuaternionBase& Invert()
+		{
+			return *this = Inverse();
+		}
+
+		/* Sets this quaternion equal to its inverse, which is its conjugate since a unit quaternion is assumed. (i.e, [w -x -y -z]). */
+		constexpr QuaternionBase& Invert_Normalized()
 		{
 			return SetToConjugate();
 		}
