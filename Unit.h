@@ -3,8 +3,11 @@
 // Project Includes.
 #include "Concepts.h"
 #include "Initialization.h"
-#include "Math.h"
+#include "TypeTraits.h"
 #include "Utility.h"
+
+// std Includes.
+#include <compare>
 
 namespace Framework
 {

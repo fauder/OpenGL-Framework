@@ -28,52 +28,6 @@ namespace Framework::Math
 	template< std::floating_point Value >
 	Value NonHyptothenuseEdge( const Value edge, const Value hyptothenuse ) { return std::sqrt( hyptothenuse * hyptothenuse - edge * edge ); }
 
-/* Floating point comparisons. */
-	/* Based on Magnum's TypeTraits::Equals(). */
-	template< std::floating_point Value >
-	constexpr bool IsEqual( Value lhs, Value rhs, const float epsilon = Constants< Value >::Epsilon() )
-	{
-		if( lhs == rhs ) // Check for binary and infinity equalities.
-			return true;
-
-		Value abs_lhs    = std::abs( lhs );
-		Value abs_rhs    = std::abs( rhs );
-		Value difference = std::abs( lhs - rhs );
-
-		/* Do not use relative error if one of the values is zero or the difference is smaller than the epsilon. */
-		if( lhs == Value{} || rhs == Value{} || difference < epsilon )
-			return true;
-
-		return difference / std::abs( lhs + rhs ) < epsilon;
-	}
-
-	template< std::floating_point Value >
-	bool IsEqualSquared( Value lhs, Value rhs, const float epsilon = Constants< Value >::TwoEpsilon() )
-	{
-		return IsEqual( lhs, rhs, epsilon );
-	}
-
-	template< std::floating_point Value >
-	constexpr bool IsGreaterThan( Value lhs, Value rhs, const float epsilon = Constants< Value >::Epsilon() ) { return lhs - rhs > epsilon; }
-
-	template< std::floating_point Value >
-	bool IsGreaterThanOrEqual( Value lhs, Value rhs, const float epsilon = Constants< Value >::Epsilon() ) {
-		return std::abs( lhs - rhs ) < epsilon ||
-			lhs - rhs > epsilon;
-	}
-
-	template< std::floating_point Value >
-	constexpr bool IsLessThan( Value lhs, Value rhs, const float epsilon = Constants< Value >::Epsilon() ) { return rhs - lhs > epsilon; }
-
-	template< std::floating_point Value >
-	bool IsLessThanOrEqual( Value lhs, Value rhs, const float epsilon = Constants< Value >::Epsilon() ) {
-		return std::abs( rhs - lhs ) < epsilon ||
-			rhs - lhs > epsilon;
-	}
-
-	template< std::floating_point Value >
-	bool IsZero( Value value, const float epsilon = Constants< Value >::Epsilon() ) { return IsEqual( value, Value{ 0 } ); }
-
 /* Arithmetic. */
 	template< std::floating_point Value >
 	Value SquareOf( Value value ) { return std::pow( value, Value{ 2 } ); }

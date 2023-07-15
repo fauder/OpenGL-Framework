@@ -12,10 +12,6 @@ namespace Framework
 	{
 		Constants() = delete;
 
-		static constexpr float Epsilon()		{ return 10e-5f;						}
-		static constexpr float TwoEpsilon()		{ return Epsilon() * 2.0f;				}
-
-
 		static constexpr float Pi()				{ return std::numbers::pi_v< float >;	}
 		static constexpr float Half_Pi()		{ return Pi() / 2.0f;					}
 		static constexpr float Quarter_Pi()		{ return Pi() / 4.0f;					}
@@ -32,9 +28,6 @@ namespace Framework
 	{
 		Constants() = delete;
 	
-		static constexpr double Epsilon()		{ return 10e-15;						}
-		static constexpr double TwoEpsilon()	{ return Epsilon() * 2.0;				}
-
 		static constexpr double Pi()			{ return std::numbers::pi_v< double >;	}
 		static constexpr double Half_Pi()		{ return Pi() / 2.0;					}
 		static constexpr double Quarter_Pi()	{ return Pi() / 4.0;					}

@@ -5,6 +5,9 @@
 #include "Constants.h"
 #include "Unit.h"
 
+// std Includes.
+#include <cmath>
+
 namespace Framework
 {
 	namespace Math

@@ -184,6 +184,7 @@
     <ClInclude Include="Polar.hpp" />
     <ClInclude Include="Quaternion.hpp" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="TypeTraits.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="IndexBuffer.h" />
