@@ -130,7 +130,36 @@ namespace Framework
 			return Math::IsEqual( SquareMagnitude(), ComponentType( 1 ) );
 		}
 
-	/* Arithmetic Operations. */
+	/* Arithmetic Operations: Binary operators (with a scalar), of the the form vector-operator-scalar. */
+		constexpr QuaternionBase operator* ( const ComponentType scalar ) const
+		{
+			return { xyz * scalar, w * scalar };
+		}
+
+		constexpr QuaternionBase& operator*= ( const ComponentType scalar )
+		{
+			w   *= scalar;
+			xyz *= scalar;
+
+			return *this;
+		}
+
+		constexpr QuaternionBase operator/ ( const ComponentType scalar ) const
+		{
+			const auto inverse_of_scalar = ComponentType( 1 ) / scalar; // We can calculate the inverse safely.
+			return { xyz * inverse_of_scalar, w * inverse_of_scalar };
+		}
+
+		constexpr QuaternionBase& operator/= ( const ComponentType scalar )
+		{
+			const auto inverse_of_scalar = ComponentType( 1 ) / scalar; // We can calculate the inverse safely.
+			w   *= inverse_of_scalar;
+			xyz *= inverse_of_scalar;
+
+			return *this;
+		}
+
+	/* Other Arithmetic Operations. */
 		constexpr QuaternionBase operator*( const QuaternionBase& other ) const
 		{
 			return QuaternionBase( w * other.xyz + other.w * xyz + Cross( xyz, other.xyz ),
