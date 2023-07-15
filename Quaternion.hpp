@@ -197,9 +197,10 @@ namespace Framework
 			return SetToConjugate();
 		}
 
-		/* Returns a quaternion d such that d*a=b (where a = this Quaternion (i.e., *this)).
-		 * Here, d is the angular displacement between this Quaternion and the other. */
-		constexpr QuaternionBase Difference( const QuaternionBase& b ) const
+		/* Assumes unit quaternions.
+		 * Returns a quaternion d such that d*a=b (where a = *this Quaternion).
+		 * Here, d is the angular displacement between *this and the other. */
+		constexpr QuaternionBase DifferenceBetween( const QuaternionBase& b ) const
 		{
 			return b * Inverse();
 		}
@@ -226,7 +227,7 @@ namespace Framework
 
 		constexpr QuaternionBase SlerpNaive( const QuaternionBase& other, const ComponentType t ) const
 		{
-			return Difference( other ).Exp( t ) * *this;
+			return DifferenceBetween( other ).Exp( t ) * *this;
 		}
 
 	/* Other Arithmetic Operations. */
