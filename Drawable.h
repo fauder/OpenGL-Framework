@@ -5,10 +5,7 @@
 
 // Project Includes.
 #include "Shader.h"
-#include "Vector.hpp"
-
-// std Includes.
-#include <vector>
+#include "VertexArray.h"
 
 namespace Framework
 {

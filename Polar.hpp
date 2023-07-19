@@ -4,7 +4,7 @@
 #include "Angle.hpp"
 #include "Vector.hpp"
 
-namespace Framework
+namespace Framework::Math
 {
 	// TODO: When these are necessary (for example, camera manipulation may utilize polar coordinates);
 	// TODO: (cont'd) revise (if necessary) all classes according to XYZ coordinates & handedness utilized in-framework.
@@ -20,7 +20,7 @@ namespace Framework
 			theta()
 		{}
 
-		Polar2( const float r, Radians theta )
+		Polar2( const float r, Framework::Radians theta )
 			:
 			r( r ),
 			theta( theta )
@@ -29,12 +29,12 @@ namespace Framework
 	/* Getters & Setters. */
 		constexpr float R() const { return r; }
 		float& R() { return r; }
-		constexpr Radians Theta() const { return theta; }
-		Radians& Theta() { return theta; }
+		constexpr Framework::Radians Theta() const { return theta; }
+		Framework::Radians& Theta() { return theta; }
 
 	private:
 		float r;
-		Radians theta;
+		Framework::Radians theta;
 	};
 
 	/* In classical mathematical notation (r, theta, z).  X is right & Y is forward & Z is up (right-handed space.) */
@@ -49,7 +49,7 @@ namespace Framework
 			z()
 		{}
 
-		Polar3_Cylindrical( const float r, const Radians theta, const float z )
+		Polar3_Cylindrical( const float r, const Framework::Radians theta, const float z )
 			:
 			r( r ),
 			theta( theta ),
@@ -59,14 +59,14 @@ namespace Framework
 	/* Getters & Setters. */
 		constexpr float R() const { return r; }
 		float& R() { return r; }
-		constexpr Radians Theta() const { return theta; }
-		Radians& Theta() { return theta; }
+		constexpr Framework::Radians Theta() const { return theta; }
+		Framework::Radians& Theta() { return theta; }
 		constexpr float Z() const { return z; }
 		float& Z() { return z; }
 
 	private:
 		float r;
-		Radians theta;
+		Framework::Radians theta;
 		float z;
 	};
 
@@ -84,7 +84,7 @@ namespace Framework
 			phi()
 		{}
 
-		Polar3_Spherical( const float r, const Radians theta, const Radians phi )
+		Polar3_Spherical( const float r, const Framework::Radians theta, const Framework::Radians phi )
 			:
 			r( r ),
 			theta( theta ),
@@ -94,15 +94,15 @@ namespace Framework
 	/* Getters & Setters. */
 		constexpr float R() const { return r; }
 		float& R() { return r; }
-		/* Also called Azimuth or Longitude. */ constexpr Radians Theta() const { return theta; }
-		/* Also called Azimuth or Longitude. */ Radians& Theta() { return theta; }
-		/* Also called Zenith. Latitude is (90 - Zenith/Phi). */ constexpr Radians Phi() const { return phi; }
-		/* Also called Zenith. Latitude is (90 - Zenith/Phi). */ Radians& Phi() { return phi; }
+		/* Also called Azimuth or Longitude. */ constexpr Framework::Radians Theta() const { return theta; }
+		/* Also called Azimuth or Longitude. */ Framework::Radians& Theta() { return theta; }
+		/* Also called Zenith. Latitude is (90 - Zenith/Phi). */ constexpr Framework::Radians Phi() const { return phi; }
+		/* Also called Zenith. Latitude is (90 - Zenith/Phi). */ Framework::Radians& Phi() { return phi; }
 
 	private:
 		float r;
-		Radians theta;
-		Radians phi;
+		Framework::Radians theta;
+		Framework::Radians phi;
 	};
 
 	/* Deviates from classical mathematical notation (r, theta, phi), more in-line with video game conventions/needs. In this convention, Y is up, X is right & Z is forward (left-handed).
@@ -121,7 +121,7 @@ namespace Framework
 			pitch()
 		{}
 
-		Polar3_Spherical_Game( const float r, const Radians heading, const Radians pitch )
+		Polar3_Spherical_Game( const float r, const Framework::Radians heading, const Framework::Radians pitch )
 			:
 			r( r ),
 			heading( heading ),
@@ -134,23 +134,23 @@ namespace Framework
 		/* Heading = 0 means forward (assuming Pitch is also zero).
 		 * Increasing Heading means clockwise rotation around the Y axis.
 		 */
-		constexpr Radians Heading() const { return heading; }
+		constexpr Framework::Radians Heading() const { return heading; }
 		/* Heading = 0 means forward (assuming Pitch is also zero).
 		 * Increasing Heading means clockwise rotation around the Y axis.
 		 */
-		Radians& Heading() { return heading; }
+		Framework::Radians& Heading() { return heading; }
 		/* Pitch = 0 means horizontal.
 		 * Also called the Angle of Declination, as Z decreases with increasing Pitch.
 		 */
-		constexpr Radians Pitch() const { return pitch; }
+		constexpr Framework::Radians Pitch() const { return pitch; }
 		/* Pitch = 0 means horizontal.
 		 * Also called the Angle of Declination, as Z decreases with increasing Pitch.
 		 */
-		Radians& Pitch() { return pitch; }
+		Framework::Radians& Pitch() { return pitch; }
 
 	private:
 		float r;
-		Radians heading;
-		Radians pitch;
+		Framework::Radians heading;
+		Framework::Radians pitch;
 	};
 }

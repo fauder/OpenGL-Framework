@@ -35,7 +35,7 @@ int main()
 		// Shader creation & compilation.
 		Shader shader( "Asset/Shader/Vertex.shader", "Asset/Shader/Fragment.shader" );
 
-		const std::vector< VectorBase< float, 3 + 2 > > vertices =
+		const std::vector< Math::Vector< float, 3 + 2 > > vertices =
 		{
 			/* Object space coordinates			UVs. */
 			{ -0.5f, -0.5f, -0.5f,			0.0f, 0.0f },

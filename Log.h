@@ -2,7 +2,7 @@
 
 // Project Includes.
 #include "Concepts.h"
-#include "MatrixBase.hpp"
+#include "Matrix.hpp"
 #include "Utility.h"
 #include "Vector.hpp"
 
@@ -13,7 +13,7 @@
 namespace Framework::Log
 {
 	template< Concepts::Arithmetic Coordinate, unsigned int Size > requires( Concepts::NonZero< Size > )
-	void Dump( const VectorBase< Coordinate, Size >& vector )
+	void Dump( const Math::Vector< Coordinate, Size >& vector )
 	{
 		std::cout << '<' << vector[ 0 ];
 
@@ -24,7 +24,7 @@ namespace Framework::Log
 	}
 
 	template< Concepts::Arithmetic Coordinate, unsigned int Size > requires( Concepts::NonZero< Size > )
-	void Dump( const char* debug_name, const VectorBase< Coordinate, Size >& vector )
+	void Dump( const char* debug_name, const Math::Vector< Coordinate, Size >& vector )
 	{
 		std::cout << debug_name << ": ";
 		Dump( vector );

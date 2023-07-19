@@ -1,7 +1,6 @@
 // Project Includes.
 #include "Drawable_Indexed.h"
 #include "Graphics.h"
-#include "VertexArray.h"
 
 namespace Framework
 {

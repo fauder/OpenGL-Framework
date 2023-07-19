@@ -1,9 +1,6 @@
-// GLAD Includes.
-#include <glad/glad.h>
-
 // Project Includes.
+#include "Graphics.h"
 #include "Renderer.h"
-#include "Window.h"
 
 // std Includes.
 #include <iostream>

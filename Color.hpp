@@ -6,9 +6,9 @@
 
 namespace Framework
 {
-	class Color3 : public VectorBase< float, 3 >
+	class Color3 : public Vector3
 	{
-		using Base = VectorBase< float, 3 >;
+		using Base = Vector< float, 3 >;
 
 	public:
 		Color3()
@@ -26,9 +26,9 @@ namespace Framework
 		constexpr float B() const { return data[ 2 ]; };
 	};
 
-	class Color4 : public VectorBase< float, 4 >
+	class Color4 : public Vector4
 	{
-		using Base = VectorBase< float, 4 >;
+		using Base = Vector4;
 	
 	public:
 		Color4()

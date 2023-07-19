@@ -45,7 +45,7 @@ namespace Framework
 		void SetInt( const char* name, const int value );
 		void SetBool( const char* name, const bool value );
 		template< unsigned int Size > requires Concepts::NonZero< Size >
-		void SetVector( const char* name, const VectorBase< float, Size >& value )
+		void SetVector( const char* name, const Math::Vector< float, Size >& value )
 		{
 			if constexpr( Size == 2 )
 			{

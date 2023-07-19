@@ -23,7 +23,7 @@ namespace Framework
 	class QuaternionBase
 	{
 	private:
-		using VectorType  = VectorBase< ComponentType, 3 >;
+		using VectorType  = Math::Vector< ComponentType, 3 >;
 		using RadiansType = Math::Radians< ComponentType >;
 
 	public:
@@ -153,8 +153,8 @@ namespace Framework
 	/* Other Arithmetic Operations. */
 		constexpr QuaternionBase operator*( const QuaternionBase& other ) const
 		{
-			return QuaternionBase( w * other.xyz + other.w * xyz + Framework::Cross( xyz, other.xyz ),
-								   w * other.w - Framework::Dot( xyz, other.xyz ) );
+			return QuaternionBase( w * other.xyz + other.w * xyz + Framework::Math::Cross( xyz, other.xyz ),
+								   w * other.w - Framework::Math::Dot( xyz, other.xyz ) );
 		}
 
 		constexpr QuaternionBase Conjugate() const

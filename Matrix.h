@@ -8,7 +8,6 @@
 /* Constexpr functions can not be in the implementation file. So the ones that are constexpr are on this header file, the ones not constexpr are on the impl. (cpp) file. */
 namespace Framework::Matrix
 {
-
 	/* In row-major form. */
 	constexpr Matrix4x4 OrthographicProjection( const float left_plane_offset, const float right_plane_offset, const float bottom_plane_offset, const float top_plane_offset, 
 												const float near_plane_offset, const float far_plane_offset )

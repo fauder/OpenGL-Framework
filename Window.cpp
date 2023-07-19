@@ -2,7 +2,7 @@
 #include "Window.h"
 
 // std Includes.
-#include <iostream>
+#include <stdexcept>
 
 namespace Framework::Window
 {

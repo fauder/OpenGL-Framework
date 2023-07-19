@@ -1,13 +1,10 @@
 #pragma once
 
-// GLAD Includes.
-#include <glad/glad.h>
+// Project Includes.
+#include "Graphics.h"
 
 // std Includes.
 #include <vector>
-
-// Project Includes.
-#include "Graphics.h"
 
 namespace Framework
 {

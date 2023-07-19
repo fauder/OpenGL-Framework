@@ -1,9 +1,5 @@
 // Project Includes.
-#include "Graphics.h"
 #include "VertexBuffer.h"
-
-// std Includes.
-#include <iostream>
 
 namespace Framework
 {

@@ -7,16 +7,21 @@
 // std Includes.
 #include <cmath>
 
-namespace Framework
+/* Forward Declarations. */
+namespace Framework::Math
 {
 	class Polar2;
 	class Polar3_Cylindrical;
 	class Polar3_Spherical;
 	class Polar3_Spherical_Game;
 	template< Concepts::Arithmetic Coordinate, size_t Size > requires Concepts::NonZero< Size >
-	class VectorBase;
-	using Vector2 = VectorBase< float, 2 >;
-	using Vector3 = VectorBase< float, 3 >;
+	class Vector;
+}
+
+namespace Framework
+{
+	using Vector2 = Math::Vector< float, 2 >;
+	using Vector3 = Math::Vector< float, 3 >;
 }
 
 namespace Framework::Math

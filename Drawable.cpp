@@ -1,7 +1,6 @@
 // Project Includes.
 #include "Drawable.h"
 #include "Graphics.h"
-#include "VertexArray.h"
 
 namespace Framework
 {

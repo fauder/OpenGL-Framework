@@ -10,63 +10,63 @@
 #include <cmath>
 #include <utility>
 
-namespace Framework
+namespace Framework::Math
 {
 	template< Concepts::Arithmetic Coordinate, size_t Size >
 		requires Concepts::NonZero< Size >
-	class VectorBase
+	class Vector
 	{
 	public:
 	/* Constructors. */
-		constexpr VectorBase() : data{} {}
+		constexpr Vector() : data{} {}
 
-		constexpr VectorBase( const VectorBase& other )					= default;
-		constexpr VectorBase( VectorBase && donor )						= default;
-		constexpr VectorBase& operator = ( const VectorBase & other )	= default;
-		constexpr VectorBase& operator = ( VectorBase && donor )		= default;
+		constexpr Vector( const Vector& other )					= default;
+		constexpr Vector( Vector && donor )						= default;
+		constexpr Vector& operator = ( const Vector & other )	= default;
+		constexpr Vector& operator = ( Vector && donor )		= default;
 
-		constexpr ~VectorBase() = default;
+		constexpr ~Vector() = default;
 
-		constexpr explicit VectorBase( Initialization::UniformInitialization, const Coordinate value )
+		constexpr explicit Vector( Initialization::UniformInitialization, const Coordinate value )
 		{
 			std::fill_n( data, Size, value );
 		}
 
-		constexpr explicit VectorBase( const Coordinate x )
+		constexpr explicit Vector( const Coordinate x )
 			:
 			data{ x }
 		{
 		}
 
-		constexpr VectorBase( const Coordinate x, const Coordinate y ) requires( Size >= 2 )
+		constexpr Vector( const Coordinate x, const Coordinate y ) requires( Size >= 2 )
 			:
 			data{ x, y }
 		{
 		}
 
-		constexpr VectorBase( const Coordinate x, const Coordinate y, const Coordinate z ) requires( Size >= 3 )
+		constexpr Vector( const Coordinate x, const Coordinate y, const Coordinate z ) requires( Size >= 3 )
 			:
 			data{ x, y, z }
 		{
 		}
 
-		constexpr VectorBase( const Coordinate x, const Coordinate y, const Coordinate z, const Coordinate w ) requires( Size >= 4 )
+		constexpr Vector( const Coordinate x, const Coordinate y, const Coordinate z, const Coordinate w ) requires( Size >= 4 )
 			:
 			data{ x, y, z, w }
 		{
 		}
 
 		template< typename... Values >
-		constexpr VectorBase( Values... values )
+		constexpr Vector( Values... values )
 			:
 			data{ values... }
 		{
 		}
 
 	/* Comparison Operators. */
-		constexpr auto operator<=>( const VectorBase& ) const = default;
+		constexpr auto operator<=>( const Vector& ) const = default;
 
-		bool operator==( const VectorBase& right_hand_side ) const
+		bool operator==( const Vector& right_hand_side ) const
 		{
 			bool result = true;
 
@@ -79,7 +79,7 @@ namespace Framework
 			return result;
 		}
 
-		bool operator!=( const VectorBase& right_hand_side ) const
+		bool operator!=( const Vector& right_hand_side ) const
 		{
 			return !operator==( right_hand_side );
 		}
@@ -100,7 +100,7 @@ namespace Framework
 		constexpr Coordinate& W() requires( Size >= 4 ) { return data[ 3 ]; };
 
 		template< typename... Values >
-		constexpr VectorBase& Set( Values... values )
+		constexpr Vector& Set( Values... values )
 		{
 			int i = 0;
 			( /* Lambda: */ [ & ]{ data[ i++ ] = values; }(), ... ); // Utilize fold expressions with a lambda to "loop over" the parameter pack.
@@ -111,17 +111,17 @@ namespace Framework
 	/* Other Queries. */
 		static consteval size_t Dimension()		{ return Size; }
 
-		static constexpr VectorBase Zero()		{ return VectorBase{}; }
-		static constexpr VectorBase One()		{ return VectorBase{ Coordinate( 1 ) }; }
+		static constexpr Vector Zero()		{ return Vector{}; }
+		static constexpr Vector One()		{ return Vector{ Coordinate( 1 ) }; }
 
-		static consteval VectorBase Left()		requires( Size >= 1 ) { return VectorBase{ -1.0f }; }
-		static consteval VectorBase Right()		requires( Size >= 1 ) { return VectorBase{ +1.0f }; }
-		static consteval VectorBase Bottom()	requires( Size >= 2 ) { return VectorBase{ 0.0f, -1.0f }; }
-		static consteval VectorBase Top()		requires( Size >= 2 ) { return VectorBase{ 0.0f, +1.0f }; }
+		static consteval Vector Left()		requires( Size >= 1 ) { return Vector{ -1.0f }; }
+		static consteval Vector Right()		requires( Size >= 1 ) { return Vector{ +1.0f }; }
+		static consteval Vector Bottom()	requires( Size >= 2 ) { return Vector{ 0.0f, -1.0f }; }
+		static consteval Vector Top()		requires( Size >= 2 ) { return Vector{ 0.0f, +1.0f }; }
 		/* Using right-handed coordinate system. */
-		static consteval VectorBase Backward()	requires( Size >= 3 ) { return VectorBase{ 0.0f, 0.0f, +1.0f }; }
+		static consteval Vector Backward()	requires( Size >= 3 ) { return Vector{ 0.0f, 0.0f, +1.0f }; }
 		/* Using right-handed coordinate system. */
-		static consteval VectorBase Forward()	requires( Size >= 3 ) { return VectorBase{ 0.0f, 0.0f, -1.0f }; }
+		static consteval Vector Forward()	requires( Size >= 3 ) { return Vector{ 0.0f, 0.0f, -1.0f }; }
 
 		constexpr bool IsZero() const
 		{
@@ -140,62 +140,62 @@ namespace Framework
 		}
 
 	/* Arithmetic Operations: Unary operators. */
-		constexpr VectorBase operator- () const
+		constexpr Vector operator- () const
 		{
 			return *this * -1; // Utilize operator * (scalar).
 		}
 
 	/* Arithmetic Operations: Binary operators (with a vector). */
-		constexpr VectorBase operator+ ( const VectorBase& right_hand_side ) const
+		constexpr Vector operator+ ( const Vector& right_hand_side ) const
 		{
-			VectorBase result( *this );
+			Vector result( *this );
 			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result.data[ index ] += right_hand_side.data[ index ]; } );
 			return result;
 		}
 
-		constexpr VectorBase& operator+= ( const VectorBase& right_hand_side )
+		constexpr Vector& operator+= ( const Vector& right_hand_side )
 		{
 			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] += right_hand_side.data[ index ]; } );
 
 			return *this;
 		}
 
-		constexpr VectorBase operator- ( const VectorBase& right_hand_side ) const
+		constexpr Vector operator- ( const Vector& right_hand_side ) const
 		{
-			VectorBase result( *this );
+			Vector result( *this );
 			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result.data[ index ] -= right_hand_side.data[ index ]; } );
 			return result;
 		}
 
-		constexpr VectorBase& operator-= ( const VectorBase& right_hand_side )
+		constexpr Vector& operator-= ( const Vector& right_hand_side )
 		{
 			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] -= right_hand_side.data[ index ]; } );
 
 			return *this;
 		}
 
-		constexpr VectorBase operator* ( const VectorBase& right_hand_side ) const
+		constexpr Vector operator* ( const Vector& right_hand_side ) const
 		{
-			VectorBase result( *this );
+			Vector result( *this );
 			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result.data[ index ] *= right_hand_side.data[ index ]; } );
 			return result;
 		}
 
-		constexpr VectorBase& operator*= ( const VectorBase& right_hand_side )
+		constexpr Vector& operator*= ( const Vector& right_hand_side )
 		{
 			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] *= right_hand_side.data[ index ]; } );
 
 			return *this;
 		}
 
-		constexpr VectorBase operator/ ( const VectorBase& right_hand_side ) const
+		constexpr Vector operator/ ( const Vector& right_hand_side ) const
 		{
-			VectorBase result( *this );
+			Vector result( *this );
 			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result.data[ index ] /= right_hand_side.data[ index ]; } );
 			return result;
 		}
 
-		constexpr VectorBase& operator/= ( const VectorBase& right_hand_side )
+		constexpr Vector& operator/= ( const Vector& right_hand_side )
 		{
 			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] /= right_hand_side.data[ index ]; } );
 
@@ -203,54 +203,54 @@ namespace Framework
 		}
 
 	/* Arithmetic Operations: Binary operators (with a scalar), of the the form vector-operator-scalar. */
-		constexpr VectorBase operator+ ( const Coordinate scalar ) const
+		constexpr Vector operator+ ( const Coordinate scalar ) const
 		{
-			VectorBase result( *this );
+			Vector result( *this );
 			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result.data[ index ] += scalar; } );
 
 			return result;
 		}
 
-		constexpr VectorBase& operator+= ( const Coordinate scalar )
+		constexpr Vector& operator+= ( const Coordinate scalar )
 		{
 			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] += scalar; } );
 
 			return *this;
 		}
 
-		constexpr VectorBase operator- ( const Coordinate scalar ) const
+		constexpr Vector operator- ( const Coordinate scalar ) const
 		{
-			VectorBase result( *this );
+			Vector result( *this );
 			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result.data[ index ] -= scalar; } );
 
 			return result;
 		}
 
-		constexpr VectorBase& operator-= ( const Coordinate scalar )
+		constexpr Vector& operator-= ( const Coordinate scalar )
 		{
 			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] -= scalar; } );
 
 			return *this;
 		}
 
-		constexpr VectorBase operator* ( const Coordinate scalar ) const
+		constexpr Vector operator* ( const Coordinate scalar ) const
 		{
-			VectorBase result( *this );
+			Vector result( *this );
 			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result.data[ index ] *= scalar; } );
 
 			return result;
 		}
 
-		constexpr VectorBase& operator*= ( const Coordinate scalar )
+		constexpr Vector& operator*= ( const Coordinate scalar )
 		{
 			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] *= scalar; } );
 
 			return *this;
 		}
 
-		constexpr VectorBase operator/ ( const Coordinate scalar ) const
+		constexpr Vector operator/ ( const Coordinate scalar ) const
 		{
-			VectorBase result( *this );
+			Vector result( *this );
 			if constexpr( std::is_integral_v< Coordinate > )
 				Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result.data[ index ] /= scalar; } ); // Divide directly as division of 1/scalar will give zero when scalar > 1.
 			else
@@ -262,7 +262,7 @@ namespace Framework
 			return result;
 		}
 
-		constexpr VectorBase& operator/= ( const Coordinate scalar )
+		constexpr Vector& operator/= ( const Coordinate scalar )
 		{
 			if constexpr( std::is_integral_v< Coordinate > )
 				Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] /= scalar; } ); // Divide directly as division of 1/scalar will give zero when scalar > 1.
@@ -276,27 +276,27 @@ namespace Framework
 		}
 
 	/* Arithmetic Operations: Binary operators (with a scalar), of the the form scalar-operator-vector. */
-		constexpr friend VectorBase operator + ( const Coordinate scalar, const VectorBase& vector )
+		constexpr friend Vector operator + ( const Coordinate scalar, const Vector& vector )
 		{
-			VectorBase result( UNIFORM_INITIALIZATION, scalar );
+			Vector result( UNIFORM_INITIALIZATION, scalar );
 			return result + vector;
 		}
 
-		constexpr friend VectorBase operator - ( const Coordinate scalar, const VectorBase& vector )
+		constexpr friend Vector operator - ( const Coordinate scalar, const Vector& vector )
 		{
-			VectorBase result( UNIFORM_INITIALIZATION, scalar );
+			Vector result( UNIFORM_INITIALIZATION, scalar );
 			return result - vector;
 		}
 
-		constexpr friend VectorBase operator * ( const Coordinate scalar, const VectorBase& vector )
+		constexpr friend Vector operator * ( const Coordinate scalar, const Vector& vector )
 		{
-			VectorBase result( UNIFORM_INITIALIZATION, scalar );
+			Vector result( UNIFORM_INITIALIZATION, scalar );
 			return result * vector;
 		}
 
-		constexpr friend VectorBase operator / ( const Coordinate scalar, const VectorBase& vector )
+		constexpr friend Vector operator / ( const Coordinate scalar, const Vector& vector )
 		{
-			VectorBase result( UNIFORM_INITIALIZATION, scalar );
+			Vector result( UNIFORM_INITIALIZATION, scalar );
 			return result / vector;
 		}
 
@@ -313,16 +313,16 @@ namespace Framework
 
 		// Practically we won't use this for any vectors other than 3D & 4D, but no need to restrict.
 		template< Concepts::Arithmetic Coordinate_, size_t Size_ > // Have to use different template parameters here because C++...
-		friend constexpr Coordinate_ Dot( const VectorBase< Coordinate_, Size_ >& u, const VectorBase< Coordinate_, Size_ >& v );
+		friend constexpr Coordinate_ Dot( const Vector< Coordinate_, Size_ >& u, const Vector< Coordinate_, Size_ >& v );
 
 		// Cross product is only defined for vectors of 3 & 7 dimensions apparently, but practically we only need it for 3D.
 		template< Concepts::Arithmetic Coordinate_ > // Have to use different template parameters here because C++...
-		friend constexpr VectorBase< Coordinate_, 3 > Cross( const VectorBase< Coordinate_, 3 >& u, const VectorBase< Coordinate_, 3 >& v );
+		friend constexpr Vector< Coordinate_, 3 > Cross( const Vector< Coordinate_, 3 >& u, const Vector< Coordinate_, 3 >& v );
 
 		constexpr Coordinate SquareMagnitude() const { return Dot(); }
 		Coordinate Magnitude() const requires( std::floating_point< Coordinate > ) { return std::sqrt( SquareMagnitude() ); }
 
-		VectorBase Normalized() const requires( std::floating_point< Coordinate > )
+		Vector Normalized() const requires( std::floating_point< Coordinate > )
 		{
 			if( const auto magnitude = Magnitude(); magnitude > Constants< Coordinate >::Epsilon() )
 			{
@@ -333,7 +333,7 @@ namespace Framework
 			return {};
 		}
 
-		VectorBase& Normalize() requires std::floating_point< Coordinate >
+		Vector& Normalize() requires std::floating_point< Coordinate >
 		{
 			const Coordinate one_over_magnitude = 1.0f / Magnitude();
 			*this *= one_over_magnitude;
@@ -342,9 +342,9 @@ namespace Framework
 
 		/* Vector-matrix multiplication. */
 		template< size_t ColumnSize >
-		constexpr VectorBase< Coordinate, ColumnSize > operator* ( const MatrixBase< Coordinate, Size, ColumnSize >& transform_matrix ) const
+		constexpr Vector< Coordinate, ColumnSize > operator* ( const MatrixBase< Coordinate, Size, ColumnSize >& transform_matrix ) const
 		{
-			VectorBase< Coordinate, ColumnSize > vector_transformed;
+			Vector< Coordinate, ColumnSize > vector_transformed;
 			for( auto j = 0; j < ColumnSize; j++ )
 				for( auto k = 0; k < Size; k++ )
 					vector_transformed[ j ] += data[ k ] * transform_matrix[ k ][ j ];
@@ -354,7 +354,7 @@ namespace Framework
 
 		/* Vector-matrix multiplication. */
 		template< size_t ColumnSize >
-		constexpr VectorBase< Coordinate, ColumnSize >& operator*= ( const MatrixBase< Coordinate, Size, ColumnSize >& transform_matrix )
+		constexpr Vector< Coordinate, ColumnSize >& operator*= ( const MatrixBase< Coordinate, Size, ColumnSize >& transform_matrix )
 		{
 			return *this = *this * transform_matrix;
 		}
@@ -364,7 +364,7 @@ namespace Framework
 	};
 
 	template< Concepts::Arithmetic Coordinate, size_t Size >
-	constexpr Coordinate Dot( const VectorBase< Coordinate, Size >& u, const VectorBase< Coordinate, Size >& v ) // Practically we won't use this for any vectors other than 3D & 4D, but no need to restrict.
+	constexpr Coordinate Dot( const Vector< Coordinate, Size >& u, const Vector< Coordinate, Size >& v ) // Practically we won't use this for any vectors other than 3D & 4D, but no need to restrict.
 	{
 		Coordinate result( 0 );
 
@@ -375,21 +375,25 @@ namespace Framework
 
 	// Cross product is only defined for vectors of 3 & 7 dimensions apparently, but practically we only need it for 3D.
 	template< Concepts::Arithmetic Coordinate >
-	constexpr VectorBase< Coordinate, 3 > Cross( const VectorBase< Coordinate, 3 >& u, const VectorBase< Coordinate, 3 >& v )
+	constexpr Vector< Coordinate, 3 > Cross( const Vector< Coordinate, 3 >& u, const Vector< Coordinate, 3 >& v )
 	{
 		// u X v = ( u2v3 - u3v2, u3v1 - u1v3, u1v2 - u2v1 )
-		return VectorBase< Coordinate, 3 >( u.data[ 1 ] * v.data[ 2 ] - u.data[ 2 ] * v.data[ 1 ],
+		return Vector< Coordinate, 3 >( u.data[ 1 ] * v.data[ 2 ] - u.data[ 2 ] * v.data[ 1 ],
 											u.data[ 2 ] * v.data[ 0 ] - u.data[ 0 ] * v.data[ 2 ],
 											u.data[ 0 ] * v.data[ 1 ] - u.data[ 1 ] * v.data[ 0 ] );
 	}
 
-	using Vector2  = VectorBase< float,  2 >;
-	using Vector3  = VectorBase< float,  3 >;
-	using Vector4  = VectorBase< float,  4 >;
-	using Vector2D = VectorBase< double, 2 >;
-	using Vector3D = VectorBase< double, 3 >;
-	using Vector4D = VectorBase< double, 4 >;
-	using Vector2I = VectorBase< int,    2 >;
-	using Vector3I = VectorBase< int,    3 >;
-	using Vector4I = VectorBase< int,    4 >;
+}
+
+namespace Framework
+{
+	using Vector2  = Math::Vector< float,	2 >;
+	using Vector3  = Math::Vector< float,	3 >;
+	using Vector4  = Math::Vector< float,	4 >;
+	using Vector2D = Math::Vector< double,	2 >;
+	using Vector3D = Math::Vector< double,	3 >;
+	using Vector4D = Math::Vector< double,	4 >;
+	using Vector2I = Math::Vector< int,		2 >;
+	using Vector3I = Math::Vector< int,		3 >;
+	using Vector4I = Math::Vector< int,		4 >;
 }
