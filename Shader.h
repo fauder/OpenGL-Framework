@@ -26,7 +26,7 @@ namespace Framework
 
 		/* Only accept square matrices for now. If there a use-case for non-square matrices come up, I'll refactor. */
 		template< unsigned int Size > requires Concepts::NonZero< Size >
-		void SetMatrix( const char* name, const MatrixBase< float, Size, Size >& value )
+		void SetMatrix( const char* name, const Math::Matrix< float, Size, Size >& value )
 		{
 			if constexpr( Size == 2U )
 			{

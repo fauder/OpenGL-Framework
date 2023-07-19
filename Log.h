@@ -32,7 +32,7 @@ namespace Framework::Log
 
 	template< Concepts::Arithmetic Coordinate, unsigned int RowSize, unsigned int ColumnSize >
 		requires( Concepts::NonZero< RowSize > && Concepts::NonZero< ColumnSize > )
-	void Dump( const MatrixBase< Coordinate, RowSize, ColumnSize >& matrix )
+	void Dump( const Matrix< Coordinate, RowSize, ColumnSize >& matrix )
 	{
 		int width = 0;
 		for( auto i = 0; i < RowSize; i++ )
@@ -51,7 +51,7 @@ namespace Framework::Log
 
 	template< Concepts::Arithmetic Coordinate, unsigned int RowSize, unsigned int ColumnSize >
 		requires( Concepts::NonZero< RowSize >&& Concepts::NonZero< ColumnSize > )
-	void Dump( const char* debug_name, const MatrixBase< Coordinate, RowSize, ColumnSize >& matrix )
+	void Dump( const char* debug_name, const Matrix< Coordinate, RowSize, ColumnSize >& matrix )
 	{
 		std::cout << debug_name << ":\n";
 		Dump( matrix );

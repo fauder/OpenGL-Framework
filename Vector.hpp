@@ -342,7 +342,7 @@ namespace Framework::Math
 
 		/* Vector-matrix multiplication. */
 		template< size_t ColumnSize >
-		constexpr Vector< Coordinate, ColumnSize > operator* ( const MatrixBase< Coordinate, Size, ColumnSize >& transform_matrix ) const
+		constexpr Vector< Coordinate, ColumnSize > operator* ( const Matrix< Coordinate, Size, ColumnSize >& transform_matrix ) const
 		{
 			Vector< Coordinate, ColumnSize > vector_transformed;
 			for( auto j = 0; j < ColumnSize; j++ )
@@ -354,7 +354,7 @@ namespace Framework::Math
 
 		/* Vector-matrix multiplication. */
 		template< size_t ColumnSize >
-		constexpr Vector< Coordinate, ColumnSize >& operator*= ( const MatrixBase< Coordinate, Size, ColumnSize >& transform_matrix )
+		constexpr Vector< Coordinate, ColumnSize >& operator*= ( const Matrix< Coordinate, Size, ColumnSize >& transform_matrix )
 		{
 			return *this = *this * transform_matrix;
 		}

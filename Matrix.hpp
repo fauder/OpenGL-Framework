@@ -4,30 +4,29 @@
 #include "Assert.h"
 #include "Concepts.h"
 #include "Initialization.h"
-//#include "Math.h"
 #include "TypeTraits.h"
 
 // std Includes.
 #include <array>
 
-namespace Framework
+namespace Framework::Math
 {
 	/* Row-major. Post-multiplies a row vector to transform it. */
 	template< Concepts::Arithmetic Type, size_t RowSize, size_t ColumnSize >
 		requires Concepts::NonZero< RowSize > && Concepts::NonZero< ColumnSize >
-	class MatrixBase
+	class Matrix
 	{
 	public:
 	/* Constructors. */
-		constexpr MatrixBase( const MatrixBase& other )             = default;
-		constexpr MatrixBase( MatrixBase&& donor )                  = default;
-		constexpr MatrixBase& operator= ( const MatrixBase& other ) = default;
-		constexpr MatrixBase& operator= ( MatrixBase&& donor )      = default;
+		constexpr Matrix( const Matrix& other )             = default;
+		constexpr Matrix( Matrix&& donor )                  = default;
+		constexpr Matrix& operator= ( const Matrix& other ) = default;
+		constexpr Matrix& operator= ( Matrix&& donor )      = default;
 
-		constexpr ~MatrixBase() = default;
+		constexpr ~Matrix() = default;
 
 		/* Initializes to identity matrix. */
-		constexpr MatrixBase()
+		constexpr Matrix()
 			:
 			data{}
 		{
@@ -36,37 +35,37 @@ namespace Framework
 					data[ i ][ i ] = Type( 1 );
 		}
 
-		constexpr explicit MatrixBase( Initialization::ZeroInitialization )
+		constexpr explicit Matrix( Initialization::ZeroInitialization )
 			:
 			data{}
 		{}
 
 #pragma warning(disable:26495) // Suppress "variable is uninitialized" warning, as not initializing it is the whole point of this constructor.
-		explicit MatrixBase( Initialization::NoInitialization )
+		explicit Matrix( Initialization::NoInitialization )
 		{}
 #pragma warning(default:26495)
 
-		constexpr explicit MatrixBase( const Type( &values )[ RowSize ][ ColumnSize ] )
+		constexpr explicit Matrix( const Type( &values )[ RowSize ][ ColumnSize ] )
 		{
 			for( auto i = 0; i < RowSize; i++ )
 				for( auto j = 0; j < ColumnSize; j++ )
 					data[ i ][ j ] = values[ i ][ j ];
 		}
-		constexpr explicit MatrixBase( Type( &&values )[ RowSize ][ ColumnSize ] )
+		constexpr explicit Matrix( Type( &&values )[ RowSize ][ ColumnSize ] )
 		{
 			for( auto i = 0; i < RowSize; i++ )
 				for( auto j = 0; j < ColumnSize; j++ )
 					data[ i ][ j ] = values[ i ][ j ];
 		}
 
-		constexpr explicit MatrixBase( const Type( &values )[ RowSize * ColumnSize ] ) // 1D array version.
+		constexpr explicit Matrix( const Type( &values )[ RowSize * ColumnSize ] ) // 1D array version.
 		{
 			for( auto i = 0; i < RowSize; i++ )
 				for( auto j = 0; j < ColumnSize; j++ )
 					data[ i ][ j ] = values[ i * ColumnSize + j ];
 		}
 
-		constexpr explicit MatrixBase( Type( && values )[ RowSize * ColumnSize ] ) // 1D array version.
+		constexpr explicit Matrix( Type( && values )[ RowSize * ColumnSize ] ) // 1D array version.
 		{
 			for( auto i = 0; i < RowSize; i++ )
 				for( auto j = 0; j < ColumnSize; j++ )
@@ -74,7 +73,7 @@ namespace Framework
 		}
 
 	/* Comparison operators. */
-		bool operator== ( const MatrixBase& right_hand_side ) const
+		bool operator== ( const Matrix& right_hand_side ) const
 		{
 			bool result = true;
 
@@ -88,7 +87,7 @@ namespace Framework
 			return result;
 		}
 
-		bool operator!= ( const MatrixBase& right_hand_side ) const
+		bool operator!= ( const Matrix& right_hand_side ) const
 		{
 			return !operator==( right_hand_side );
 		}
@@ -99,7 +98,7 @@ namespace Framework
 		constexpr const Type* operator[] ( const unsigned int row_index ) const { return data[ row_index ]; }
 
 		template< typename... Values >
-		constexpr MatrixBase& Set( Values... values )
+		constexpr Matrix& Set( Values... values )
 		{
 			static_assert( sizeof...( values ) <= ElementCount(), "More values passed than total element count." );
 
@@ -121,7 +120,7 @@ namespace Framework
 		}
 
 		template< typename VectorType >
-		constexpr MatrixBase& SetDiagonals( const VectorType& vector ) requires( RowSize == ColumnSize && VectorType::Dimension() <= RowSize )
+		constexpr Matrix& SetDiagonals( const VectorType& vector ) requires( RowSize == ColumnSize && VectorType::Dimension() <= RowSize )
 		{
 			for( auto i = 0; i < VectorType::Dimension(); i++ )
 				data[ i ][ i ] = vector[ i ];
@@ -130,7 +129,7 @@ namespace Framework
 		}
 
 		template< typename VectorType >
-		constexpr MatrixBase& SetRow( const VectorType& vector, const unsigned int row_index = 0, const unsigned int start_index_inRow = 0 ) requires( VectorType::Dimension() <= RowSize )
+		constexpr Matrix& SetRow( const VectorType& vector, const unsigned int row_index = 0, const unsigned int start_index_inRow = 0 ) requires( VectorType::Dimension() <= RowSize )
 		{
 			ASSERT( row_index < RowSize && "Row index out of bounds." );
 			ASSERT( start_index_inRow + VectorType::Dimension() <= ColumnSize && "Given vector does not fit inside the row when starting from start_index_inRow." );
@@ -142,7 +141,7 @@ namespace Framework
 		}
 
 		template< typename VectorType >
-		constexpr MatrixBase& SetColumn( const VectorType& vector, const unsigned int column_index = 0, const unsigned int start_index_inColumn = 0 ) requires( VectorType::Dimension() <= ColumnSize )
+		constexpr Matrix& SetColumn( const VectorType& vector, const unsigned int column_index = 0, const unsigned int start_index_inColumn = 0 ) requires( VectorType::Dimension() <= ColumnSize )
 		{
 			ASSERT( column_index < ColumnSize && "Column index out of bounds." );
 			ASSERT( start_index_inColumn + VectorType::Dimension() <= RowSize && "Given vector does not fit inside the column when starting from start_index_inColumn." );
@@ -154,13 +153,13 @@ namespace Framework
 		}
 
 		template< typename VectorType >
-		constexpr MatrixBase& SetScaling( const VectorType& vector ) requires( RowSize == ColumnSize && VectorType::Dimension() <= RowSize - 1 )
+		constexpr Matrix& SetScaling( const VectorType& vector ) requires( RowSize == ColumnSize && VectorType::Dimension() <= RowSize - 1 )
 		{
 			return SetDiagonals( vector );
 		}
 
 		template< typename VectorType >
-		constexpr MatrixBase& SetTranslation( const VectorType& vector ) requires( RowSize == ColumnSize && VectorType::Dimension() <= RowSize - 1 )
+		constexpr Matrix& SetTranslation( const VectorType& vector ) requires( RowSize == ColumnSize && VectorType::Dimension() <= RowSize - 1 )
 		{
 			return SetRow( vector, RowSize - 1 );
 		}
@@ -174,9 +173,9 @@ namespace Framework
 
 		/* Matrix-matrix multiplication. */
 		template< size_t RowSizeOther, size_t ColumnSizeOther >
-		constexpr MatrixBase< Type, RowSize, ColumnSizeOther > operator* ( const MatrixBase< Type, RowSizeOther, ColumnSizeOther >& other ) const requires( ColumnSize == RowSizeOther )
+		constexpr Matrix< Type, RowSize, ColumnSizeOther > operator* ( const Matrix< Type, RowSizeOther, ColumnSizeOther >& other ) const requires( ColumnSize == RowSizeOther )
 		{
-			MatrixBase< Type, RowSize, ColumnSizeOther > result( ZERO_INITIALIZATION );
+			Matrix< Type, RowSize, ColumnSizeOther > result( ZERO_INITIALIZATION );
 			for( auto i = 0; i < RowSize; i++ )
 				for( auto j = 0; j < ColumnSizeOther; j++ )
 					for( auto k = 0; k < ColumnSize; k++ )
@@ -185,7 +184,7 @@ namespace Framework
 			return result;
 		}
 
-		MatrixBase& Transpose()
+		Matrix& Transpose()
 		{
 			for( auto i = 0; i < RowSize; i++ )
 			{
@@ -196,23 +195,26 @@ namespace Framework
 			return *this;
 		}
 
-		MatrixBase Transposed() const
+		Matrix Transposed() const
 		{
-			return MatrixBase( *this ).Transpose();
+			return Matrix( *this ).Transpose();
 		}
 
 	protected:
 		/* Row-major. */
 		Type data[ RowSize ][ ColumnSize ];
 	};
+}
 
-	using Matrix2x2  = MatrixBase< float,  2, 2 >;
-	using Matrix3x3  = MatrixBase< float,  3, 3 >;
-	using Matrix4x4  = MatrixBase< float,  4, 4 >;
-	using Matrix2x2D = MatrixBase< double, 2, 2 >;
-	using Matrix3x3D = MatrixBase< double, 3, 3 >;
-	using Matrix4x4D = MatrixBase< double, 4, 4 >;
-	using Matrix2x2I = MatrixBase< int,    2, 2 >;
-	using Matrix3x3I = MatrixBase< int,    3, 3 >;
-	using Matrix4x4I = MatrixBase< int,    4, 4 >;
+namespace Framework
+{
+	using Matrix2x2  = Math::Matrix< float,		2, 2 >;
+	using Matrix3x3  = Math::Matrix< float,		3, 3 >;
+	using Matrix4x4  = Math::Matrix< float,		4, 4 >;
+	using Matrix2x2D = Math::Matrix< double,	2, 2 >;
+	using Matrix3x3D = Math::Matrix< double,	3, 3 >;
+	using Matrix4x4D = Math::Matrix< double,	4, 4 >;
+	using Matrix2x2I = Math::Matrix< int,		2, 2 >;
+	using Matrix3x3I = Math::Matrix< int,		3, 3 >;
+	using Matrix4x4I = Math::Matrix< int,		4, 4 >;
 }
