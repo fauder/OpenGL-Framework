@@ -37,23 +37,23 @@ namespace Framework::Matrix
 		const Radians  beta( around_y );
 		const Radians gamma( around_z );
 
-		const auto sinAlpha = std::sin( float( alpha ) );
-		const auto sinBeta  = std::sin( float( beta  ) );
-		const auto sinGamma = std::sin( float( gamma ) );
+		const auto sin_alpha = std::sin( float( alpha ) );
+		const auto sin_beta  = std::sin( float( beta  ) );
+		const auto sin_gamma = std::sin( float( gamma ) );
 
-		const auto cosAlpha = std::cos( float( alpha ) );
-		const auto cosBeta  = std::cos( float( beta  ) );
-		const auto cosGamma = std::cos( float( gamma ) );
+		const auto cos_alpha = std::cos( float( alpha ) );
+		const auto cos_beta  = std::cos( float( beta  ) );
+		const auto cos_gamma = std::cos( float( gamma ) );
 
-		const auto sinBetaCosGamma = sinBeta * cosGamma;
-		const auto sinBetaSinGamma = sinBeta * sinGamma;
+		const auto sin_beta_cos_gamma = sin_beta * cos_gamma;
+		const auto sin_beta_sin_gamma = sin_beta * sin_gamma;
 
 		return Matrix4x4
 		(
 			{
-				cosBeta * cosGamma,										cosBeta * sinGamma,										-sinBeta,				0.0f,
-				sinAlpha * sinBetaCosGamma - cosAlpha * sinGamma,		sinAlpha * sinBetaSinGamma + cosAlpha * cosGamma,		sinAlpha * cosBeta,		0.0f,
-				cosAlpha * sinBetaCosGamma + sinAlpha * sinGamma,		cosAlpha * sinBetaSinGamma - sinAlpha * cosGamma,		cosAlpha * cosBeta,		0.0f,
+				cos_beta * cos_gamma,									cos_beta * sin_gamma,									-sin_beta,				0.0f,
+				sin_alpha * sin_beta_cos_gamma - cos_alpha * sin_gamma,	sin_alpha * sin_beta_sin_gamma + cos_alpha * cos_gamma,	sin_alpha * cos_beta,	0.0f,
+				cos_alpha * sin_beta_cos_gamma + sin_alpha * sin_gamma,	cos_alpha * sin_beta_sin_gamma - sin_alpha * cos_gamma,	cos_alpha * cos_beta,	0.0f,
 				0.0f,													0.0f,													0.0f,					1.0f
 			}
 		);
@@ -116,25 +116,25 @@ namespace Framework::Matrix
 
 		const Radians theta( angle );
 
-		const auto nx = vector.X();
-		const auto ny = vector.Y();
-		const auto nz = vector.Z();
-		const auto cosTheta = std::cos( float( theta ) );
-		const auto sinTheta = std::sin( float( theta ) );
-		const auto one_minus_cosTheta = 1.0f - cosTheta;
-		const auto nx_times_one_minus_cosTheta = nx * one_minus_cosTheta;
-		const auto ny_times_one_minus_cosTheta = ny * one_minus_cosTheta;
-		const auto nz_times_one_minus_cosTheta = nz * one_minus_cosTheta;
-		const auto nx_sinTheta = nx * sinTheta;
-		const auto ny_sinTheta = ny * sinTheta;
-		const auto nz_sinTheta = nz * sinTheta;
+		const auto nx                           = vector.X();
+		const auto ny                           = vector.Y();
+		const auto nz                           = vector.Z();
+		const auto cos_theta                    = std::cos( float( theta ) );
+		const auto sin_theta                    = std::sin( float( theta ) );
+		const auto one_minus_cos_theta          = 1.0f - cos_theta;
+		const auto nx_times_one_minus_cos_theta = nx * one_minus_cos_theta;
+		const auto ny_times_one_minus_cos_theta = ny * one_minus_cos_theta;
+		const auto nz_times_one_minus_cos_theta = nz * one_minus_cos_theta;
+		const auto nx_sin_theta                 = nx * sin_theta;
+		const auto ny_sin_theta                 = ny * sin_theta;
+		const auto nz_sin_theta                 = nz * sin_theta;
 
 		return Matrix4x4
 		(
 			{
-				nx * nx_times_one_minus_cosTheta + cosTheta,		ny * nx_times_one_minus_cosTheta + nz_sinTheta,			nz * nx_times_one_minus_cosTheta - ny_sinTheta,		0.0f,
-				nx * ny_times_one_minus_cosTheta - nz_sinTheta,		ny * ny_times_one_minus_cosTheta + cosTheta,			nz * ny_times_one_minus_cosTheta + nx_sinTheta,		0.0f,
-				nx * nz_times_one_minus_cosTheta + ny_sinTheta,		ny * nz_times_one_minus_cosTheta - nx_sinTheta,			nz * nz_times_one_minus_cosTheta + cosTheta,		0.0f,
+				nx * nx_times_one_minus_cos_theta + cos_theta,		ny * nx_times_one_minus_cos_theta + nz_sin_theta,		nz * nx_times_one_minus_cos_theta - ny_sin_theta,	0.0f,
+				nx * ny_times_one_minus_cos_theta - nz_sin_theta,	ny * ny_times_one_minus_cos_theta + cos_theta,			nz * ny_times_one_minus_cos_theta + nx_sin_theta,	0.0f,
+				nx * nz_times_one_minus_cos_theta + ny_sin_theta,	ny * nz_times_one_minus_cos_theta - nx_sin_theta,		nz * nz_times_one_minus_cos_theta + cos_theta,		0.0f,
 				0.0f,												0.0f,													0.0f,												1.0f
 			}
 		);

@@ -12,7 +12,7 @@ namespace Framework::Matrix
 	constexpr Matrix4x4 OrthographicProjection( const float left_plane_offset, const float right_plane_offset, const float bottom_plane_offset, const float top_plane_offset, 
 												const float near_plane_offset, const float far_plane_offset )
 	{
-		const float f_plus_n = far_plane_offset + near_plane_offset;
+		const float f_plus_n  = far_plane_offset + near_plane_offset;
 		const float f_minus_n = far_plane_offset - near_plane_offset;
 
 		return Matrix4x4
