@@ -105,7 +105,8 @@ namespace Framework::Math
 			ASSERT( IsNormalized() && R"(QuaternionBase::Axis(): The quaternion "*this" is not normalized!)" );
 		#endif // _DEBUG
 
-			return VectorType( xyz / std::sin( ComponentType( HalfAngle() ) ) );
+			// Instead of incurring the cost of sin( HalfAngle() ), sin(theta) can be derived by sqrt(1-w*w), as we know w = cos(theta).
+			return VectorType( xyz / std::sqrt( ComponentType{ 1 } - w * w ) );
 		}
 
 		constexpr ComponentType SquareMagnitude() const { return Dot(); }
