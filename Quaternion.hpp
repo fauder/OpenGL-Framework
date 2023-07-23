@@ -194,6 +194,11 @@ namespace Framework::Math
 							   w * other.w - Math::Dot( xyz, other.xyz ) );
 		}
 
+		constexpr Vector3 Transform_Naive( const Vector3& vector_to_rotate ) const
+		{
+			 return ( *this * Quaternion( vector_to_rotate ) * Inverse() ).xyz;
+		}
+
 		/* With self. */
 		constexpr Quaternion Normalized() const
 		{
