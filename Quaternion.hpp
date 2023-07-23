@@ -56,6 +56,13 @@ namespace Framework::Math
 			w( w )
 		{}
 
+		/* Promotes a 3D vector to a pure quaternion. */
+		constexpr Quaternion( const VectorType& xyz )
+			:
+			xyz( xyz ),
+			w( ComponentType( 0 ) )
+		{}
+
 		/* Expects a unit vector for the axis! */
 		Quaternion( RadiansType angle, const VectorType& rotation_axis_normalized )
 		{
