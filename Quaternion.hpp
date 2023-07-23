@@ -259,6 +259,10 @@ namespace Framework::Math
 		/* Taken from https://gamemath.com/book/orient.html#quaternions. */
 		constexpr Quaternion Exp( const ComponentType exponent ) const
 		{
+		#ifdef _DEBUG
+			ASSERT( IsNormalized() && R"(Quaternion::Exp() : The quaternion "*this" is not normalized!)" );
+		#endif
+
 			Quaternion result( *this );
 
 			// Check for the case of an identity quaternion. This will protect against divide by zero.
@@ -322,6 +326,11 @@ namespace Framework::Math
 	template< std::floating_point ComponentType >
 	constexpr Quaternion< ComponentType > Nlerp( const Quaternion< ComponentType > q1, const Quaternion< ComponentType >& q2, const ComponentType t )
 	{
+	#ifdef _DEBUG
+		ASSERT( q1.IsNormalized() && R"(Quaternion::Nlerp() : The quaternion q1 is not normalized!)" );
+		ASSERT( q2.IsNormalized() && R"(Quaternion::Nlerp() : The quaternion q2 is not normalized!)" );
+	#endif
+
 		return Lerp( q1, q2, t ).Normalized();
 	}
 
@@ -329,6 +338,11 @@ namespace Framework::Math
 	template< std::floating_point ComponentType >
 	constexpr Quaternion< ComponentType > SlerpNaive( const Quaternion< ComponentType >& q1, const Quaternion< ComponentType >& q2, const ComponentType t )
 	{
+	#ifdef _DEBUG
+		ASSERT( q1.IsNormalized() && R"(Quaternion::SlerpNaive() : The quaternion q1 is not normalized!)" );
+		ASSERT( q2.IsNormalized() && R"(Quaternion::SlerpNaive() : The quaternion q2 is not normalized!)" );
+	#endif
+
 		return q1.DifferenceBetween( q2 ).Exp( t ) * q1;
 	}
 
@@ -336,6 +350,11 @@ namespace Framework::Math
 	template< std::floating_point ComponentType > // Have to use a different template parameter here because C++...
 	constexpr Quaternion< ComponentType > Slerp( Quaternion< ComponentType >& q1, Quaternion< ComponentType > q2, const ComponentType t )
 	{
+	#ifdef _DEBUG
+		ASSERT( q1.IsNormalized() && R"(Quaternion::Slerp() : The quaternion q1 is not normalized!)" );
+		ASSERT( q2.IsNormalized() && R"(Quaternion::Slerp() : The quaternion q2 is not normalized!)" );
+	#endif
+
 		using RadiansType = Radians< ComponentType >;
 
 		const auto dot = Math::Dot( q1, q2 );
@@ -359,7 +378,7 @@ namespace Framework::Math
 		const auto one_over_sin_theta = ComponentType{ 1 } / Sin( theta );
 
 		return ( q1 * Sin( ( ComponentType{ 1 } - t ) * theta ) + q2 * Sin( t * theta ) )
-			* one_over_sin_theta;
+				* one_over_sin_theta;
 	}
 }
 
