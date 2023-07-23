@@ -50,7 +50,7 @@ namespace Framework::Log
 	}
 
 	template< Concepts::Arithmetic Coordinate, unsigned int RowSize, unsigned int ColumnSize >
-		requires( Concepts::NonZero< RowSize >&& Concepts::NonZero< ColumnSize > )
+		requires( Concepts::NonZero< RowSize > && Concepts::NonZero< ColumnSize > )
 	void Dump( const char* debug_name, const Math::Matrix< Coordinate, RowSize, ColumnSize >& matrix )
 	{
 		std::cout << debug_name << ":\n";

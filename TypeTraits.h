@@ -15,8 +15,9 @@ namespace Framework
 	{
 		TypeTraits() = delete;
 
-		static constexpr float Epsilon() { return 10e-5f; }
-		static constexpr float TwoEpsilon() { return Epsilon() * 2.0f; }
+		static constexpr float Epsilon()			{ return 10e-5f;			}
+		static constexpr float TwoEpsilon()			{ return Epsilon() * 2.0f;	}
+		static constexpr float OneMinusEpsilon()	{ return 1.0f - Epsilon();	}
 
 	};
 
@@ -24,8 +25,9 @@ namespace Framework
 	{
 		TypeTraits() = delete;
 
-		static constexpr double Epsilon() { return 10e-15; }
-		static constexpr double TwoEpsilon() { return Epsilon() * 2.0; }
+		static constexpr double Epsilon()			{ return 10e-15;			}
+		static constexpr double TwoEpsilon()		{ return Epsilon() * 2.0;	}
+		static constexpr double OneMinusEpsilon()	{ return 1.0 - Epsilon();	}
 	};
 
 	namespace Math
