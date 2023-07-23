@@ -276,9 +276,19 @@ namespace Framework::Math
 			return result;
 		}
 
+		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
+		friend constexpr Quaternion< ComponentType_ > Lerp( const Quaternion< ComponentType_ > q1, const Quaternion< ComponentType_ >& q2, const ComponentType_ t );
+
+		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
+		friend constexpr Quaternion< ComponentType_ > Nlerp( const Quaternion< ComponentType_ > q1, const Quaternion< ComponentType_ >& q2, const ComponentType_ t );
+
 		/* The algebraic derivation. Included for completion. Not to be used in production code, as it is quite inefficient. */
 		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
 		friend constexpr Quaternion< ComponentType_ > SlerpNaive( const Quaternion< ComponentType_ >& q1, const Quaternion< ComponentType_ >& q2, const ComponentType_ t );
+
+		/* Geometric derivation. Computationally more efficient than the naive (algebraic) derivation. */
+		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
+		friend constexpr Quaternion< ComponentType_ > Slerp( Quaternion< ComponentType_ >& q1, Quaternion< ComponentType_ > q2, const ComponentType_ t );
 
 	private:
 		VectorType xyz;
@@ -303,11 +313,53 @@ namespace Framework::Math
 		return q1.w * q2.w + Dot( q1.xyz, q2.xyz );
 	}
 
+	template< std::floating_point ComponentType >
+	constexpr Quaternion< ComponentType > Lerp( const Quaternion< ComponentType > q1, const Quaternion< ComponentType >& q2, const ComponentType t )
+	{
+		return ( ComponentType{ 1 } - t ) * q1 + t * q2;
+	}
+
+	template< std::floating_point ComponentType >
+	constexpr Quaternion< ComponentType > Nlerp( const Quaternion< ComponentType > q1, const Quaternion< ComponentType >& q2, const ComponentType t )
+	{
+		return Lerp( q1, q2, t ).Normalized();
+	}
+
 	/* The algebraic derivation. Included for completion. Not to be used in production code, as it is quite inefficient. */
 	template< std::floating_point ComponentType >
 	constexpr Quaternion< ComponentType > SlerpNaive( const Quaternion< ComponentType >& q1, const Quaternion< ComponentType >& q2, const ComponentType t )
 	{
 		return q1.DifferenceBetween( q2 ).Exp( t ) * q1;
+	}
+
+	/* Geometric derivation. Computationally more efficient than the naive (algebraic) derivation. */
+	template< std::floating_point ComponentType > // Have to use a different template parameter here because C++...
+	constexpr Quaternion< ComponentType > Slerp( Quaternion< ComponentType >& q1, Quaternion< ComponentType > q2, const ComponentType t )
+	{
+		using RadiansType = Radians< ComponentType >;
+
+		const auto dot = Math::Dot( q1, q2 );
+
+		if( dot < 0 )
+			/* Negate one of the input quaternions, to take the shorter 4D "arc". */
+			q2 = -q2;
+
+		const auto cos_theta = dot < 0 ? -dot : +dot;
+
+		if( cos_theta > Framework::TypeTraits< ComponentType >::OneMinusEpsilon() )
+			/* Quaternions are too close; Revert back to a simple Nlerp(). */
+			return Nlerp( q1, q2, t );
+
+		const auto sin_theta = Sqrt( ComponentType{ 1 } - cos_theta * cos_theta ); // sqrt() is faster than sin().
+
+		/* Let's leverage the fact that now we have sin_theta & cos_theta in order to more efficiently find theta, compared to using acos/asin( theta ). */
+		const RadiansType theta( Atan2( sin_theta, cos_theta ) );
+
+		/* Compute 1.0 / sin(theta) once here, to not have to incur division of the 4 components by sin(theta) later on. */
+		const auto one_over_sin_theta = ComponentType{ 1 } / Sin( theta );
+
+		return ( q1 * Sin( ( ComponentType{ 1 } - t ) * theta ) + q2 * Sin( t * theta ) )
+			* one_over_sin_theta;
 	}
 }
 
