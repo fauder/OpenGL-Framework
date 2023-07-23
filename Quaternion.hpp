@@ -160,6 +160,17 @@ namespace Framework::Math
 							   w * other.w - Math::Dot( xyz, other.xyz ) );
 		}
 
+		/* With self. */
+		constexpr ComponentType Dot() const
+		{
+			ComponentType result( 0 );
+
+			return w * w + xyz.Dot();
+		}
+
+		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
+		friend constexpr ComponentType_ Dot( const Quaternion< ComponentType_ >& q1, const Quaternion< ComponentType_ >& q2 );
+
 		constexpr Quaternion Conjugate() const
 		{
 			return Quaternion( -xyz, w );
@@ -232,18 +243,6 @@ namespace Framework::Math
 		{
 			return DifferenceBetween( other ).Exp( t ) * *this;
 		}
-
-	/* Other Arithmetic Operations. */
-		/* With self. */
-		constexpr ComponentType Dot() const
-		{
-			ComponentType result( 0 );
-
-			return w * w + xyz.Dot();
-		}
-
-		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
-		constexpr friend ComponentType_ Dot( const Quaternion< ComponentType_ >& q1, const Quaternion< ComponentType_ >& q2 );
 
 	private:
 		VectorType xyz;
