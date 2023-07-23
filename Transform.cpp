@@ -12,10 +12,10 @@ namespace Framework
 		rotation_axis( Vector3() ),
 		rotation_angle( 0.0f ),
 		rotation_usingRepresentation_eulerAngles( true ),
-		needsUpdate_scaling( true ),
-		needsUpdate_rotation( true ),
-		needsUpdate_translation( true ),
-		needsUpdate_finalMatrix( true )
+		scaling_needsUpdate( true ),
+		rotation_needsUpdate( true ),
+		translation_needsUpdate( true ),
+		final_matrix_needsUpdate( true )
 	{
 	}
 
@@ -27,10 +27,10 @@ namespace Framework
 		rotation_axis( Vector3() ),
 		rotation_angle( 0.0f ),
 		rotation_usingRepresentation_eulerAngles( true ),
-		needsUpdate_scaling( true ),
-		needsUpdate_rotation( true ),
-		needsUpdate_translation( true ),
-		needsUpdate_finalMatrix( true )
+		scaling_needsUpdate( true ),
+		rotation_needsUpdate( true ),
+		translation_needsUpdate( true ),
+		final_matrix_needsUpdate( true )
 	{
 	}
 
@@ -42,10 +42,10 @@ namespace Framework
 		rotation_axis( Vector3() ),
 		rotation_angle( 0.0f ),
 		rotation_usingRepresentation_eulerAngles( true ),
-		needsUpdate_scaling( true ),
-		needsUpdate_rotation( true ),
-		needsUpdate_translation( true ),
-		needsUpdate_finalMatrix( true )
+		scaling_needsUpdate( true ),
+		rotation_needsUpdate( true ),
+		translation_needsUpdate( true ),
+		final_matrix_needsUpdate( true )
 	{
 	}
 
@@ -57,10 +57,10 @@ namespace Framework
 		rotation_axis( Vector3() ),
 		rotation_angle( 0.0f ),
 		rotation_usingRepresentation_eulerAngles( true ),
-		needsUpdate_scaling( true ),
-		needsUpdate_rotation( true ),
-		needsUpdate_translation( true ),
-		needsUpdate_finalMatrix( true )
+		scaling_needsUpdate( true ),
+		rotation_needsUpdate( true ),
+		translation_needsUpdate( true ),
+		final_matrix_needsUpdate( true )
 	{
 	}
 
@@ -71,7 +71,7 @@ namespace Framework
 	Transform& Transform::SetScaling( const Vector3& scale )
 	{
 		this->scale = scale;
-		needsUpdate_scaling = needsUpdate_finalMatrix = true;
+		scaling_needsUpdate = final_matrix_needsUpdate = true;
 
 		return *this;
 	}
@@ -81,7 +81,7 @@ namespace Framework
 		// TODO: Switch to quaternions instead of euler angle triplets so we can represent both euler-angles & angle-axis representations uniformly and also query for both from the quaternion.
 		rotation_usingRepresentation_eulerAngles = true;
 		this->rotation_euler_inDegrees = rotation_euler_inDegrees;
-		needsUpdate_rotation = needsUpdate_finalMatrix = true;
+		rotation_needsUpdate = final_matrix_needsUpdate = true;
 
 		return *this;
 	}
@@ -92,7 +92,7 @@ namespace Framework
 		rotation_usingRepresentation_eulerAngles = false;
 		this->rotation_angle = angle;
 		this->rotation_axis = axis;
-		needsUpdate_rotation = needsUpdate_finalMatrix = true;
+		rotation_needsUpdate = final_matrix_needsUpdate = true;
 
 		return *this;
 	}
@@ -100,7 +100,7 @@ namespace Framework
 	Transform& Transform::SetTranslation( const Vector3& translation )
 	{
 		this->translation = translation;
-		needsUpdate_translation = needsUpdate_finalMatrix = true;
+		translation_needsUpdate = final_matrix_needsUpdate = true;
 
 		return *this;
 	}
@@ -136,48 +136,48 @@ namespace Framework
 
 	const Matrix4x4& Transform::GetScalingMatrix()
 	{
-		if( needsUpdate_scaling )
+		if( scaling_needsUpdate )
 		{
-			matrix_scaling.SetDiagonals( scale );
-			needsUpdate_scaling = false;
+			scaling_matrix.SetDiagonals( scale );
+			scaling_needsUpdate = false;
 		}
 
-		return matrix_scaling;
+		return scaling_matrix;
 	}
 
 	const Matrix4x4& Transform::GetRotationAndTranslationMatrix()
 	{
-		if( needsUpdate_rotation )
+		if( rotation_needsUpdate )
 		{
 			if( rotation_usingRepresentation_eulerAngles )
-				Matrix::GeneralRotation( matrix_rotation_and_translation,
+				Matrix::GeneralRotation( rotation_and_translation_matrix,
 										 Degrees( rotation_euler_inDegrees.X() ),
 										 Degrees( rotation_euler_inDegrees.Y() ),
 										 Degrees( rotation_euler_inDegrees.Z() ) );
 			else
-				Matrix::RotationAroundAxis( matrix_rotation_and_translation,
+				Matrix::RotationAroundAxis( rotation_and_translation_matrix,
 											rotation_angle, rotation_axis );
 
-			needsUpdate_rotation = false;
+			rotation_needsUpdate = false;
 		}
 
-		if( needsUpdate_translation )
+		if( translation_needsUpdate )
 		{
-			matrix_rotation_and_translation.SetTranslation( translation );
-			needsUpdate_translation = false;
+			rotation_and_translation_matrix.SetTranslation( translation );
+			translation_needsUpdate = false;
 		}
 
-		return matrix_rotation_and_translation;
+		return rotation_and_translation_matrix;
 	}
 
 	const Matrix4x4& Transform::GetFinalMatrix()
 	{
-		if( needsUpdate_finalMatrix )
+		if( final_matrix_needsUpdate )
 		{
-			matrix_final = GetScalingMatrix() * GetRotationAndTranslationMatrix();
-			needsUpdate_finalMatrix = false;
+			final_matrix = GetScalingMatrix() * GetRotationAndTranslationMatrix();
+			final_matrix_needsUpdate = false;
 		}
 
-		return matrix_final;
+		return final_matrix;
 	}
 }

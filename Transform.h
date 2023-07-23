@@ -25,8 +25,7 @@ namespace Framework
 		inline bool IsUsingEulerAngleRepresentation() const { return rotation_usingRepresentation_eulerAngles; }
 		/* Usage: First query whether using this representation or not. */
 		const Vector3& GetRotationEuler() const;
-		/* Usage: First query whether using this representation or not.
-			Angle is in degrees. */
+		/* Usage: First query whether using this representation or not. */
 		Degrees GetRotationAngleAroundAxis() const;
 		/* Usage: First query whether using this representation or not. */
 		const Vector3& GetRotationAxis() const;
@@ -49,15 +48,15 @@ namespace Framework
 
 		bool rotation_usingRepresentation_eulerAngles;
 
-		Matrix4x4 matrix_scaling;
-		Matrix4x4 matrix_rotation_and_translation;
+		Matrix4x4 scaling_matrix;
+		Matrix4x4 rotation_and_translation_matrix;
 
-		Matrix4x4 matrix_final;
+		Matrix4x4 final_matrix;
 
-		bool needsUpdate_scaling;
-		bool needsUpdate_rotation;
-		bool needsUpdate_translation;
+		bool scaling_needsUpdate;
+		bool rotation_needsUpdate;
+		bool translation_needsUpdate;
 
-		bool needsUpdate_finalMatrix;
+		bool final_matrix_needsUpdate;
 	};
 }
