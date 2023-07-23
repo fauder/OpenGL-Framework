@@ -288,7 +288,7 @@ namespace Framework::Math
 
 		/* The algebraic derivation. Included for completion. Not to be used in production code, as it is quite inefficient. */
 		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
-		friend constexpr Quaternion< ComponentType_ > SlerpNaive( const Quaternion< ComponentType_ >& q1, const Quaternion< ComponentType_ >& q2, const ComponentType_ t );
+		friend constexpr Quaternion< ComponentType_ > Slerp_Naive( const Quaternion< ComponentType_ >& q1, const Quaternion< ComponentType_ >& q2, const ComponentType_ t );
 
 		/* Geometric derivation. Computationally more efficient than the naive (algebraic) derivation. */
 		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
@@ -336,11 +336,11 @@ namespace Framework::Math
 
 	/* The algebraic derivation. Included for completion. Not to be used in production code, as it is quite inefficient. */
 	template< std::floating_point ComponentType >
-	constexpr Quaternion< ComponentType > SlerpNaive( const Quaternion< ComponentType >& q1, const Quaternion< ComponentType >& q2, const ComponentType t )
+	constexpr Quaternion< ComponentType > Slerp_Naive( const Quaternion< ComponentType >& q1, const Quaternion< ComponentType >& q2, const ComponentType t )
 	{
 	#ifdef _DEBUG
-		ASSERT( q1.IsNormalized() && R"(Quaternion::SlerpNaive() : The quaternion q1 is not normalized!)" );
-		ASSERT( q2.IsNormalized() && R"(Quaternion::SlerpNaive() : The quaternion q2 is not normalized!)" );
+		ASSERT( q1.IsNormalized() && R"(Quaternion::Slerp_Naive() : The quaternion q1 is not normalized!)" );
+		ASSERT( q2.IsNormalized() && R"(Quaternion::Slerp_Naive() : The quaternion q2 is not normalized!)" );
 	#endif
 
 		return q1.DifferenceBetween( q2 ).Exp( t ) * q1;
