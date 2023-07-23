@@ -188,6 +188,16 @@ namespace Framework::Math
 		}
 
 		/* With self. */
+		constexpr Quaternion Normalized() const
+		{
+			return *this / Magnitude();
+		}
+
+		constexpr Quaternion& Normalize()
+		{
+			return *this /= Magnitude();
+		}
+
 		constexpr ComponentType Dot() const
 		{
 			ComponentType result( 0 );
