@@ -124,6 +124,12 @@ namespace Framework::Math
 			return Math::IsEqual( SquareMagnitude(), ComponentType( 1 ) );
 		}
 
+	/* Arithmetic Operations: Unary operators. */
+		constexpr Quaternion operator- () const
+		{
+			return *this * -1;
+		}
+
 	/* Arithmetic Operations: Binary operators (with a Quaternion). */
 		constexpr Quaternion operator+ ( const Quaternion other ) const
 		{
