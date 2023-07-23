@@ -145,39 +145,36 @@ namespace Framework
 		return matrix_scaling;
 	}
 
-	const Matrix4x4& Transform::GetRotationMatrix()
+	const Matrix4x4& Transform::GetRotationAndTranslationMatrix()
 	{
 		if( needsUpdate_rotation )
 		{
 			if( rotation_usingRepresentation_eulerAngles )
-				matrix_rotation = Matrix::GeneralRotation( Degrees( rotation_euler_inDegrees.X() ), 
-														   Degrees( rotation_euler_inDegrees.Y() ),
-														   Degrees( rotation_euler_inDegrees.Z() ) );
+				Matrix::GeneralRotation( matrix_rotation_and_translation,
+										 Degrees( rotation_euler_inDegrees.X() ),
+										 Degrees( rotation_euler_inDegrees.Y() ),
+										 Degrees( rotation_euler_inDegrees.Z() ) );
 			else
-				matrix_rotation = Matrix::RotationAroundAxis( rotation_angle, rotation_axis );
+				Matrix::RotationAroundAxis( matrix_rotation_and_translation,
+											rotation_angle, rotation_axis );
 
 			needsUpdate_rotation = false;
 		}
 
-		return matrix_rotation;
-	}
-
-	const Matrix4x4& Transform::GetTranslationMatrix()
-	{
 		if( needsUpdate_translation )
 		{
-			matrix_translation.SetTranslation( translation );
+			matrix_rotation_and_translation.SetTranslation( translation );
 			needsUpdate_translation = false;
 		}
 
-		return matrix_translation;
+		return matrix_rotation_and_translation;
 	}
 
 	const Matrix4x4& Transform::GetFinalMatrix()
 	{
 		if( needsUpdate_finalMatrix )
 		{
-			matrix_final = GetScalingMatrix() * GetRotationMatrix() * GetTranslationMatrix();
+			matrix_final = GetScalingMatrix() * GetRotationAndTranslationMatrix();
 			needsUpdate_finalMatrix = false;
 		}
 

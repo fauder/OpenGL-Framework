@@ -32,10 +32,11 @@ namespace Framework
 		const Vector3& GetRotationAxis() const;
 		const Vector3& GetTranslation() const;
 
-		const Matrix4x4& GetScalingMatrix();
-		const Matrix4x4& GetRotationMatrix();
-		const Matrix4x4& GetTranslationMatrix();
 		const Matrix4x4& GetFinalMatrix();
+
+	private:
+		const Matrix4x4& GetScalingMatrix();
+		const Matrix4x4& GetRotationAndTranslationMatrix();
 
 	private:
 		Vector3 scale;
@@ -49,8 +50,7 @@ namespace Framework
 		bool rotation_usingRepresentation_eulerAngles;
 
 		Matrix4x4 matrix_scaling;
-		Matrix4x4 matrix_rotation;
-		Matrix4x4 matrix_translation;
+		Matrix4x4 matrix_rotation_and_translation;
 
 		Matrix4x4 matrix_final;
 
