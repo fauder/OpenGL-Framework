@@ -15,12 +15,12 @@ namespace Framework
 			  template< class > class Derived > /* Explicitly restrict to template classes */
 	class Unit
 	{
-		using DerivedType = Unit< Type, Derived >;
+		using DerivedType = Derived< Type >;
 
 	public:
 	/* Constructors. */
 		constexpr Unit() : value( Type( 0 ) ) {}
-		constexpr Unit( const DerivedType& other ) = default;
+		constexpr Unit( const Unit< Type, Derived >& other ) = default;
 
 		explicit Unit( Initialization::NoInitialization ) {}
 
@@ -34,7 +34,7 @@ namespace Framework
 		constexpr ~Unit() = default;
 
 	/* Comparison Operators. */
-		constexpr auto operator<=> ( const DerivedType& ) const = default;
+		constexpr auto operator<=> ( const Unit< Type, Derived >& ) const = default;
 
 		bool operator== ( const DerivedType& right_hand_side ) const
 		{
@@ -157,25 +157,17 @@ namespace Framework
 		}
 
 	/* Arithmetic Operations: Binary operators (with a scalar), of the the form scalar-operator-unit. */
-		constexpr friend DerivedType operator+ ( const Type left_hand_side_value, const DerivedType& right_hand_side_unit )
-		{
-			return DerivedType( left_hand_side_value + right_hand_side_unit.value );
-		}
+		template< Concepts::Arithmetic Type_, template< class > class Derived_ > // Have to use a different template parameter here because C++...
+		friend constexpr Derived_< Type_ > operator+ ( const Type_ left_hand_side_value, const Derived_< Type_ >& right_hand_side_unit );
 
-		constexpr friend DerivedType operator- ( const Type left_hand_side_value, const DerivedType& right_hand_side_unit )
-		{
-			return DerivedType( left_hand_side_value - right_hand_side_unit.value );
-		}
+		template< Concepts::Arithmetic Type_, template< class > class Derived_ > // Have to use a different template parameter here because C++...
+		friend constexpr Derived_< Type_ > operator- ( const Type_ left_hand_side_value, const Derived_< Type_ >& right_hand_side_unit );
 
-		constexpr friend DerivedType operator* ( const Type left_hand_side_value, const DerivedType& right_hand_side_unit )
-		{
-			return DerivedType( left_hand_side_value * right_hand_side_unit.value );
-		}
+		template< Concepts::Arithmetic Type_, template< class > class Derived_ > // Have to use a different template parameter here because C++...
+		friend constexpr Derived_< Type_ > operator* ( const Type_ left_hand_side_value, const Derived_< Type_ >& right_hand_side_unit );
 
-		constexpr friend DerivedType operator/ ( const Type left_hand_side_value, const DerivedType& right_hand_side_unit )
-		{
-			return DerivedType( left_hand_side_value / right_hand_side_unit.value );
-		}
+		template< Concepts::Arithmetic Type_, template< class > class Derived_ > // Have to use a different template parameter here because C++...
+		friend constexpr Derived_< Type_ > operator/ ( const Type_ left_hand_side_value, const Derived_< Type_ >& right_hand_side_unit );
 
 	/* Other Operators. */
 		constexpr explicit operator Type() const { return value; }
@@ -183,4 +175,28 @@ namespace Framework
 	protected:
 		Type value;
 	};
+
+	template< Concepts::Arithmetic Type, template< class > class Derived >
+	constexpr Derived< Type > operator+ ( const Type left_hand_side_value, const Derived< Type >& right_hand_side_unit )
+	{
+		return Derived< Type >( left_hand_side_value + right_hand_side_unit.value );
+	}
+
+	template< Concepts::Arithmetic Type, template< class > class Derived >
+	constexpr Derived< Type > operator- ( const Type left_hand_side_value, const Derived< Type >& right_hand_side_unit )
+	{
+		return Derived< Type >( left_hand_side_value - right_hand_side_unit.value );
+	}
+
+	template< Concepts::Arithmetic Type, template< class > class Derived >
+	constexpr Derived< Type > operator* ( const Type left_hand_side_value, const Derived< Type >& right_hand_side_unit )
+	{
+		return Derived< Type >( left_hand_side_value * right_hand_side_unit.value );
+	}
+
+	template< Concepts::Arithmetic Type, template< class > class Derived >
+	constexpr Derived< Type > operator/ ( const Type left_hand_side_value, const Derived< Type >& right_hand_side_unit )
+	{
+		return Unit< Type, Derived >( left_hand_side_value / right_hand_side_unit.value );
+	}
 }
