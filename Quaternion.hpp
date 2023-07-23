@@ -276,10 +276,9 @@ namespace Framework::Math
 			return result;
 		}
 
-		constexpr Quaternion SlerpNaive( const Quaternion& other, const ComponentType t ) const
-		{
-			return DifferenceBetween( other ).Exp( t ) * *this;
-		}
+		/* The algebraic derivation. Included for completion. Not to be used in production code, as it is quite inefficient. */
+		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
+		friend constexpr Quaternion< ComponentType_ > SlerpNaive( const Quaternion< ComponentType_ >& q1, const Quaternion< ComponentType_ >& q2, const ComponentType_ t );
 
 	private:
 		VectorType xyz;
@@ -302,6 +301,13 @@ namespace Framework::Math
 	constexpr ComponentType Dot( const Quaternion< ComponentType >& q1, const Quaternion< ComponentType >& q2 )
 	{
 		return q1.w * q2.w + Dot( q1.xyz, q2.xyz );
+	}
+
+	/* The algebraic derivation. Included for completion. Not to be used in production code, as it is quite inefficient. */
+	template< std::floating_point ComponentType >
+	constexpr Quaternion< ComponentType > SlerpNaive( const Quaternion< ComponentType >& q1, const Quaternion< ComponentType >& q2, const ComponentType t )
+	{
+		return q1.DifferenceBetween( q2 ).Exp( t ) * q1;
 	}
 }
 
