@@ -4,6 +4,8 @@
 #include "Angle.hpp"
 #include "ConditionalCompilation.h"
 #include "Concepts.h"
+#include "Math.h"
+#include "TypeTraits.h"
 #include "Vector.hpp"
 
 #ifdef _DEBUG
@@ -35,10 +37,10 @@ namespace Framework::Math
 			w( 1 )
 		{}
 
-		constexpr Quaternion( const Quaternion& other )					= default;
-		constexpr Quaternion( Quaternion && donor )						= default;
-		constexpr Quaternion& operator = ( const Quaternion & other )	= default;
-		constexpr Quaternion& operator = ( Quaternion && donor )		= default;
+		constexpr Quaternion( const Quaternion& other )				= default;
+		constexpr Quaternion( Quaternion && donor )					= default;
+		constexpr Quaternion& operator= ( const Quaternion& other )	= default;
+		constexpr Quaternion& operator= ( Quaternion && donor )		= default;
 
 		constexpr ~Quaternion() = default;
 
@@ -58,8 +60,8 @@ namespace Framework::Math
 		Quaternion( RadiansType angle, const VectorType& rotation_axis_normalized )
 		{
 			const RadiansType half_angle = angle / 2.0f;
-			w   = std::cos( ComponentType( half_angle ) );
-			xyz = std::sin( ComponentType( half_angle ) ) * rotation_axis_normalized;
+			w   = Cos( half_angle );
+			xyz = Sin( half_angle ) * rotation_axis_normalized;
 
 	#ifdef _DEBUG
 			ASSERT( rotation_axis_normalized.IsNormalized() && "QuaternionBase::QuaternionBase( angle, axis ): The axis vector provided is not normalized!" );
@@ -73,7 +75,7 @@ namespace Framework::Math
 			ASSERT( IsNormalized() && R"(QuaternionBase::HaflAngle(): The quaternion "*this" is not normalized!)" );
 		#endif // _DEBUG
 
-			return RadiansType( std::acos( w ) );
+			return RadiansType( Acos( w ) );
 		}
 
 		// Returns half the angular displacement between *this Quaternion and the other.
@@ -84,7 +86,7 @@ namespace Framework::Math
 			ASSERT( other.IsNormalized() && R"(Quaternion::HalfAngleBetween(other) : The quaternion "other" is not normalized!)" );
 		#endif
 
-			return RadiansType( std::acos( Framework::Math::Dot( *this, other ) ) );
+			return RadiansType( Acos( Math::Dot( *this, other ) ) );
 		}
 
 		constexpr RadiansType Angle() const
@@ -106,15 +108,15 @@ namespace Framework::Math
 		#endif // _DEBUG
 
 			// Instead of incurring the cost of sin( HalfAngle() ), sin(theta) can be derived by sqrt(1-w*w), as we know w = cos(theta).
-			return VectorType( xyz / std::sqrt( ComponentType{ 1 } - w * w ) );
+			return VectorType( xyz / Sqrt( ComponentType{ 1 } - w * w ) );
 		}
 
 		constexpr ComponentType SquareMagnitude() const { return Dot(); }
-		ComponentType Magnitude() const { return std::sqrt( SquareMagnitude() ); }
+		ComponentType Magnitude() const { return Sqrt( SquareMagnitude() ); }
 
 		constexpr bool IsIdentity() const
 		{
-			return Math::IsEqual( std::abs( w ), ComponentType( 1 ) ) && xyz.IsZero();
+			return Math::IsEqual( Abs( w ), ComponentType( 1 ) ) && xyz.IsZero();
 		}
 
 		constexpr bool IsNormalized() const
@@ -122,7 +124,7 @@ namespace Framework::Math
 			return Math::IsEqual( SquareMagnitude(), ComponentType( 1 ) );
 		}
 
-	/* Arithmetic Operations: Binary operators (with a scalar), of the the form vector-operator-scalar. */
+	/* Arithmetic Operations: Binary operators (with a scalar), of the the form quaternion-operator-scalar. */
 		constexpr Quaternion operator* ( const ComponentType scalar ) const
 		{
 			return { xyz * scalar, w * scalar };
@@ -152,10 +154,10 @@ namespace Framework::Math
 		}
 
 	/* Other Arithmetic Operations. */
-		constexpr Quaternion operator*( const Quaternion& other ) const
+		constexpr Quaternion operator* ( const Quaternion& other ) const
 		{
-			return Quaternion( w * other.xyz + other.w * xyz + Framework::Math::Cross( xyz, other.xyz ),
-								   w * other.w - Framework::Math::Dot( xyz, other.xyz ) );
+			return Quaternion( w * other.xyz + other.w * xyz + Math::Cross( xyz, other.xyz ),
+							   w * other.w - Math::Dot( xyz, other.xyz ) );
 		}
 
 		constexpr Quaternion Conjugate() const
@@ -212,15 +214,15 @@ namespace Framework::Math
 			Quaternion result( *this );
 
 			// Check for the case of an identity quaternion. This will protect against divide by zero.
-			if( std::abs( result.w ) < ComponentType{ 0.9999 } )
+			if( Abs( result.w ) < ComponentType{ 0.9999 } )
 			{
 				// Extract the half angle alpha (alpha = theta/2).
-				ComponentType alpha = std::acos( result.w );
+				const RadiansType alpha = Acos( result.w );
 
 				// Compute new alpha, w & xyz values.
-				ComponentType newAlpha = alpha * exponent;
-				result.w = std::cos( newAlpha );
-				result.xyz *= std::sin( newAlpha ) / std::sin( alpha );
+				const RadiansType newAlpha = alpha * exponent;
+				result.w = Cos( newAlpha );
+				result.xyz *= Sin( newAlpha ) / Sin( alpha );
 			}
 
 			return result;
