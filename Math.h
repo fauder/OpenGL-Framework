@@ -1,6 +1,7 @@
 #pragma once
 
 // Project Includes.
+#include "Angle.hpp"
 #include "Concepts.h"
 #include "Constants.h"
 
@@ -33,9 +34,36 @@ namespace Framework::Math
 	template< std::floating_point Value >
 	Value NonHyptothenuseEdge( const Value edge, const Value hyptothenuse ) { return std::sqrt( hyptothenuse * hyptothenuse - edge * edge ); }
 
+	template< std::floating_point Value >
+	Value Sin( const Radians< Value > angle ) { return std::sin( Value( angle ) ); }
+
+	template< std::floating_point Value >
+	Value Cos( const Radians< Value > angle ) { return std::cos( Value( angle ) ); }
+
+	template< std::floating_point Value >
+	Value Tan( const Radians< Value > angle ) { return std::tan( Value( angle ) ); }
+
+	template< std::floating_point Value >
+	Radians< Value > Acos( const Value cosine ) { return Radians< Value >( std::acos( cosine ) ); }
+
+	template< std::floating_point Value >
+	Radians< Value > Asin( const Value sine ) { return Radians< Value >( std::asin( sine ) ); }
+
+	template< std::floating_point Value >
+	Radians< Value > Atan( const Value slope ) { return Radians< Value >( std::atan( slope ) ); }
+
+	template< std::floating_point Value >
+	Radians< Value > Atan2( const Value y, const Value x ) { return Radians< Value >( std::atan2( y, x ) ); }
+
 /* Arithmetic. */
 	template< std::floating_point Value >
 	Value SquareOf( Value value ) { return std::pow( value, Value{ 2 } ); }
+
+	template< std::floating_point Value >
+	Value Abs( const Value value ) { return std::abs( value ); }
+
+	template< std::floating_point Value >
+	Value Sqrt( const Value value ) { return std::sqrt( value ); }
 
 /* Other. */
 	Polar2 ToPolar2( const Vector2& cartesian );
