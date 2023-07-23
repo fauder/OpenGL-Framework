@@ -124,6 +124,20 @@ namespace Framework::Math
 			return Math::IsEqual( SquareMagnitude(), ComponentType( 1 ) );
 		}
 
+	/* Arithmetic Operations: Binary operators (with a Quaternion). */
+		constexpr Quaternion operator+ ( const Quaternion other ) const
+		{
+			return { xyz + other.xyz, w + other.w };
+		}
+
+		constexpr Quaternion& operator+= ( const Quaternion other )
+		{
+			xyz += other.xyz;
+			w += other.w;
+
+			return *this;
+		}
+
 	/* Arithmetic Operations: Binary operators (with a scalar), of the the form quaternion-operator-scalar. */
 		constexpr Quaternion operator* ( const ComponentType scalar ) const
 		{
@@ -153,19 +167,12 @@ namespace Framework::Math
 			return *this;
 		}
 
-	/* Arithmetic Operations: Binary operators (with a Quaternion). */
-		constexpr Quaternion operator+ ( const Quaternion other ) const
-		{
-			return { xyz + other.xyz, w + other.w };
-		}
+	/* Arithmetic Operations: Binary operators (with a scalar), of the the form scalar-operator-quaternion. */
+		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
+		friend constexpr Quaternion< ComponentType_ > operator* ( const ComponentType_ scalar, Quaternion< ComponentType_ > quaternion );
 
-		constexpr Quaternion& operator+= ( const Quaternion other )
-		{
-			xyz += other.xyz;
-			w += other.w;
-
-			return *this;
-		}
+		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
+		friend constexpr Quaternion< ComponentType_ > operator/ ( const ComponentType_ scalar, Quaternion< ComponentType_ > quaternion );
 
 	/* Other Arithmetic Operations. */
 		constexpr Quaternion operator* ( const Quaternion& other ) const
@@ -262,6 +269,18 @@ namespace Framework::Math
 		VectorType xyz;
 		ComponentType w;
 	};
+
+	template< std::floating_point ComponentType >
+	constexpr Quaternion< ComponentType > operator* ( const ComponentType scalar, Quaternion< ComponentType > quaternion )
+	{
+		return quaternion * scalar;
+	}
+
+	template< std::floating_point ComponentType >
+	constexpr Quaternion< ComponentType > operator/ ( const ComponentType scalar, Quaternion< ComponentType > quaternion )
+	{
+		return quaternion / scalar;
+	}
 
 	template< std::floating_point ComponentType >
 	constexpr ComponentType Dot( const Quaternion< ComponentType >& q1, const Quaternion< ComponentType >& q2 )
