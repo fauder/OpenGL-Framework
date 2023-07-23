@@ -153,6 +153,20 @@ namespace Framework::Math
 			return *this;
 		}
 
+	/* Arithmetic Operations: Binary operators (with a Quaternion). */
+		constexpr Quaternion operator+ ( const Quaternion other ) const
+		{
+			return { xyz + other.xyz, w + other.w };
+		}
+
+		constexpr Quaternion& operator+= ( const Quaternion other )
+		{
+			xyz += other.xyz;
+			w += other.w;
+
+			return *this;
+		}
+
 	/* Other Arithmetic Operations. */
 		constexpr Quaternion operator* ( const Quaternion& other ) const
 		{
