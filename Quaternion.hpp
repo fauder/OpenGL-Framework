@@ -194,9 +194,21 @@ namespace Framework::Math
 							   w * other.w - Math::Dot( xyz, other.xyz ) );
 		}
 
+		/* Do not use this as it is slow. 
+		 * Use Transform(), as it is faster. */
 		constexpr Vector3 Transform_Naive( const Vector3& vector_to_rotate ) const
 		{
 			 return ( *this * Quaternion( vector_to_rotate ) * Inverse() ).xyz;
+		}
+
+		/* Use this as it is faster than Transform_Naive(). */
+		constexpr Vector3 Transform( const Vector3& vector_to_rotate ) const
+		{
+			/* Derivation can be found at https://gamesandsimulations.fandom.com/wiki/Quaternions, which is dead but can be retrieved via wayback machine at
+			 * https://web.archive.org/web/20191115092410/https://gamesandsimulations.fandom.com/wiki/Quaternions. */
+
+			const auto t = ComponentType( 2 ) * Math::Cross( xyz, vector_to_rotate );
+			return vector_to_rotate + w * t - Math::Cross( t, xyz );
 		}
 
 		/* With self. */
