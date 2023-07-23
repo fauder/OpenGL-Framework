@@ -116,8 +116,8 @@ namespace Framework::Math
 
 		static consteval Vector Left()		requires( Size >= 1 ) { return Vector{ -1.0f }; }
 		static consteval Vector Right()		requires( Size >= 1 ) { return Vector{ +1.0f }; }
-		static consteval Vector Bottom()	requires( Size >= 2 ) { return Vector{ 0.0f, -1.0f }; }
-		static consteval Vector Top()		requires( Size >= 2 ) { return Vector{ 0.0f, +1.0f }; }
+		static consteval Vector Down()		requires( Size >= 2 ) { return Vector{ 0.0f, -1.0f }; }
+		static consteval Vector Up()		requires( Size >= 2 ) { return Vector{ 0.0f, +1.0f }; }
 		/* Using right-handed coordinate system. */
 		static consteval Vector Backward()	requires( Size >= 3 ) { return Vector{ 0.0f, 0.0f, +1.0f }; }
 		/* Using right-handed coordinate system. */
