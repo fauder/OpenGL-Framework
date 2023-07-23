@@ -57,7 +57,7 @@ namespace Framework::Math
 		}
 
 		template< typename... Values >
-		constexpr Vector( Values... values )
+		constexpr Vector( Values... values ) requires( sizeof...( values ) > 1 )
 			:
 			data{ values... }
 		{
