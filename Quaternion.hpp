@@ -204,6 +204,10 @@ namespace Framework::Math
 		/* Use this as it is faster than Transform_Naive(). */
 		constexpr Vector3 Transform( const Vector3& vector_to_rotate ) const
 		{
+		#ifdef _DEBUG
+			ASSERT( IsNormalized() && R"(QuaternionBase::Transform(): The quaternion "*this" is not normalized!)" ); // The derivation assumes unit quaternions.
+		#endif // _DEBUG
+
 			/* Derivation can be found at https://gamesandsimulations.fandom.com/wiki/Quaternions, which is dead but can be retrieved via wayback machine at
 			 * https://web.archive.org/web/20191115092410/https://gamesandsimulations.fandom.com/wiki/Quaternions. */
 
