@@ -40,16 +40,16 @@ namespace Framework::Matrix
 		const auto cos_heading = Cos( heading_around_y );
 		const auto cos_bank    = Cos( bank_around_z );
 
-		const auto cos_heading_cos_bank  = cos_heading * cos_bank;
-		const auto sin_heading_sin_pitch = sin_heading * sin_pitch;
+		const auto cos_bank_cos_heading  = cos_bank * cos_heading;
+		const auto sin_pitch_sin_heading = sin_pitch * sin_heading;
 
 		return Matrix4x4
 		(
 			{
-				cos_heading_cos_bank - sin_heading_sin_pitch * sin_bank,		cos_heading * sin_bank + sin_heading_sin_pitch * cos_bank,		-sin_heading * cos_pitch,		0.0f,
-				-cos_pitch * sin_bank,											cos_pitch* cos_bank,											sin_pitch,						0.0f,
-				sin_heading* cos_bank + sin_pitch * cos_heading * sin_bank,		sin_heading * sin_bank - sin_pitch * cos_heading_cos_bank,		cos_heading * cos_pitch,		0.0f,
-				0.0f,															0.0f,															0.0f,							1.0f
+				cos_bank_cos_heading + sin_bank * sin_pitch_sin_heading,		sin_bank * cos_pitch,											-cos_bank * sin_heading + sin_bank * sin_pitch * cos_heading,	0.0f,
+				-sin_bank * cos_heading + cos_bank * sin_pitch_sin_heading,		cos_bank * cos_pitch,											sin_bank * sin_heading + sin_pitch * cos_bank_cos_heading,		0.0f,
+				cos_pitch * sin_heading,										-sin_pitch,														cos_pitch * cos_heading,										0.0f,
+				0.0f,															0.0f,															0.0f,															1.0f
 			}
 		);
 	}
@@ -67,12 +67,12 @@ namespace Framework::Matrix
 		const auto cos_heading = Cos( heading_around_y );
 		const auto cos_bank    = Cos( bank_around_z );
 
-		const auto cos_heading_cos_bank = cos_heading * cos_bank;
-		const auto sin_heading_sin_pitch = sin_heading * sin_pitch;
+		const auto cos_bank_cos_heading = cos_bank * cos_heading;
+		const auto sin_pitch_sin_heading = sin_pitch * sin_heading;
 
-		matrix[ 0 ][ 0 ] = cos_heading_cos_bank - sin_heading_sin_pitch * sin_bank;		matrix[ 0 ][ 1 ] = cos_heading * sin_bank + sin_heading_sin_pitch * cos_bank;	matrix[ 0 ][ 2 ] = -sin_heading * cos_pitch;
-		matrix[ 1 ][ 0 ] = -cos_pitch * sin_bank;										matrix[ 1 ][ 1 ] = cos_pitch * cos_bank;										matrix[ 1 ][ 2 ] = sin_pitch;
-		matrix[ 2 ][ 0 ] = sin_heading * cos_bank + sin_pitch * cos_heading * sin_bank,	matrix[ 2 ][ 1 ] = sin_heading * sin_bank - sin_pitch * cos_heading_cos_bank;	matrix[ 2 ][ 2 ] = cos_heading * cos_pitch;
+		matrix[ 0 ][ 0 ] = cos_bank_cos_heading + sin_bank * sin_pitch_sin_heading;		matrix[ 0 ][ 1 ] = sin_bank * cos_pitch;	matrix[ 0 ][ 2 ] = -cos_bank * sin_heading + sin_bank * sin_pitch * cos_heading;
+		matrix[ 1 ][ 0 ] = -sin_bank * cos_heading + cos_bank * sin_pitch_sin_heading;	matrix[ 1 ][ 1 ] = cos_bank * cos_pitch;	matrix[ 1 ][ 2 ] = sin_bank * sin_heading + sin_pitch * cos_bank_cos_heading;	
+		matrix[ 2 ][ 0 ] = cos_pitch * sin_heading;										matrix[ 2 ][ 1 ] = -sin_pitch;				matrix[ 2 ][ 2 ] = cos_pitch * cos_heading;									
 	}
 
 	/* In row-major form. Right-handed. Clockwise rotation. */
