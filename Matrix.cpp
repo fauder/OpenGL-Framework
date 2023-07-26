@@ -29,7 +29,8 @@ namespace Framework::Matrix
 	}
 
 	/* In row-major form. Right-handed. Clockwise rotation.
-	 * Describes an extrinsic (fixed-axis) rotation, in this order: first heading (around y), then pitch (around x) and finally bank (around z). */
+	 * Describes an extrinsic (fixed-axis) rotation, in this order:    bank (around z) -> pitch (around x) -> heading (around y).
+	 * an Euler rotation (is intrinsic, body-axis),  in this order: heading (around y) -> pitch (around x) -> bank (around z), which means */
 	Matrix4x4 Matrix::FromEuler( Radians heading_around_y, Radians pitch_around_x, Radians bank_around_z )
 	{
 		const auto sin_pitch   = Sin( pitch_around_x );
@@ -56,7 +57,8 @@ namespace Framework::Matrix
 
 	/* In-place modification of the upper-left 3x3 portion. */
 	/* In row-major form. Right-handed. Clockwise rotation.
-	 * Describes an extrinsic (fixed-axis) rotation, in this order: first heading (around y), then pitch (around x) and finally bank (around z). */
+	 * Describes an extrinsic (fixed-axis) rotation, in this order:    bank (around z) -> pitch (around x) -> heading (around y).
+	 * an Euler rotation (is intrinsic, body-axis),  in this order: heading (around y) -> pitch (around x) -> bank (around z), which means */
 	void Matrix::FromEuler( Matrix4x4& matrix, Radians heading_around_y, Radians pitch_around_x, Radians bank_around_z )
 	{
 		const auto sin_pitch   = Sin( pitch_around_x );
