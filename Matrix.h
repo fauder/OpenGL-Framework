@@ -94,13 +94,13 @@ namespace Framework::Matrix
 		);
 	}
 
-	/* In row-major form. */ Matrix4x4 GeneralRotation( Degrees around_x, Degrees around_y, Degrees around_z );
-	/* In row-major form. */ void GeneralRotation( Matrix4x4& matrix, Degrees around_x, Degrees around_y, Degrees around_z );
-	/* In row-major form. */ Matrix4x4 RotationAroundX( Degrees angle );
-	/* In row-major form. */ Matrix4x4 RotationAroundY( Degrees angle );
-	/* In row-major form. */ Matrix4x4 RotationAroundZ( Degrees angle );
-	/* In row-major form. */ Matrix4x4 RotationAroundAxis( Degrees angle, Vector3 vector );
-	/* In row-major form. */ void RotationAroundAxis( Matrix4x4& matrix, Degrees angle, Vector3 vector );
+	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Matrix4x4 GeneralRotation( Degrees around_x, Degrees around_y, Degrees around_z );
+	/* In row-major form. Right-handed. Counter-clockwise rotation. */ void GeneralRotation( Matrix4x4& matrix, Degrees around_x, Degrees around_y, Degrees around_z );
+	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Matrix4x4 RotationAroundX( Degrees angle );
+	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Matrix4x4 RotationAroundY( Degrees angle );
+	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Matrix4x4 RotationAroundZ( Degrees angle );
+	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Matrix4x4 RotationAroundAxis( Degrees angle, Vector3 vector );
+	/* In row-major form. Right-handed. Counter-clockwise rotation. */ void RotationAroundAxis( Matrix4x4& matrix, Degrees angle, Vector3 vector );
 
 	/* In row-major form. */ constexpr Matrix4x4 TranslationOnX( const float delta )
 	{

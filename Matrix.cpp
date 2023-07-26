@@ -31,6 +31,7 @@ namespace Framework::Matrix
 		);
 	}
 
+	/* In row-major form. Right-handed. Clockwise rotation. */
 	Matrix4x4 Matrix::GeneralRotation( Degrees around_x, Degrees around_y, Degrees around_z )
 	{
 		const Radians alpha( around_x );
@@ -59,6 +60,7 @@ namespace Framework::Matrix
 		);
 	}
 
+	/* In row-major form. Right-handed. Clockwise rotation. */
 	/* In-place modification of the upper-left 3x3 portion. */
 	void Matrix::GeneralRotation( Matrix4x4& matrix, Degrees around_x, Degrees around_y, Degrees around_z )
 	{
@@ -82,6 +84,7 @@ namespace Framework::Matrix
 		matrix[ 2 ][ 0 ] = cos_alpha * sin_beta_cos_gamma + sin_alpha * sin_gamma,	matrix[ 2 ][ 1 ] = cos_alpha * sin_beta_sin_gamma - sin_alpha * cos_gamma;	matrix[ 2 ][ 2 ] = cos_alpha * cos_beta;
 	}
 
+	/* In row-major form. Right-handed. Clockwise rotation. */
 	Matrix4x4 RotationAroundX( Degrees angle )
 	{
 		const Radians alpha( angle );
@@ -99,6 +102,7 @@ namespace Framework::Matrix
 		);
 	}
 
+	/* In row-major form. Right-handed. Clockwise rotation. */
 	Matrix4x4 RotationAroundY( Degrees angle )
 	{
 		const Radians beta( angle );
@@ -116,6 +120,7 @@ namespace Framework::Matrix
 		);
 	}
 
+	/* In row-major form. Right-handed. Clockwise rotation. */
 	Matrix4x4 RotationAroundZ( Degrees angle )
 	{
 		const Radians gamma( angle );
@@ -133,6 +138,7 @@ namespace Framework::Matrix
 		);
 	}
 
+	/* In row-major form. Right-handed. Clockwise rotation. */
 	Matrix4x4 RotationAroundAxis( Degrees angle, Vector3 vector )
 	{
 		vector.Normalize();
@@ -163,6 +169,7 @@ namespace Framework::Matrix
 		);
 	}
 
+	/* In row-major form. Right-handed. Clockwise rotation. */
 	/* In-place modification of the upper-left 3x3 portion. */
 	void Matrix::RotationAroundAxis( Matrix4x4& matrix, Degrees angle, Vector3 vector )
 	{
