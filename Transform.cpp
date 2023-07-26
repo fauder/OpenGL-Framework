@@ -150,10 +150,10 @@ namespace Framework
 		if( rotation_needsUpdate )
 		{
 			if( rotation_usingRepresentation_eulerAngles )
-				Matrix::GeneralRotation( rotation_and_translation_matrix,
-										 Degrees( rotation_euler_inDegrees.X() ),
-										 Degrees( rotation_euler_inDegrees.Y() ),
-										 Degrees( rotation_euler_inDegrees.Z() ) );
+				Matrix::FromEuler( rotation_and_translation_matrix,
+								   Degrees( rotation_euler_inDegrees.X() ),
+								   Degrees( rotation_euler_inDegrees.Y() ),
+								   Degrees( rotation_euler_inDegrees.Z() ) );
 			else
 				Matrix::RotationAroundAxis( rotation_and_translation_matrix,
 											rotation_angle, rotation_axis );

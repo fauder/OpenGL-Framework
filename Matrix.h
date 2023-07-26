@@ -95,9 +95,9 @@ namespace Framework::Matrix
 	}
 
 	/* Describes an extrinsic (fixed-axis) rotation, in this order: first heading (around y), then pitch (around x) and finally bank (around z). */
-	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Matrix4x4 GeneralRotation( Radians heading_around_y, Radians pitch_around_x, Radians bank_around_z );
+	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Matrix4x4 FromEuler( Radians heading_around_y, Radians pitch_around_x, Radians bank_around_z );
 	/* Describes an extrinsic (fixed-axis) rotation, in this order: first heading (around y), then pitch (around x) and finally bank (around z). */
-	/* In row-major form. Right-handed. Counter-clockwise rotation. */ void GeneralRotation( Matrix4x4& matrix, Radians heading_around_y, Radians pitch_around_x, Radians bank_around_z );
+	/* In row-major form. Right-handed. Counter-clockwise rotation. */ void FromEuler( Matrix4x4& matrix, Radians heading_around_y, Radians pitch_around_x, Radians bank_around_z );
 	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Matrix4x4 RotationAroundX( Radians pitch );
 	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Matrix4x4 RotationAroundY( Radians heading );
 	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Matrix4x4 RotationAroundZ( Radians bank );
