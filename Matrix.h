@@ -27,7 +27,7 @@ namespace Framework::Matrix
 	}
 
 	/* In row-major form. */ Matrix4x4 PerspectiveProjection( const float near_plane_offset, const float far_plane_offset,
-															  const float aspect_ratio,      const Degrees field_of_view );
+															  const float aspect_ratio,      const Radians field_of_view );
 
 	/* In row-major form. */ constexpr Matrix4x4 Scaling( const float newScale )
 	{
@@ -94,13 +94,15 @@ namespace Framework::Matrix
 		);
 	}
 
-	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Matrix4x4 GeneralRotation( Degrees around_x, Degrees around_y, Degrees around_z );
-	/* In row-major form. Right-handed. Counter-clockwise rotation. */ void GeneralRotation( Matrix4x4& matrix, Degrees around_x, Degrees around_y, Degrees around_z );
-	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Matrix4x4 RotationAroundX( Degrees angle );
-	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Matrix4x4 RotationAroundY( Degrees angle );
-	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Matrix4x4 RotationAroundZ( Degrees angle );
-	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Matrix4x4 RotationAroundAxis( Degrees angle, Vector3 vector );
-	/* In row-major form. Right-handed. Counter-clockwise rotation. */ void RotationAroundAxis( Matrix4x4& matrix, Degrees angle, Vector3 vector );
+	/* Describes an extrinsic (fixed-axis) rotation, in this order: first heading (around y), then pitch (around x) and finally bank (around z). */
+	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Matrix4x4 GeneralRotation( Radians heading_around_y, Radians pitch_around_x, Radians bank_around_z );
+	/* Describes an extrinsic (fixed-axis) rotation, in this order: first heading (around y), then pitch (around x) and finally bank (around z). */
+	/* In row-major form. Right-handed. Counter-clockwise rotation. */ void GeneralRotation( Matrix4x4& matrix, Radians heading_around_y, Radians pitch_around_x, Radians bank_around_z );
+	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Matrix4x4 RotationAroundX( Radians pitch );
+	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Matrix4x4 RotationAroundY( Radians heading );
+	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Matrix4x4 RotationAroundZ( Radians bank );
+	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Matrix4x4 RotationAroundAxis( Radians angle, Vector3 vector );
+	/* In row-major form. Right-handed. Counter-clockwise rotation. */ void RotationAroundAxis( Matrix4x4& matrix, Radians angle, Vector3 vector );
 
 	/* In row-major form. */ constexpr Matrix4x4 TranslationOnX( const float delta )
 	{

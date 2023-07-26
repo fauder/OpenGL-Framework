@@ -4,17 +4,14 @@
 #include "Math.h"
 #include "Matrix.h"
 
-// std Includes.
-#include <cmath>
-
 namespace Framework::Matrix
 {
 	/* In row-major form. */
-	Matrix4x4 PerspectiveProjection( const float near_plane_offset, const float far_plane_offset, const float aspect_ratio, const Degrees vertical_fieldOfView )
+	Matrix4x4 PerspectiveProjection( const float near_plane_offset, const float far_plane_offset, const float aspect_ratio, const Radians vertical_fieldOfView )
 	{
 		const Radians half_fov( vertical_fieldOfView / 2.0f );
 
-		const auto half_tangent = std::tan( float( half_fov ) );
+		const auto half_tangent = Tan( half_fov );
 		const float half_height = half_tangent * near_plane_offset;
 		const float half_width  = aspect_ratio * half_height;
 		const float f_plus_n    = far_plane_offset + near_plane_offset;
@@ -31,65 +28,58 @@ namespace Framework::Matrix
 		);
 	}
 
-	/* In row-major form. Right-handed. Clockwise rotation. */
-	Matrix4x4 Matrix::GeneralRotation( Degrees around_x, Degrees around_y, Degrees around_z )
+	/* In row-major form. Right-handed. Clockwise rotation.
+	 * Describes an extrinsic (fixed-axis) rotation, in this order: first heading (around y), then pitch (around x) and finally bank (around z). */
+	Matrix4x4 Matrix::GeneralRotation( Radians heading_around_y, Radians pitch_around_x, Radians bank_around_z )
 	{
-		const Radians alpha( around_x );
-		const Radians  beta( around_y );
-		const Radians gamma( around_z );
+		const auto sin_pitch   = Sin( pitch_around_x );
+		const auto sin_heading = Sin( heading_around_y );
+		const auto sin_bank    = Sin( bank_around_z );
 
-		const auto sin_alpha = std::sin( float( alpha ) );
-		const auto sin_beta  = std::sin( float( beta  ) );
-		const auto sin_gamma = std::sin( float( gamma ) );
+		const auto cos_pitch   = Cos( pitch_around_x );
+		const auto cos_heading = Cos( heading_around_y );
+		const auto cos_bank    = Cos( bank_around_z );
 
-		const auto cos_alpha = std::cos( float( alpha ) );
-		const auto cos_beta  = std::cos( float( beta  ) );
-		const auto cos_gamma = std::cos( float( gamma ) );
-
-		const auto sin_beta_cos_gamma = sin_beta * cos_gamma;
-		const auto sin_beta_sin_gamma = sin_beta * sin_gamma;
+		const auto cos_heading_cos_bank  = cos_heading * cos_bank;
+		const auto sin_heading_sin_pitch = sin_heading * sin_pitch;
 
 		return Matrix4x4
 		(
 			{
-				cos_beta * cos_gamma,									cos_beta * sin_gamma,									-sin_beta,				0.0f,
-				sin_alpha * sin_beta_cos_gamma - cos_alpha * sin_gamma,	sin_alpha * sin_beta_sin_gamma + cos_alpha * cos_gamma,	sin_alpha * cos_beta,	0.0f,
-				cos_alpha * sin_beta_cos_gamma + sin_alpha * sin_gamma,	cos_alpha * sin_beta_sin_gamma - sin_alpha * cos_gamma,	cos_alpha * cos_beta,	0.0f,
-				0.0f,													0.0f,													0.0f,					1.0f
+				cos_heading_cos_bank - sin_heading_sin_pitch * sin_bank,		cos_heading * sin_bank + sin_heading_sin_pitch * cos_bank,		-sin_heading * cos_pitch,		0.0f,
+				-cos_pitch * sin_bank,											cos_pitch* cos_bank,											sin_pitch,						0.0f,
+				sin_heading* cos_bank + sin_pitch * cos_heading * sin_bank,		sin_heading * sin_bank - sin_pitch * cos_heading_cos_bank,		cos_heading * cos_pitch,		0.0f,
+				0.0f,															0.0f,															0.0f,							1.0f
 			}
 		);
 	}
 
-	/* In row-major form. Right-handed. Clockwise rotation. */
 	/* In-place modification of the upper-left 3x3 portion. */
-	void Matrix::GeneralRotation( Matrix4x4& matrix, Degrees around_x, Degrees around_y, Degrees around_z )
+	/* In row-major form. Right-handed. Clockwise rotation.
+	 * Describes an extrinsic (fixed-axis) rotation, in this order: first heading (around y), then pitch (around x) and finally bank (around z). */
+	void Matrix::GeneralRotation( Matrix4x4& matrix, Radians heading_around_y, Radians pitch_around_x, Radians bank_around_z )
 	{
-		const Radians alpha( around_x );
-		const Radians  beta( around_y );
-		const Radians gamma( around_z );
+		const auto sin_pitch   = Sin( pitch_around_x );
+		const auto sin_heading = Sin( heading_around_y );
+		const auto sin_bank    = Sin( bank_around_z );
 
-		const auto sin_alpha = std::sin( float( alpha ) );
-		const auto sin_beta  = std::sin( float( beta  ) );
-		const auto sin_gamma = std::sin( float( gamma ) );
+		const auto cos_pitch   = Cos( pitch_around_x );
+		const auto cos_heading = Cos( heading_around_y );
+		const auto cos_bank    = Cos( bank_around_z );
 
-		const auto cos_alpha = std::cos( float( alpha ) );
-		const auto cos_beta  = std::cos( float( beta  ) );
-		const auto cos_gamma = std::cos( float( gamma ) );
+		const auto cos_heading_cos_bank = cos_heading * cos_bank;
+		const auto sin_heading_sin_pitch = sin_heading * sin_pitch;
 
-		const auto sin_beta_cos_gamma = sin_beta * cos_gamma;
-		const auto sin_beta_sin_gamma = sin_beta * sin_gamma;
-
-		matrix[ 0 ][ 0 ] = cos_beta * cos_gamma;									matrix[ 0 ][ 1 ] = cos_beta * sin_gamma;									matrix[ 0 ][ 2 ] = -sin_beta;
-		matrix[ 1 ][ 0 ] = sin_alpha * sin_beta_cos_gamma - cos_alpha * sin_gamma;	matrix[ 1 ][ 1 ] = sin_alpha * sin_beta_sin_gamma + cos_alpha * cos_gamma;	matrix[ 1 ][ 2 ] = sin_alpha * cos_beta;
-		matrix[ 2 ][ 0 ] = cos_alpha * sin_beta_cos_gamma + sin_alpha * sin_gamma,	matrix[ 2 ][ 1 ] = cos_alpha * sin_beta_sin_gamma - sin_alpha * cos_gamma;	matrix[ 2 ][ 2 ] = cos_alpha * cos_beta;
+		matrix[ 0 ][ 0 ] = cos_heading_cos_bank - sin_heading_sin_pitch * sin_bank;		matrix[ 0 ][ 1 ] = cos_heading * sin_bank + sin_heading_sin_pitch * cos_bank;	matrix[ 0 ][ 2 ] = -sin_heading * cos_pitch;
+		matrix[ 1 ][ 0 ] = -cos_pitch * sin_bank;										matrix[ 1 ][ 1 ] = cos_pitch * cos_bank;										matrix[ 1 ][ 2 ] = sin_pitch;
+		matrix[ 2 ][ 0 ] = sin_heading * cos_bank + sin_pitch * cos_heading * sin_bank,	matrix[ 2 ][ 1 ] = sin_heading * sin_bank - sin_pitch * cos_heading_cos_bank;	matrix[ 2 ][ 2 ] = cos_heading * cos_pitch;
 	}
 
 	/* In row-major form. Right-handed. Clockwise rotation. */
-	Matrix4x4 RotationAroundX( Degrees angle )
+	Matrix4x4 RotationAroundX( Radians pitch )
 	{
-		const Radians alpha( angle );
-		const auto cosine_term = std::cos( float( alpha ) );
-		const auto   sine_term = std::sin( float( alpha ) );
+		const auto cosine_term = Cos( pitch );
+		const auto   sine_term = Sin( pitch );
 
 		return Matrix4x4
 		(
@@ -103,11 +93,10 @@ namespace Framework::Matrix
 	}
 
 	/* In row-major form. Right-handed. Clockwise rotation. */
-	Matrix4x4 RotationAroundY( Degrees angle )
+	Matrix4x4 RotationAroundY( Radians heading )
 	{
-		const Radians beta( angle );
-		const auto cosine_term = std::cos( float( beta ) );
-		const auto   sine_term = std::sin( float( beta ) );
+		const auto cosine_term = Cos( heading );
+		const auto   sine_term = Sin( heading );
 
 		return Matrix4x4
 		(
@@ -121,11 +110,10 @@ namespace Framework::Matrix
 	}
 
 	/* In row-major form. Right-handed. Clockwise rotation. */
-	Matrix4x4 RotationAroundZ( Degrees angle )
+	Matrix4x4 RotationAroundZ( Radians bank )
 	{
-		const Radians gamma( angle );
-		const auto cosine_term = std::cos( float( gamma ) );
-		const auto   sine_term = std::sin( float( gamma ) );
+		const auto cosine_term = Cos( bank );
+		const auto   sine_term = Sin( bank );
 
 		return Matrix4x4
 		(
@@ -139,7 +127,7 @@ namespace Framework::Matrix
 	}
 
 	/* In row-major form. Right-handed. Clockwise rotation. */
-	Matrix4x4 RotationAroundAxis( Degrees angle, Vector3 vector )
+	Matrix4x4 RotationAroundAxis( Radians angle, Vector3 vector )
 	{
 		vector.Normalize();
 
@@ -148,8 +136,8 @@ namespace Framework::Matrix
 		const auto nx                           = vector.X();
 		const auto ny                           = vector.Y();
 		const auto nz                           = vector.Z();
-		const auto cos_theta                    = std::cos( float( theta ) );
-		const auto sin_theta                    = std::sin( float( theta ) );
+		const auto cos_theta                    = Cos( theta );
+		const auto sin_theta                    = Sin( theta );
 		const auto one_minus_cos_theta          = 1.0f - cos_theta;
 		const auto nx_times_one_minus_cos_theta = nx * one_minus_cos_theta;
 		const auto ny_times_one_minus_cos_theta = ny * one_minus_cos_theta;
@@ -169,9 +157,9 @@ namespace Framework::Matrix
 		);
 	}
 
-	/* In row-major form. Right-handed. Clockwise rotation. */
 	/* In-place modification of the upper-left 3x3 portion. */
-	void Matrix::RotationAroundAxis( Matrix4x4& matrix, Degrees angle, Vector3 vector )
+	/* In row-major form. Right-handed. Clockwise rotation. */
+	void Matrix::RotationAroundAxis( Matrix4x4& matrix, Radians angle, Vector3 vector )
 	{
 		vector.Normalize();
 
@@ -180,8 +168,8 @@ namespace Framework::Matrix
 		const auto nx                           = vector.X();
 		const auto ny                           = vector.Y();
 		const auto nz                           = vector.Z();
-		const auto cos_theta                    = std::cos( float( theta ) );
-		const auto sin_theta                    = std::sin( float( theta ) );
+		const auto cos_theta                    = Cos( theta );
+		const auto sin_theta                    = Sin( theta );
 		const auto one_minus_cos_theta          = 1.0f - cos_theta;
 		const auto nx_times_one_minus_cos_theta = nx * one_minus_cos_theta;
 		const auto ny_times_one_minus_cos_theta = ny * one_minus_cos_theta;
