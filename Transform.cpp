@@ -1,5 +1,6 @@
 // Project Includes.
 #include "Transform.h"
+#include "Math.h"
 #include "Matrix.h"
 
 namespace Framework
@@ -150,10 +151,10 @@ namespace Framework
 		if( rotation_needsUpdate )
 		{
 			if( rotation_usingRepresentation_eulerAngles )
-				Matrix::FromEuler( rotation_and_translation_matrix,
-								   Degrees( rotation_euler_inDegrees.X() ),
-								   Degrees( rotation_euler_inDegrees.Y() ),
-								   Degrees( rotation_euler_inDegrees.Z() ) );
+				Math::FromEuler( rotation_and_translation_matrix,
+								 Degrees( rotation_euler_inDegrees.X() ),
+								 Degrees( rotation_euler_inDegrees.Y() ),
+								 Degrees( rotation_euler_inDegrees.Z() ) );
 			else
 				Matrix::RotationAroundAxis( rotation_and_translation_matrix,
 											rotation_angle, rotation_axis );

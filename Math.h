@@ -17,12 +17,23 @@ namespace Framework::Math
 	class Polar3_Spherical_Game;
 	template< Concepts::Arithmetic Coordinate, size_t Size > requires Concepts::NonZero< Size >
 	class Vector;
+	template< Concepts::Arithmetic Type, size_t RowSize, size_t ColumnSize >
+		requires Concepts::NonZero< RowSize > && Concepts::NonZero< ColumnSize >
+	class Matrix;
+	template< Concepts::Arithmetic Type,
+			  template< class > class Derived > /* Explicitly restrict to template classes */
+	class Unit;
+	template< std::floating_point FloatType >
+	class Radians /*: public Unit< FloatType, Radians >*/;
+	template< std::floating_point ComponentType >
+	class Quaternion;
 }
 
 namespace Framework
 {
-	using Vector2 = Math::Vector< float, 2 >;
-	using Vector3 = Math::Vector< float, 3 >;
+	using Vector2   = Math::Vector< float, 2 >;
+	using Vector3   = Math::Vector< float, 3 >;
+	using Matrix4x4 = Math::Matrix< float, 4, 4 >;
 }
 
 namespace Framework::Math
@@ -65,7 +76,14 @@ namespace Framework::Math
 	template< std::floating_point Value >
 	Value Sqrt( const Value value ) { return std::sqrt( value ); }
 
-/* Other. */
+/* Conversions Between Rotation Representations. */
+	/* Describes an extrinsic (fixed-axis) rotation, in this order: first heading (around y), then pitch (around x) and finally bank (around z). */
+	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Framework::Matrix4x4 FromEuler( Framework::Radians heading_around_y, Framework::Radians pitch_around_x, Framework::Radians bank_around_z );
+	/* Describes an extrinsic (fixed-axis) rotation, in this order: first heading (around y), then pitch (around x) and finally bank (around z). */
+	/* In row-major form. Right-handed. Counter-clockwise rotation. */ void FromEuler( Framework::Matrix4x4& matrix, Framework::Radians heading_around_y, Framework::Radians pitch_around_x, Framework::Radians bank_around_z );
+	/* In row-major form. Right-handed. Counter-clockwise rotation. */ void ToEuler( const Framework::Matrix4x4& matrix, Framework::Radians& heading_around_y, Framework::Radians& pitch_around_x, Framework::Radians& bank_around_z );
+
+/* Conversions Between Cartesian, Polar, Cylindrical & Spherical Coordinates. */
 	Polar2 ToPolar2( const Vector2& cartesian );
 	Vector2 ToVector2( const Polar2& polar2 );
 	Polar3_Cylindrical ToPolar3_Cylindrical( const Vector3& cartesian );
