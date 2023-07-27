@@ -75,6 +75,6 @@ namespace Framework
 		}
 
 		template< std::floating_point Value >
-		bool IsZero( Value value, const float epsilon = TypeTraits< Value >::Epsilon() ) { return IsEqual( value, Value{ 0 } ); }
+		bool IsZero( Value value, const float epsilon = TypeTraits< Value >::Epsilon() ) { return IsEqual( value, Value{ 0 }, epsilon ); }
 	}
 }
