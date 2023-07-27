@@ -342,6 +342,10 @@ namespace Framework::Math
 		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
 		friend constexpr Matrix< ComponentType_, 4, 4 > QuaternionToMatrix( const Quaternion< ComponentType_ >& quaternion );
 
+		/* Source: https://gamemath.com/book/orient.html#euler_to_matrix. */
+		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
+		friend constexpr Quaternion< ComponentType_ > MatrixToQuaternion( const Matrix< ComponentType_, 4, 4 >& matrix );
+
 	private:
 		VectorType xyz;
 		ComponentType w;
@@ -395,7 +399,7 @@ namespace Framework::Math
 	}
 
 	/* Geometric derivation. Computationally more efficient than the naive (algebraic) derivation. */
-	template< std::floating_point ComponentType > // Have to use a different template parameter here because C++...
+	template< std::floating_point ComponentType >
 	constexpr Quaternion< ComponentType > Slerp( Quaternion< ComponentType >& q1, Quaternion< ComponentType > q2, const ComponentType t )
 	{
 	#ifdef _DEBUG
@@ -451,6 +455,76 @@ namespace Framework::Math
 				0.0f,										0.0f,										0.0f,										1.0f
 			}
 		);
+	}
+
+	/* Source: https://gamemath.com/book/orient.html#euler_to_matrix. */
+	template< std::floating_point ComponentType >
+	constexpr Quaternion< ComponentType > MatrixToQuaternion( const Matrix< ComponentType, 4, 4 >& matrix )
+	{
+		ComponentType w, x, y, z;
+
+		// Determine which of w, x, y, or z has the largest absolute value.
+		float four_w_squared_minus_1 = matrix[ 0 ][ 0 ] + matrix[ 1 ][ 1 ] + matrix[ 2 ][ 2 ];
+		float four_x_squared_minus_1 = matrix[ 0 ][ 0 ] - matrix[ 1 ][ 1 ] - matrix[ 2 ][ 2 ];
+		float four_y_squared_minus_1 = matrix[ 1 ][ 1 ] - matrix[ 0 ][ 0 ] - matrix[ 2 ][ 2 ];
+		float four_z_squared_minus_1 = matrix[ 2 ][ 2 ] - matrix[ 0 ][ 0 ] - matrix[ 1 ][ 1 ];
+
+		std::size_t biggest_index = 0;
+		float four_biggest_squared_minus1 = four_w_squared_minus_1;
+
+		if( four_x_squared_minus_1 > four_biggest_squared_minus1 )
+		{
+			four_biggest_squared_minus1 = four_x_squared_minus_1;
+			biggest_index = 1;
+		}
+		if( four_y_squared_minus_1 > four_biggest_squared_minus1 )
+		{
+			four_biggest_squared_minus1 = four_y_squared_minus_1;
+			biggest_index = 2;
+		}
+		if( four_z_squared_minus_1 > four_biggest_squared_minus1 )
+		{
+			four_biggest_squared_minus1 = four_z_squared_minus_1;
+			biggest_index = 3;
+		}
+
+		// Perform square root and division.
+		float biggestVal = sqrt( four_biggest_squared_minus1 + ComponentType( 1 ) ) * ComponentType( 0.5 );
+		float mult = ComponentType( 0.25 ) / biggestVal;
+
+		// Apply table to compute quaternion values
+		switch( biggest_index )
+		{
+			case 0:
+				w = biggestVal;
+				x = ( matrix[ 1 ][ 2 ] - matrix[ 2 ][ 1 ] ) * mult;
+				y = ( matrix[ 2 ][ 0 ] - matrix[ 0 ][ 2 ] ) * mult;
+				z = ( matrix[ 0 ][ 1 ] - matrix[ 1 ][ 0 ] ) * mult;
+				break;
+
+			case 1:
+				x = biggestVal;
+				w = ( matrix[ 1 ][ 2 ] - matrix[ 2 ][ 1 ] ) * mult;
+				y = ( matrix[ 0 ][ 1 ] + matrix[ 1 ][ 0 ] ) * mult;
+				z = ( matrix[ 2 ][ 0 ] + matrix[ 0 ][ 2 ] ) * mult;
+				break;
+
+			case 2:
+				y = biggestVal;
+				w = ( matrix[ 2 ][ 0 ] - matrix[ 0 ][ 2 ] ) * mult;
+				x = ( matrix[ 0 ][ 1 ] + matrix[ 1 ][ 0 ] ) * mult;
+				z = ( matrix[ 1 ][ 2 ] + matrix[ 2 ][ 1 ] ) * mult;
+				break;
+
+			case 3:
+				z = biggestVal;
+				w = ( matrix[ 0 ][ 1 ] - matrix[ 1 ][ 0 ] ) * mult;
+				x = ( matrix[ 2 ][ 0 ] + matrix[ 0 ][ 2 ] ) * mult;
+				y = ( matrix[ 1 ][ 2 ] + matrix[ 2 ][ 1 ] ) * mult;
+				break;
+		}
+
+		return { x, y, z, w };
 	}
 }
 
