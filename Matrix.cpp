@@ -47,10 +47,10 @@ namespace Framework::Matrix
 		return Matrix4x4
 		(
 			{
-				cos_bank_cos_heading + sin_bank * sin_pitch_sin_heading,		sin_bank * cos_pitch,											-cos_bank * sin_heading + sin_bank * sin_pitch * cos_heading,	0.0f,
-				-sin_bank * cos_heading + cos_bank * sin_pitch_sin_heading,		cos_bank * cos_pitch,											sin_bank * sin_heading + sin_pitch * cos_bank_cos_heading,		0.0f,
-				cos_pitch * sin_heading,										-sin_pitch,														cos_pitch * cos_heading,										0.0f,
-				0.0f,															0.0f,															0.0f,															1.0f
+				cos_bank_cos_heading + sin_bank * sin_pitch_sin_heading,		sin_bank * cos_pitch,		-cos_bank * sin_heading + sin_bank * sin_pitch * cos_heading,	0.0f,
+				-sin_bank * cos_heading + cos_bank * sin_pitch_sin_heading,		cos_bank * cos_pitch,		sin_bank * sin_heading + sin_pitch * cos_bank_cos_heading,		0.0f,
+				cos_pitch * sin_heading,										-sin_pitch,					cos_pitch * cos_heading,										0.0f,
+				0.0f,															0.0f,						0.0f,															1.0f
 			}
 		);
 	}
@@ -77,11 +77,70 @@ namespace Framework::Matrix
 		matrix[ 2 ][ 0 ] = cos_pitch * sin_heading;										matrix[ 2 ][ 1 ] = -sin_pitch;				matrix[ 2 ][ 2 ] = cos_pitch * cos_heading;									
 	}
 
+	/* Expects matrix in row-major form. Right-handed. Clockwise rotation.
+	 * The matrix should describe an extrinsic (fixed-axis) rotation, in this order:	bank (around z) -> pitch (around x) -> heading (around y), which results in
+	 * the Euler rotation (that is intrinsic & around body-axes) in this order:		 heading (around y) -> pitch (around x) -> bank (around z). */
+	void Matrix::ToEuler( const Matrix4x4& matrix, Radians& heading_around_y, Radians& pitch_around_x, Radians& bank_around_z )
+	{
+		/* The matrix' values for reference:
+		{
+			matrix[ 0 ][ 0 ] = cos_bank_cos_heading + sin_bank * sin_pitch_sin_heading		matrix[ 0 ][ 1 ] = sin_bank * cos_pitch		matrix[ 0 ][ 2 ] = -cos_bank * sin_heading + sin_bank * sin_pitch * cos_heading
+			matrix[ 1 ][ 0 ] = -sin_bank * cos_heading + cos_bank * sin_pitch_sin_heading	matrix[ 1 ][ 1 ] = cos_bank * cos_pitch		matrix[ 1 ][ 2 ] = sin_bank * sin_heading + sin_pitch * cos_bank_cos_heading
+			matrix[ 2 ][ 0 ] = cos_pitch * sin_heading										matrix[ 2 ][ 1 ] = -sin_pitch				matrix[ 2 ][ 2 ] = cos_pitch * cos_heading
+		}*/
+
+		using namespace Math::Literals;
+
+		const auto sin_pitch = -matrix[ 2 ][ 1 ];
+
+		if( sin_pitch <= -1.0f )
+			pitch_around_x = Radians( -Constants< float >::Half_Pi() );
+		else if( sin_pitch >= +1.0f )
+			pitch_around_x = Radians( Constants< float >::Half_Pi() );
+		else
+			pitch_around_x = Math::Asin( sin_pitch );
+
+		const auto cos_pitch = Math::Cos( pitch_around_x );
+
+		if( Math::IsZero( cos_pitch ) ) // Which means pitch is +90 or -90 -> gimbal lock!
+		{
+			// Set bank to zero & assign all rotation around the vertical axis to heading.
+			bank_around_z = 0.0_rad;
+
+			// Since bank = 0, it means that cos_bank = 1 & sin_bank = 0. Reminder: cos_pitch is also 0.
+
+			/* Updated matrix' values for reference:
+			{
+				matrix[ 0 ][ 0 ] = cos_heading					matrix[ 0 ][ 1 ] = 0				matrix[ 0 ][ 2 ] = -sin_heading
+				matrix[ 1 ][ 0 ] = sin_pitch_sin_heading		matrix[ 1 ][ 1 ] = 0				matrix[ 1 ][ 2 ] = sin_pitch * cos_heading
+				matrix[ 2 ][ 0 ] = 0							matrix[ 2 ][ 1 ] = -sin_pitch		matrix[ 2 ][ 2 ] = 0
+			}*/
+
+			heading_around_y = Math::Atan2( -matrix[ 0 ][ 2 ], matrix[ 0 ][ 0 ] );
+		}
+		else
+		{
+
+			/*
+			const auto sin_heading = matrix[ 2 ][ 0 ] / cos_pitch;
+			const auto cos_heading = matrix[ 2 ][ 2 ] / cos_pitch;
+			*/
+
+			/* Since cos_pitch is a common denominator between these two terms, we can directly pass the numerators of these fractions to atan2() instead. */
+
+			heading_around_y = Math::Atan2( matrix[ 2 ][ 0 ], matrix[ 2 ][ 2 ] );
+
+			/* Similar method for bank: */
+
+			bank_around_z = Math::Atan2( matrix[ 0 ][ 1 ], matrix[ 1 ][ 1 ] );
+		}
+	}
+
 	/* In row-major form. Right-handed. Clockwise rotation. */
 	Matrix4x4 RotationAroundX( Radians pitch )
 	{
-		const auto cosine_term = Cos( pitch );
-		const auto   sine_term = Sin( pitch );
+		const auto cosine_term = Math::Cos( pitch );
+		const auto   sine_term = Math::Sin( pitch );
 
 		return Matrix4x4
 		(
