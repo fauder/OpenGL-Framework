@@ -21,6 +21,10 @@ namespace Framework::Math
 	template< std::floating_point ComponentType >
 	constexpr ComponentType Dot( const Quaternion< ComponentType >& q1, const Quaternion< ComponentType >& q2 );
 
+	template< Concepts::Arithmetic Type, size_t RowSize, size_t ColumnSize >
+		requires Concepts::NonZero< RowSize > && Concepts::NonZero< ColumnSize >
+	class Matrix;
+
 	template< std::floating_point ComponentType >
 	class Quaternion
 	{
@@ -322,6 +326,9 @@ namespace Framework::Math
 		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
 		friend constexpr Quaternion< ComponentType_ > Slerp( Quaternion< ComponentType_ >& q1, Quaternion< ComponentType_ > q2, const ComponentType_ t );
 
+		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
+		friend constexpr Matrix< ComponentType_, 4, 4 > ToMatrix( const Quaternion< ComponentType_ >& quaternion );
+
 	private:
 		VectorType xyz;
 		ComponentType w;
@@ -407,6 +414,30 @@ namespace Framework::Math
 
 		return ( q1 * Sin( ( ComponentType{ 1 } - t ) * theta ) + q2 * Sin( t * theta ) )
 				* one_over_sin_theta;
+	}
+
+	template< std::floating_point ComponentType > // Have to use a different template parameter here because C++...
+	constexpr Matrix< ComponentType, 4, 4 > ToMatrix( const Quaternion< ComponentType >& quaternion )
+	{
+		const auto two_x2  = ComponentType( 2 ) * quaternion.xyz[ 0 ] * quaternion.xyz[ 0 ];
+		const auto two_y2  = ComponentType( 2 ) * quaternion.xyz[ 1 ] * quaternion.xyz[ 1 ];
+		const auto two_z2  = ComponentType( 2 ) * quaternion.xyz[ 2 ] * quaternion.xyz[ 2 ];
+		const auto two_x_y = ComponentType( 2 ) * quaternion.xyz[ 0 ] * quaternion.xyz[ 1 ];
+		const auto two_x_z = ComponentType( 2 ) * quaternion.xyz[ 0 ] * quaternion.xyz[ 2 ];
+		const auto two_y_z = ComponentType( 2 ) * quaternion.xyz[ 1 ] * quaternion.xyz[ 2 ];
+		const auto two_w_x = ComponentType( 2 ) * quaternion.w		  * quaternion.xyz[ 0 ];
+		const auto two_w_y = ComponentType( 2 ) * quaternion.w		  * quaternion.xyz[ 1 ];
+		const auto two_w_z = ComponentType( 2 ) * quaternion.w		  * quaternion.xyz[ 2 ];
+
+		return Framework::Matrix4x4
+		(
+			{
+				ComponentType( 1 ) - two_y2 - two_z2,		two_x_y + two_w_z,							two_x_z - two_w_y,							0.0f,
+				two_x_y - two_w_z,							ComponentType( 1 ) - two_x2 - two_z2,		two_y_z + two_w_x,							0.0f,
+				two_x_z + two_w_y,							two_y_z - two_w_x,							ComponentType( 1 ) - two_x2 - two_y2,		0.0f,
+				0.0f,										0.0f,										0.0f,										1.0f
+			}
+		);
 	}
 }
 
