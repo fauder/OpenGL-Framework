@@ -45,7 +45,7 @@ namespace Framework
 
 			/* Do not use relative error if one of the values is zero or the difference is smaller than the epsilon. */
 			if( lhs == Value{} || rhs == Value{} || difference < epsilon )
-				return true;
+				return difference < epsilon;
 
 			return difference / std::abs( lhs + rhs ) < epsilon;
 		}
