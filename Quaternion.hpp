@@ -79,6 +79,19 @@ namespace Framework::Math
 	#endif // _DEBUG
 		}
 
+	/* Comparison Operators. */
+		//constexpr auto operator<=>( const Quaternion& ) const = default;
+
+		bool operator==( const Quaternion & right_hand_side ) const
+		{
+			return Math::IsEqual( w, right_hand_side.w ) && xyz == right_hand_side.xyz;
+		}
+
+		bool operator!=( const Quaternion & right_hand_side ) const
+		{
+			return !operator==( right_hand_side );
+		}
+
 	/* Other Queries. */
 		constexpr RadiansType HalfAngle() const
 		{
