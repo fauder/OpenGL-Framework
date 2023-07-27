@@ -12,7 +12,7 @@
 
 namespace Framework::Math
 {
-	template< Concepts::Arithmetic Coordinate, size_t Size >
+	template< Concepts::Arithmetic Coordinate, std::size_t Size >
 		requires Concepts::NonZero< Size >
 	class Vector
 	{
@@ -109,7 +109,7 @@ namespace Framework::Math
 		}
 
 	/* Other Queries. */
-		static consteval size_t Dimension()		{ return Size; }
+		static consteval std::size_t Dimension()		{ return Size; }
 
 		static constexpr Vector Zero()		{ return Vector{}; }
 		static constexpr Vector One()		{ return Vector{ Coordinate( 1 ) }; }
@@ -312,7 +312,7 @@ namespace Framework::Math
 		}
 
 		// Practically we won't use this for any vectors other than 3D & 4D, but no need to restrict.
-		template< Concepts::Arithmetic Coordinate_, size_t Size_ > // Have to use different template parameters here because C++...
+		template< Concepts::Arithmetic Coordinate_, std::size_t Size_ > // Have to use different template parameters here because C++...
 		friend constexpr Coordinate_ Dot( const Vector< Coordinate_, Size_ >& u, const Vector< Coordinate_, Size_ >& v );
 
 		// Cross product is only defined for vectors of 3 & 7 dimensions apparently, but practically we only need it for 3D.
@@ -341,7 +341,7 @@ namespace Framework::Math
 		}
 
 		/* Vector-matrix multiplication. */
-		template< size_t ColumnSize >
+		template< std::size_t ColumnSize >
 		constexpr Vector< Coordinate, ColumnSize > operator* ( const Matrix< Coordinate, Size, ColumnSize >& transform_matrix ) const
 		{
 			Vector< Coordinate, ColumnSize > vector_transformed;
@@ -353,7 +353,7 @@ namespace Framework::Math
 		}
 
 		/* Vector-matrix multiplication. */
-		template< size_t ColumnSize >
+		template< std::size_t ColumnSize >
 		constexpr Vector< Coordinate, ColumnSize >& operator*= ( const Matrix< Coordinate, Size, ColumnSize >& transform_matrix )
 		{
 			return *this = *this * transform_matrix;
@@ -363,7 +363,7 @@ namespace Framework::Math
 		Coordinate data[ Size ];
 	};
 
-	template< Concepts::Arithmetic Coordinate, size_t Size >
+	template< Concepts::Arithmetic Coordinate, std::size_t Size >
 	constexpr Coordinate Dot( const Vector< Coordinate, Size >& u, const Vector< Coordinate, Size >& v ) // Practically we won't use this for any vectors other than 3D & 4D, but no need to restrict.
 	{
 		Coordinate result( 0 );

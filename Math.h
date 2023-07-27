@@ -15,9 +15,9 @@ namespace Framework::Math
 	class Polar3_Cylindrical;
 	class Polar3_Spherical;
 	class Polar3_Spherical_Game;
-	template< Concepts::Arithmetic Coordinate, size_t Size > requires Concepts::NonZero< Size >
+	template< Concepts::Arithmetic Coordinate, std::size_t Size > requires Concepts::NonZero< Size >
 	class Vector;
-	template< Concepts::Arithmetic Type, size_t RowSize, size_t ColumnSize >
+	template< Concepts::Arithmetic Type, std::size_t RowSize, std::size_t ColumnSize >
 		requires Concepts::NonZero< RowSize > && Concepts::NonZero< ColumnSize >
 	class Matrix;
 	template< std::floating_point FloatType >

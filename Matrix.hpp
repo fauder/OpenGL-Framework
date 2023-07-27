@@ -13,7 +13,7 @@
 namespace Framework::Math
 {
 	/* Row-major. Post-multiplies a row vector to transform it. */
-	template< Concepts::Arithmetic Type, size_t RowSize, size_t ColumnSize >
+	template< Concepts::Arithmetic Type, std::size_t RowSize, std::size_t ColumnSize >
 		requires Concepts::NonZero< RowSize > && Concepts::NonZero< ColumnSize >
 	class Matrix
 	{
@@ -166,14 +166,14 @@ namespace Framework::Math
 		}
 
 	/* Other Queries. */
-		static consteval size_t RowCount()     { return RowSize; }
-		static consteval size_t ColumnCount()  { return ColumnSize; }
-		static consteval size_t ElementCount() { return RowSize * ColumnSize; }
+		static consteval std::size_t RowCount()     { return RowSize; }
+		static consteval std::size_t ColumnCount()  { return ColumnSize; }
+		static consteval std::size_t ElementCount() { return RowSize * ColumnSize; }
 
 	/* Arithmetic Operations. */
 
 		/* Matrix-matrix multiplication. */
-		template< size_t RowSizeOther, size_t ColumnSizeOther >
+		template< std::size_t RowSizeOther, std::size_t ColumnSizeOther >
 		constexpr Matrix< Type, RowSize, ColumnSizeOther > operator* ( const Matrix< Type, RowSizeOther, ColumnSizeOther >& other ) const requires( ColumnSize == RowSizeOther )
 		{
 			Matrix< Type, RowSize, ColumnSizeOther > result( ZERO_INITIALIZATION );
