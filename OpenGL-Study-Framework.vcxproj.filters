@@ -93,7 +93,7 @@
     <ClInclude Include="Texture.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="Utility.h">
+    <ClInclude Include="Utility.hpp">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Matrix.hpp">

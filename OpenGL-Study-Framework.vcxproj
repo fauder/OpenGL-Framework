@@ -186,7 +186,7 @@
     <ClInclude Include="Transform.h" />
     <ClInclude Include="TypeTraits.h" />
     <ClInclude Include="Unit.h" />
-    <ClInclude Include="Utility.h" />
+    <ClInclude Include="Utility.hpp" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Graphics.h" />
