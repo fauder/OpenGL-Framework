@@ -5,6 +5,7 @@
 #include "Concepts.h"
 #include "Initialization.h"
 #include "TypeTraits.h"
+#include "Utility.hpp"
 
 // std Includes.
 #include <array>
@@ -198,6 +199,17 @@ namespace Framework::Math
 		Matrix Transposed() const
 		{
 			return Matrix( *this ).Transpose();
+		}
+
+		constexpr Type Trace() const requires( RowSize == ColumnSize )
+		{
+			Type result( 0 );
+			Utility::constexpr_for< 0, RowSize, 1 >( [ & ]( const auto index )
+			{
+				result += data[ index ][ index ];
+			} );
+
+			return result;
 		}
 
 	protected:
