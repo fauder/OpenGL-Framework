@@ -327,7 +327,7 @@ namespace Framework::Math
 		friend constexpr Quaternion< ComponentType_ > Slerp( Quaternion< ComponentType_ >& q1, Quaternion< ComponentType_ > q2, const ComponentType_ t );
 
 		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
-		friend constexpr Matrix< ComponentType_, 4, 4 > ToMatrix( const Quaternion< ComponentType_ >& quaternion );
+		friend constexpr Matrix< ComponentType_, 4, 4 > QuaternionToMatrix( const Quaternion< ComponentType_ >& quaternion );
 
 	private:
 		VectorType xyz;
@@ -416,8 +416,8 @@ namespace Framework::Math
 				* one_over_sin_theta;
 	}
 
-	template< std::floating_point ComponentType > // Have to use a different template parameter here because C++...
-	constexpr Matrix< ComponentType, 4, 4 > ToMatrix( const Quaternion< ComponentType >& quaternion )
+	template< std::floating_point ComponentType >
+	constexpr Matrix< ComponentType, 4, 4 > QuaternionToMatrix( const Quaternion< ComponentType >& quaternion )
 	{
 		const auto two_x2  = ComponentType( 2 ) * quaternion.xyz[ 0 ] * quaternion.xyz[ 0 ];
 		const auto two_y2  = ComponentType( 2 ) * quaternion.xyz[ 1 ] * quaternion.xyz[ 1 ];
