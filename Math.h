@@ -20,13 +20,8 @@ namespace Framework::Math
 	template< Concepts::Arithmetic Type, size_t RowSize, size_t ColumnSize >
 		requires Concepts::NonZero< RowSize > && Concepts::NonZero< ColumnSize >
 	class Matrix;
-	template< Concepts::Arithmetic Type,
-			  template< class > class Derived > /* Explicitly restrict to template classes */
-	class Unit;
 	template< std::floating_point FloatType >
-	class Radians /*: public Unit< FloatType, Radians >*/;
-	template< std::floating_point ComponentType >
-	class Quaternion;
+	class Radians;
 }
 
 namespace Framework
