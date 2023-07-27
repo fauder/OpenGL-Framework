@@ -11,7 +11,7 @@ namespace Framework::Matrix
 	{
 		const Radians half_fov( vertical_fieldOfView / 2.0f );
 
-		const auto half_tangent = Tan( half_fov );
+		const auto half_tangent = Math::Tan( half_fov );
 		const float half_height = half_tangent * near_plane_offset;
 		const float half_width  = aspect_ratio * half_height;
 		const float f_plus_n    = far_plane_offset + near_plane_offset;
@@ -33,13 +33,13 @@ namespace Framework::Matrix
 	 * an Euler rotation (is intrinsic, body-axis),  in this order: heading (around y) -> pitch (around x) -> bank (around z), which means */
 	Matrix4x4 Matrix::FromEuler( Radians heading_around_y, Radians pitch_around_x, Radians bank_around_z )
 	{
-		const auto sin_pitch   = Sin( pitch_around_x );
-		const auto sin_heading = Sin( heading_around_y );
-		const auto sin_bank    = Sin( bank_around_z );
+		const auto sin_pitch   = Math::Sin( pitch_around_x );
+		const auto sin_heading = Math::Sin( heading_around_y );
+		const auto sin_bank    = Math::Sin( bank_around_z );
 
-		const auto cos_pitch   = Cos( pitch_around_x );
-		const auto cos_heading = Cos( heading_around_y );
-		const auto cos_bank    = Cos( bank_around_z );
+		const auto cos_pitch   = Math::Cos( pitch_around_x );
+		const auto cos_heading = Math::Cos( heading_around_y );
+		const auto cos_bank    = Math::Cos( bank_around_z );
 
 		const auto cos_bank_cos_heading  = cos_bank * cos_heading;
 		const auto sin_pitch_sin_heading = sin_pitch * sin_heading;
@@ -61,13 +61,13 @@ namespace Framework::Matrix
 	 * an Euler rotation (is intrinsic, body-axis),  in this order: heading (around y) -> pitch (around x) -> bank (around z), which means */
 	void Matrix::FromEuler( Matrix4x4& matrix, Radians heading_around_y, Radians pitch_around_x, Radians bank_around_z )
 	{
-		const auto sin_pitch   = Sin( pitch_around_x );
-		const auto sin_heading = Sin( heading_around_y );
-		const auto sin_bank    = Sin( bank_around_z );
+		const auto sin_pitch   = Math::Sin( pitch_around_x );
+		const auto sin_heading = Math::Sin( heading_around_y );
+		const auto sin_bank    = Math::Sin( bank_around_z );
 
-		const auto cos_pitch   = Cos( pitch_around_x );
-		const auto cos_heading = Cos( heading_around_y );
-		const auto cos_bank    = Cos( bank_around_z );
+		const auto cos_pitch   = Math::Cos( pitch_around_x );
+		const auto cos_heading = Math::Cos( heading_around_y );
+		const auto cos_bank    = Math::Cos( bank_around_z );
 
 		const auto cos_bank_cos_heading = cos_bank * cos_heading;
 		const auto sin_pitch_sin_heading = sin_pitch * sin_heading;
@@ -156,8 +156,8 @@ namespace Framework::Matrix
 	/* In row-major form. Right-handed. Clockwise rotation. */
 	Matrix4x4 RotationAroundY( Radians heading )
 	{
-		const auto cosine_term = Cos( heading );
-		const auto   sine_term = Sin( heading );
+		const auto cosine_term = Math::Cos( heading );
+		const auto   sine_term = Math::Sin( heading );
 
 		return Matrix4x4
 		(
@@ -173,8 +173,8 @@ namespace Framework::Matrix
 	/* In row-major form. Right-handed. Clockwise rotation. */
 	Matrix4x4 RotationAroundZ( Radians bank )
 	{
-		const auto cosine_term = Cos( bank );
-		const auto   sine_term = Sin( bank );
+		const auto cosine_term = Math::Cos( bank );
+		const auto   sine_term = Math::Sin( bank );
 
 		return Matrix4x4
 		(
@@ -197,8 +197,8 @@ namespace Framework::Matrix
 		const auto nx                           = vector.X();
 		const auto ny                           = vector.Y();
 		const auto nz                           = vector.Z();
-		const auto cos_theta                    = Cos( theta );
-		const auto sin_theta                    = Sin( theta );
+		const auto cos_theta                    = Math::Cos( theta );
+		const auto sin_theta                    = Math::Sin( theta );
 		const auto one_minus_cos_theta          = 1.0f - cos_theta;
 		const auto nx_times_one_minus_cos_theta = nx * one_minus_cos_theta;
 		const auto ny_times_one_minus_cos_theta = ny * one_minus_cos_theta;
@@ -229,8 +229,8 @@ namespace Framework::Matrix
 		const auto nx                           = vector.X();
 		const auto ny                           = vector.Y();
 		const auto nz                           = vector.Z();
-		const auto cos_theta                    = Cos( theta );
-		const auto sin_theta                    = Sin( theta );
+		const auto cos_theta                    = Math::Cos( theta );
+		const auto sin_theta                    = Math::Sin( theta );
 		const auto one_minus_cos_theta          = 1.0f - cos_theta;
 		const auto nx_times_one_minus_cos_theta = nx * one_minus_cos_theta;
 		const auto ny_times_one_minus_cos_theta = ny * one_minus_cos_theta;
