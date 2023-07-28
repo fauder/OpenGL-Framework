@@ -10,7 +10,7 @@ namespace Framework::Math
 	/* In row-major form. Right-handed. Clockwise rotation.
 	 * Describes an extrinsic (fixed-axis) rotation, in this order:    bank (around z) -> pitch (around x) -> heading (around y).
 	 * an Euler rotation (is intrinsic, body-axis),  in this order: heading (around y) -> pitch (around x) -> bank (around z), which means */
-	Framework::Matrix4x4 FromEuler( Framework::Radians heading_around_y, Framework::Radians pitch_around_x, Framework::Radians bank_around_z )
+	Framework::Matrix4x4 EulerToMatrix( Framework::Radians heading_around_y, Framework::Radians pitch_around_x, Framework::Radians bank_around_z )
 	{
 		const auto sin_pitch   = Math::Sin( pitch_around_x );
 		const auto sin_heading = Math::Sin( heading_around_y );
@@ -38,7 +38,7 @@ namespace Framework::Math
 	/* In row-major form. Right-handed. Clockwise rotation.
 	 * Describes an extrinsic (fixed-axis) rotation, in this order:    bank (around z) -> pitch (around x) -> heading (around y).
 	 * an Euler rotation (is intrinsic, body-axis),  in this order: heading (around y) -> pitch (around x) -> bank (around z), which means */
-	void FromEuler( Framework::Matrix4x4& matrix, Framework::Radians heading_around_y, Framework::Radians pitch_around_x, Framework::Radians bank_around_z )
+	void EulerToMatrix( Framework::Matrix4x4& matrix, Framework::Radians heading_around_y, Framework::Radians pitch_around_x, Framework::Radians bank_around_z )
 	{
 		const auto sin_pitch   = Math::Sin( pitch_around_x );
 		const auto sin_heading = Math::Sin( heading_around_y );
@@ -59,7 +59,7 @@ namespace Framework::Math
 	/* Expects matrix in row-major form. Right-handed. Clockwise rotation.
 	 * The matrix should describe an extrinsic (fixed-axis) rotation, in this order:	bank (around z) -> pitch (around x) -> heading (around y), which results in
 	 * the Euler rotation (that is intrinsic & around body-axes) in this order:		 heading (around y) -> pitch (around x) -> bank (around z). */
-	void ToEuler( const Framework::Matrix4x4& matrix, Framework::Radians& heading_around_y, Framework::Radians& pitch_around_x, Framework::Radians& bank_around_z )
+	void MatrixToEuler( const Framework::Matrix4x4& matrix, Framework::Radians& heading_around_y, Framework::Radians& pitch_around_x, Framework::Radians& bank_around_z )
 	{
 		/* The matrix' values for reference:
 		{

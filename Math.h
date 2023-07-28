@@ -73,10 +73,10 @@ namespace Framework::Math
 
 /* Conversions Between Rotation Representations. */
 	/* Describes an extrinsic (fixed-axis) rotation, in this order: first heading (around y), then pitch (around x) and finally bank (around z). */
-	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Framework::Matrix4x4 FromEuler( Framework::Radians heading_around_y, Framework::Radians pitch_around_x, Framework::Radians bank_around_z );
+	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Framework::Matrix4x4 EulerToMatrix( Framework::Radians heading_around_y, Framework::Radians pitch_around_x, Framework::Radians bank_around_z );
 	/* Describes an extrinsic (fixed-axis) rotation, in this order: first heading (around y), then pitch (around x) and finally bank (around z). */
-	/* In row-major form. Right-handed. Counter-clockwise rotation. */ void FromEuler( Framework::Matrix4x4& matrix, Framework::Radians heading_around_y, Framework::Radians pitch_around_x, Framework::Radians bank_around_z );
-	/* In row-major form. Right-handed. Counter-clockwise rotation. */ void ToEuler( const Framework::Matrix4x4& matrix, Framework::Radians& heading_around_y, Framework::Radians& pitch_around_x, Framework::Radians& bank_around_z );
+	/* In row-major form. Right-handed. Counter-clockwise rotation. */ void EulerToMatrix( Framework::Matrix4x4& matrix, Framework::Radians heading_around_y, Framework::Radians pitch_around_x, Framework::Radians bank_around_z );
+	/* In row-major form. Right-handed. Counter-clockwise rotation. */ void MatrixToEuler( const Framework::Matrix4x4& matrix, Framework::Radians& heading_around_y, Framework::Radians& pitch_around_x, Framework::Radians& bank_around_z );
 
 /* Conversions Between Cartesian, Polar, Cylindrical & Spherical Coordinates. */
 	Polar2 ToPolar2( const Vector2& cartesian );
