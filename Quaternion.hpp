@@ -351,17 +351,17 @@ namespace Framework::Math
 		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
 		friend constexpr Quaternion< ComponentType_ > MatrixToQuaternion( const Matrix< ComponentType_, 4, 4 >& matrix );
 
+		/* Source: https://gamemath.com/book/orient.html#quaternion_to_euler_angles. */
+		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
+		friend constexpr void QuaternionToEuler( const Quaternion< ComponentType_ >& quaternion,
+												 Radians< ComponentType_ >& heading_around_y, Radians< ComponentType_ >& pitch_around_x, Radians< ComponentType_ >& bank_around_z );
+
 		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
 		friend constexpr Quaternion< ComponentType_ > EulerToQuaternion( const Radians< ComponentType_ > heading_around_y, const Radians< ComponentType_ > pitch_around_x, const Radians< ComponentType_ > bank_around_z );
 
 		/* Since the type system can not deduce the template type when passed Degrees in the specific case of the above function, this overload is provided for ease-of-use. */
 		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
 		friend constexpr Quaternion< ComponentType_ > EulerToQuaternion( const Degrees< ComponentType_ > heading_around_y, const Degrees< ComponentType_ > pitch_around_x, const Degrees< ComponentType_ > bank_around_z );
-
-		/* Source: https://gamemath.com/book/orient.html#quaternion_to_euler_angles. */
-		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
-		friend constexpr void QuaternionToEuler( const Quaternion< ComponentType_ >& quaternion,
-												 Radians< ComponentType_ >& heading_around_y, Radians< ComponentType_ >& pitch_around_x, Radians< ComponentType_ >& bank_around_z );
 
 	private:
 		VectorType xyz;
@@ -453,6 +453,10 @@ namespace Framework::Math
 	template< std::floating_point ComponentType >
 	constexpr Matrix< ComponentType, 4, 4 > QuaternionToMatrix( const Quaternion< ComponentType >& quaternion )
 	{
+	#ifdef _DEBUG
+		ASSERT( quaternion.IsNormalized() && R"(Math::QuaternionToMatrix(): The quaternion is not normalized!)" );
+	#endif // _DEBUG
+
 		const auto two_x2  = ComponentType( 2 ) * quaternion.xyz[ 0 ] * quaternion.xyz[ 0 ];
 		const auto two_y2  = ComponentType( 2 ) * quaternion.xyz[ 1 ] * quaternion.xyz[ 1 ];
 		const auto two_z2  = ComponentType( 2 ) * quaternion.xyz[ 2 ] * quaternion.xyz[ 2 ];
@@ -544,6 +548,42 @@ namespace Framework::Math
 		return { x, y, z, w };
 	}
 
+	/* Source: https://gamemath.com/book/orient.html#quaternion_to_euler_angles. */
+	template< std::floating_point ComponentType >
+	constexpr void QuaternionToEuler( const Quaternion< ComponentType >& quaternion, Radians< ComponentType >& heading_around_y, Radians< ComponentType >& pitch_around_x, Radians< ComponentType >& bank_around_z )
+	{
+		/* Method is to convert a matrix to euler angles, where the matrix is the angle - axis rotation matrix re - arranged to use x, y, z, w of a Quaternion.
+		 * So basically, it is kind it is QuaternionToMatrix() & then MatrixToEuler(). */
+
+	#ifdef _DEBUG
+		ASSERT( quaternion.IsNormalized() && R"(Math::QuaternionToEuler(): The quaternion is not normalized!)" );
+	#endif // _DEBUG
+
+		const auto x = quaternion.X();
+		const auto y = quaternion.Y();
+		const auto z = quaternion.Z();
+		const auto w = quaternion.w;
+
+		ComponentType sin_pitch = ComponentType ( -2 ) * ( y * z - w * x );
+
+		// Check for gimbal lock, giving slight tolerance for numerical imprecision.
+		if( Abs( sin_pitch ) > TypeTraits< ComponentType >::OneMinusEpsilon() )
+		{
+			pitch_around_x = Radians( Constants< ComponentType >::Half_Pi() * sin_pitch );
+
+			// Compute heading, slam bank to zero.
+			heading_around_y = Atan2( -x * z + w * y, ComponentType( 0.5 ) - y * y - z * z );
+			bank_around_z    = Radians( ComponentType( 0 ) );
+
+		}
+		else // Compute angles.
+		{
+			pitch_around_x   = Asin( sin_pitch );
+			heading_around_y = Atan2( x * z + w * y, ComponentType( 0.5 ) - x * x - y * y );
+			bank_around_z    = Atan2( x * y + w * z, ComponentType( 0.5 ) - x * x - z * z );
+		}
+	}
+
 	template< std::floating_point ComponentType >
 	constexpr Quaternion< ComponentType > EulerToQuaternion( const Radians< ComponentType > heading_around_y, const Radians< ComponentType > pitch_around_x, const Radians< ComponentType > bank_around_z )
 	{
@@ -579,40 +619,6 @@ namespace Framework::Math
 	constexpr Quaternion< ComponentType > EulerToQuaternion( const Degrees< ComponentType > heading_around_y, const Degrees< ComponentType > pitch_around_x, const Degrees< ComponentType > bank_around_z )
 	{
 		return EulerToQuaternion< ComponentType >( Radians( heading_around_y ), Radians( pitch_around_x ), Radians( bank_around_z ) );
-	}
-
-	/* Source: https://gamemath.com/book/orient.html#quaternion_to_euler_angles. */
-	template< std::floating_point ComponentType >
-	constexpr void QuaternionToEuler( const Quaternion< ComponentType >& quaternion, Radians< ComponentType >& heading_around_y, Radians< ComponentType >& pitch_around_x, Radians< ComponentType >& bank_around_z )
-	{
-		/* Method is to convert a matrix to euler angles, where the matrix is the angle - axis rotation matrix re - arranged to use x, y, z, w of a Quaternion.
-		 * So basically, it is kind it is QuaternionToMatrix() & then MatrixToEuler(). */
-
-		const auto x = quaternion.X();
-		const auto y = quaternion.Y();
-		const auto z = quaternion.Z();
-		const auto w = quaternion.w;
-
-		ComponentType sin_pitch = ComponentType ( -2 ) * ( y * z - w * x );
-
-		// Check for gimbal lock, giving slight tolerance for numerical imprecision.
-		if( Abs( sin_pitch ) > TypeTraits< ComponentType >::OneMinusEpsilon() )
-		{
-
-			// Looking straight up or down
-			pitch_around_x = Radians( Constants< ComponentType >::Half_Pi() * sin_pitch );
-
-			// Compute heading, slam bank to zero.
-			heading_around_y = Atan2( -x * z + w * y, ComponentType( 0.5 ) - y * y - z * z );
-			bank_around_z    = Radians( ComponentType( 0 ) );
-
-		}
-		else // Compute angles.
-		{
-			pitch_around_x   = Asin( sin_pitch );
-			heading_around_y = Atan2( x * z + w * y, ComponentType( 0.5 ) - x * x - y * y );
-			bank_around_z    = Atan2( x * y + w * z, ComponentType( 0.5 ) - x * x - z * z );
-		}
 	}
 }
 
