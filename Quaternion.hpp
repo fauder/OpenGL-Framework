@@ -346,6 +346,13 @@ namespace Framework::Math
 		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
 		friend constexpr Quaternion< ComponentType_ > MatrixToQuaternion( const Matrix< ComponentType_, 4, 4 >& matrix );
 
+		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
+		friend constexpr Quaternion< ComponentType_ > EulerToQuaternion( const Radians< ComponentType_ > heading_around_y, const Radians< ComponentType_ > pitch_around_x, const Radians< ComponentType_ > bank_around_z );
+
+		/* Since the type system can not deduce the template type when passed Degrees in the specific case of the above function, this overload is provided for ease-of-use. */
+		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
+		friend constexpr Quaternion< ComponentType_ > EulerToQuaternion( const Degrees< ComponentType_ > heading_around_y, const Degrees< ComponentType_ > pitch_around_x, const Degrees< ComponentType_ > bank_around_z );
+
 	private:
 		VectorType xyz;
 		ComponentType w;
@@ -525,6 +532,43 @@ namespace Framework::Math
 		}
 
 		return { x, y, z, w };
+	}
+
+	template< std::floating_point ComponentType >
+	constexpr Quaternion< ComponentType > EulerToQuaternion( const Radians< ComponentType > heading_around_y, const Radians< ComponentType > pitch_around_x, const Radians< ComponentType > bank_around_z )
+	{
+		const auto half_heading( heading_around_y / ComponentType( 2 ) );
+		const auto half_pitch( pitch_around_x / ComponentType( 2 ) );
+		const auto half_bank( bank_around_z / ComponentType( 2 ) );
+
+		const auto cos_half_heading = Cos( half_heading );
+		const auto cos_half_pitch   = Cos( half_pitch	);
+		const auto cos_half_bank    = Cos( half_bank	);
+
+		const auto sin_half_heading = Sin( half_heading );
+		const auto sin_half_pitch   = Sin( half_pitch	);
+		const auto sin_half_bank    = Sin( half_bank	);
+
+		const auto sin_half_heading_sin_half_pitch = sin_half_heading * sin_half_pitch;
+		const auto cos_half_pitch_sin_half_bank    = cos_half_pitch   * sin_half_bank;
+		const auto cos_half_heading_cos_half_bank  = cos_half_heading * cos_half_bank;
+		const auto cos_half_heading_sin_half_bank  = cos_half_heading * sin_half_bank;
+
+		return
+		{
+			/* x = */  cos_half_heading_cos_half_bank  * sin_half_pitch + sin_half_heading * cos_half_pitch_sin_half_bank,
+			/* y = */ -cos_half_heading_sin_half_bank  * sin_half_pitch + sin_half_heading * cos_half_pitch * cos_half_bank,
+			/* z = */ -sin_half_heading_sin_half_pitch * cos_half_bank  + cos_half_heading_sin_half_bank * cos_half_pitch,
+
+			/* w = */  cos_half_heading_cos_half_bank  * cos_half_pitch + sin_half_heading_sin_half_pitch * sin_half_bank
+		};
+	}
+
+	/* Since the type system can not deduce the template type when passed Degrees in the specific case of the Radians accepting version, this overload is provided for ease-of-use. */
+	template< std::floating_point ComponentType >
+	constexpr Quaternion< ComponentType > EulerToQuaternion( const Degrees< ComponentType > heading_around_y, const Degrees< ComponentType > pitch_around_x, const Degrees< ComponentType > bank_around_z )
+	{
+		return EulerToQuaternion< float >( Radians( heading_around_y ), Radians( pitch_around_x ), Radians( bank_around_z ) );
 	}
 }
 
