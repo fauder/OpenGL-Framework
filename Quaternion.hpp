@@ -93,9 +93,9 @@ namespace Framework::Math
 		}
 
 	/* Other Queries. */
-		constexpr ComponentType X() const { return xyz.X(); }
-		constexpr ComponentType Y() const { return xyz.Y(); }
-		constexpr ComponentType Z() const { return xyz.Z(); }
+		constexpr ComponentType X() const { return x; }
+		constexpr ComponentType Y() const { return y; }
+		constexpr ComponentType Z() const { return z; }
 		constexpr ComponentType W() const { return w; }
 
 		constexpr RadiansType HalfAngle() const
@@ -168,7 +168,7 @@ namespace Framework::Math
 		constexpr Quaternion& operator+= ( const Quaternion other )
 		{
 			xyz += other.xyz;
-			w += other.w;
+			w   += other.w;
 
 			return *this;
 		}
@@ -312,7 +312,6 @@ namespace Framework::Math
 		#ifdef _DEBUG
 			ASSERT( IsNormalized() && R"(Quaternion::Exp() : The quaternion "*this" is not normalized!)" );
 		#endif
-
 			Quaternion result( *this );
 
 			// Check for the case of an identity quaternion. This will protect against divide by zero.
@@ -364,7 +363,11 @@ namespace Framework::Math
 		friend constexpr Quaternion< ComponentType_ > EulerToQuaternion( const Degrees< ComponentType_ > heading_around_y, const Degrees< ComponentType_ > pitch_around_x, const Degrees< ComponentType_ > bank_around_z );
 
 	private:
-		VectorType xyz;
+		union
+		{
+			struct { VectorType xyz; };
+			struct { float x, y, z;  };
+		};
 		ComponentType w;
 	};
 
@@ -457,15 +460,15 @@ namespace Framework::Math
 		ASSERT( quaternion.IsNormalized() && R"(Math::QuaternionToMatrix(): The quaternion is not normalized!)" );
 	#endif // _DEBUG
 
-		const auto two_x2  = ComponentType( 2 ) * quaternion.xyz[ 0 ] * quaternion.xyz[ 0 ];
-		const auto two_y2  = ComponentType( 2 ) * quaternion.xyz[ 1 ] * quaternion.xyz[ 1 ];
-		const auto two_z2  = ComponentType( 2 ) * quaternion.xyz[ 2 ] * quaternion.xyz[ 2 ];
-		const auto two_x_y = ComponentType( 2 ) * quaternion.xyz[ 0 ] * quaternion.xyz[ 1 ];
-		const auto two_x_z = ComponentType( 2 ) * quaternion.xyz[ 0 ] * quaternion.xyz[ 2 ];
-		const auto two_y_z = ComponentType( 2 ) * quaternion.xyz[ 1 ] * quaternion.xyz[ 2 ];
-		const auto two_w_x = ComponentType( 2 ) * quaternion.w		  * quaternion.xyz[ 0 ];
-		const auto two_w_y = ComponentType( 2 ) * quaternion.w		  * quaternion.xyz[ 1 ];
-		const auto two_w_z = ComponentType( 2 ) * quaternion.w		  * quaternion.xyz[ 2 ];
+		const auto two_x2  = ComponentType( 2 ) * quaternion.x * quaternion.x;
+		const auto two_y2  = ComponentType( 2 ) * quaternion.y * quaternion.y;
+		const auto two_z2  = ComponentType( 2 ) * quaternion.z * quaternion.z;
+		const auto two_x_y = ComponentType( 2 ) * quaternion.x * quaternion.y;
+		const auto two_x_z = ComponentType( 2 ) * quaternion.x * quaternion.z;
+		const auto two_y_z = ComponentType( 2 ) * quaternion.y * quaternion.z;
+		const auto two_w_x = ComponentType( 2 ) * quaternion.w * quaternion.x;
+		const auto two_w_y = ComponentType( 2 ) * quaternion.w * quaternion.y;
+		const auto two_w_z = ComponentType( 2 ) * quaternion.w * quaternion.z;
 
 		return Framework::Matrix4x4
 		(
@@ -559,9 +562,9 @@ namespace Framework::Math
 		ASSERT( quaternion.IsNormalized() && R"(Math::QuaternionToEuler(): The quaternion is not normalized!)" );
 	#endif // _DEBUG
 
-		const auto x = quaternion.X();
-		const auto y = quaternion.Y();
-		const auto z = quaternion.Z();
+		const auto x = quaternion.x;
+		const auto y = quaternion.y;
+		const auto z = quaternion.z;
 		const auto w = quaternion.w;
 
 		ComponentType sin_pitch = ComponentType ( -2 ) * ( y * z - w * x );
