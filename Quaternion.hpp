@@ -70,9 +70,9 @@ namespace Framework::Math
 		/* Expects a unit vector for the axis! */
 		Quaternion( RadiansType angle, const VectorType& rotation_axis_normalized )
 		{
-			const RadiansType half_angle = angle / 2.0f;
+			const RadiansType half_angle = angle * ComponentType( 0.5 );
 			w   = Cos( half_angle );
-			xyz = Sin( half_angle ) * rotation_axis_normalized;
+			xyz = SinFromCos( w ) * rotation_axis_normalized;
 
 	#ifdef _DEBUG
 			ASSERT( rotation_axis_normalized.IsNormalized() && "QuaternionBase::QuaternionBase( angle, axis ): The axis vector provided is not normalized!" );
