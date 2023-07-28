@@ -93,6 +93,11 @@ namespace Framework::Math
 		}
 
 	/* Other Queries. */
+		constexpr ComponentType X() const { return xyz.X(); }
+		constexpr ComponentType Y() const { return xyz.Y(); }
+		constexpr ComponentType Z() const { return xyz.Z(); }
+		constexpr ComponentType W() const { return w; }
+
 		constexpr RadiansType HalfAngle() const
 		{
 		#ifdef _DEBUG
