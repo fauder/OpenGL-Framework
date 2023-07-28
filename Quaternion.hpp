@@ -136,8 +136,8 @@ namespace Framework::Math
 			ASSERT( IsNormalized() && R"(QuaternionBase::Axis(): The quaternion "*this" is not normalized!)" );
 		#endif // _DEBUG
 
-			// Instead of incurring the cost of sin( HalfAngle() ), sin(theta) can be derived by sqrt(1-w*w), as we know w = cos(theta).
-			return VectorType( xyz / Sqrt( ComponentType{ 1 } - w * w ) );
+			// Instead of incurring the cost of sin(HalfAngle()), sin(theta/2) can be derived by sqrt(1-w*w), as we know w = cos(theta/2).
+			return VectorType( xyz / SinFromCos( w ) );
 		}
 
 		constexpr ComponentType SquareMagnitude() const { return Dot(); }
@@ -441,7 +441,7 @@ namespace Framework::Math
 			/* Quaternions are too close; Revert back to a simple Nlerp(). */
 			return Nlerp( q1, q2, t );
 
-		const auto sin_theta = Sqrt( ComponentType{ 1 } - cos_theta * cos_theta ); // sqrt() is faster than sin().
+		const auto sin_theta = SinFromCos( cos_theta ); // sqrt() is faster than sin().
 
 		/* Let's leverage the fact that now we have sin_theta & cos_theta in order to more efficiently find theta, compared to using acos/asin( theta ). */
 		const RadiansType theta( Atan2( sin_theta, cos_theta ) );

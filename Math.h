@@ -47,6 +47,12 @@ namespace Framework::Math
 	Value Cos( const Radians< Value > angle ) { return std::cos( Value( angle ) ); }
 
 	template< std::floating_point Value >
+	Value SinFromCos( const Value cos ) { return std::sqrt( Value( 1 ) - cos * cos ); }
+
+	template< std::floating_point Value >
+	Value CosFromSin( const Value sin ) { return std::sqrt( Value( 1 ) - sin * sin ); }
+
+	template< std::floating_point Value >
 	Value Tan( const Radians< Value > angle ) { return std::tan( Value( angle ) ); }
 
 	template< std::floating_point Value >
