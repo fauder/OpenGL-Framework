@@ -568,7 +568,7 @@ namespace Framework::Math
 	template< std::floating_point ComponentType >
 	constexpr Quaternion< ComponentType > EulerToQuaternion( const Degrees< ComponentType > heading_around_y, const Degrees< ComponentType > pitch_around_x, const Degrees< ComponentType > bank_around_z )
 	{
-		return EulerToQuaternion< float >( Radians( heading_around_y ), Radians( pitch_around_x ), Radians( bank_around_z ) );
+		return EulerToQuaternion< ComponentType >( Radians( heading_around_y ), Radians( pitch_around_x ), Radians( bank_around_z ) );
 	}
 }
 
