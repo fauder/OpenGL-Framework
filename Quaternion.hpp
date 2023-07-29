@@ -473,10 +473,10 @@ namespace Framework::Math
 		return Framework::Matrix4x4
 		(
 			{
-				ComponentType( 1 ) - two_y2 - two_z2,		two_x_y + two_w_z,							two_x_z - two_w_y,							0.0f,
-				two_x_y - two_w_z,							ComponentType( 1 ) - two_x2 - two_z2,		two_y_z + two_w_x,							0.0f,
-				two_x_z + two_w_y,							two_y_z - two_w_x,							ComponentType( 1 ) - two_x2 - two_y2,		0.0f,
-				0.0f,										0.0f,										0.0f,										1.0f
+				ComponentType( 1 ) - two_y2 - two_z2,		two_x_y + two_w_z,							two_x_z - two_w_y,							ComponentType( 0 ),
+				two_x_y - two_w_z,							ComponentType( 1 ) - two_x2 - two_z2,		two_y_z + two_w_x,							ComponentType( 0 ),
+				two_x_z + two_w_y,							two_y_z - two_w_x,							ComponentType( 1 ) - two_x2 - two_y2,		ComponentType( 0 ),
+				ComponentType( 0 ),							ComponentType( 0 ),							ComponentType( 0 ),							ComponentType( 1 )
 			}
 		);
 	}
