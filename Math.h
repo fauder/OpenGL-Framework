@@ -77,6 +77,9 @@ namespace Framework::Math
 	template< std::floating_point Value >
 	Value Sqrt( const Value value ) { return std::sqrt( value ); }
 
+	template< std::totally_ordered Value >
+	Value Clamp( const Value value, const Value minimum, const Value maximum ) { return value < minimum ? minimum : value > maximum ? maximum : value; }
+
 /* Conversions Between Rotation Representations. */
 	/* Describes an extrinsic (fixed-axis) rotation, in this order: first heading (around y), then pitch (around x) and finally bank (around z). */
 	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Framework::Matrix4x4 EulerToMatrix( Framework::Radians heading_around_y, Framework::Radians pitch_around_x, Framework::Radians bank_around_z );
