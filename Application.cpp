@@ -35,50 +35,50 @@ int main()
 		// Shader creation & compilation.
 		Shader shader( "Asset/Shader/Vertex.shader", "Asset/Shader/Fragment.shader" );
 
-		const std::vector< Math::Vector< float, 3 + 2 > > vertices =
+		const std::vector< Math::Vector< float, 3 + 2 + 4 > > vertices = 
 		{
 			/* Object space coordinates			UVs. */
-			{ -0.5f, -0.5f, -0.5f,			0.0f, 0.0f },
-			{  0.5f, -0.5f, -0.5f,			1.0f, 0.0f },
-			{  0.5f,  0.5f, -0.5f,			1.0f, 1.0f },
-			{  0.5f,  0.5f, -0.5f,			1.0f, 1.0f },
-			{ -0.5f,  0.5f, -0.5f,			0.0f, 1.0f },
-			{ -0.5f, -0.5f, -0.5f,			0.0f, 0.0f },
+			{ -0.5f, -0.5f, -0.5f,			0.0f, 0.0f,		1.0f, 0.0f, 0.0f, 1.0f }, // FRONT
+			{  0.5f, -0.5f, -0.5f,			1.0f, 0.0f,		1.0f, 0.0f, 0.0f, 1.0f }, // FRONT
+			{  0.5f,  0.5f, -0.5f,			1.0f, 1.0f,		1.0f, 0.0f, 0.0f, 1.0f }, // FRONT
+			{  0.5f,  0.5f, -0.5f,			1.0f, 1.0f,		1.0f, 0.0f, 0.0f, 1.0f }, // FRONT
+			{ -0.5f,  0.5f, -0.5f,			0.0f, 1.0f,		1.0f, 0.0f, 0.0f, 1.0f }, // FRONT
+			{ -0.5f, -0.5f, -0.5f,			0.0f, 0.0f,		1.0f, 0.0f, 0.0f, 1.0f }, // FRONT
 
-			{ -0.5f, -0.5f,  0.5f,			0.0f, 0.0f },
-			{  0.5f, -0.5f,  0.5f,			1.0f, 0.0f },
-			{  0.5f,  0.5f,  0.5f,			1.0f, 1.0f },
-			{  0.5f,  0.5f,  0.5f,			1.0f, 1.0f },
-			{ -0.5f,  0.5f,  0.5f,			0.0f, 1.0f },
-			{ -0.5f, -0.5f,  0.5f,			0.0f, 0.0f },
+			{ -0.5f, -0.5f,  0.5f,			0.0f, 0.0f,		0.0f, 1.0f, 0.0f, 1.0f }, // BACK
+			{  0.5f, -0.5f,  0.5f,			1.0f, 0.0f,		0.0f, 1.0f, 0.0f, 1.0f }, // BACK
+			{  0.5f,  0.5f,  0.5f,			1.0f, 1.0f,		0.0f, 1.0f, 0.0f, 1.0f }, // BACK
+			{  0.5f,  0.5f,  0.5f,			1.0f, 1.0f,		0.0f, 1.0f, 0.0f, 1.0f }, // BACK
+			{ -0.5f,  0.5f,  0.5f,			0.0f, 1.0f,		0.0f, 1.0f, 0.0f, 1.0f }, // BACK
+			{ -0.5f, -0.5f,  0.5f,			0.0f, 0.0f,		0.0f, 1.0f, 0.0f, 1.0f }, // BACK
 
-			{ -0.5f,  0.5f,  0.5f,			1.0f, 0.0f },
-			{ -0.5f,  0.5f, -0.5f,			1.0f, 1.0f },
-			{ -0.5f, -0.5f, -0.5f,			0.0f, 1.0f },
-			{ -0.5f, -0.5f, -0.5f,			0.0f, 1.0f },
-			{ -0.5f, -0.5f,  0.5f,			0.0f, 0.0f },
-			{ -0.5f,  0.5f,  0.5f,			1.0f, 0.0f },
+			{ -0.5f,  0.5f,  0.5f,			1.0f, 0.0f,		0.0f, 0.0f, 1.0f, 1.0f }, // LEFT
+			{ -0.5f,  0.5f, -0.5f,			1.0f, 1.0f,		0.0f, 0.0f, 1.0f, 1.0f }, // LEFT
+			{ -0.5f, -0.5f, -0.5f,			0.0f, 1.0f,		0.0f, 0.0f, 1.0f, 1.0f }, // LEFT
+			{ -0.5f, -0.5f, -0.5f,			0.0f, 1.0f,		0.0f, 0.0f, 1.0f, 1.0f }, // LEFT
+			{ -0.5f, -0.5f,  0.5f,			0.0f, 0.0f,		0.0f, 0.0f, 1.0f, 1.0f }, // LEFT
+			{ -0.5f,  0.5f,  0.5f,			1.0f, 0.0f,		0.0f, 0.0f, 1.0f, 1.0f }, // LEFT
 
-			{  0.5f,  0.5f,  0.5f,			1.0f, 0.0f },
-			{  0.5f,  0.5f, -0.5f,			1.0f, 1.0f },
-			{  0.5f, -0.5f, -0.5f,			0.0f, 1.0f },
-			{  0.5f, -0.5f, -0.5f,			0.0f, 1.0f },
-			{  0.5f, -0.5f,  0.5f,			0.0f, 0.0f },
-			{  0.5f,  0.5f,  0.5f,			1.0f, 0.0f },
+			{  0.5f,  0.5f,  0.5f,			1.0f, 0.0f,		1.0f, 1.0f, 0.0f, 1.0f }, // RIGHT
+			{  0.5f,  0.5f, -0.5f,			1.0f, 1.0f,		1.0f, 1.0f, 0.0f, 1.0f }, // RIGHT
+			{  0.5f, -0.5f, -0.5f,			0.0f, 1.0f,		1.0f, 1.0f, 0.0f, 1.0f }, // RIGHT
+			{  0.5f, -0.5f, -0.5f,			0.0f, 1.0f,		1.0f, 1.0f, 0.0f, 1.0f }, // RIGHT
+			{  0.5f, -0.5f,  0.5f,			0.0f, 0.0f,		1.0f, 1.0f, 0.0f, 1.0f }, // RIGHT
+			{  0.5f,  0.5f,  0.5f,			1.0f, 0.0f,		1.0f, 1.0f, 0.0f, 1.0f }, // RIGHT
 
-			{ -0.5f, -0.5f, -0.5f,			0.0f, 1.0f },
-			{  0.5f, -0.5f, -0.5f,			1.0f, 1.0f },
-			{  0.5f, -0.5f,  0.5f,			1.0f, 0.0f },
-			{  0.5f, -0.5f,  0.5f,			1.0f, 0.0f },
-			{ -0.5f, -0.5f,  0.5f,			0.0f, 0.0f },
-			{ -0.5f, -0.5f, -0.5f,			0.0f, 1.0f },
+			{ -0.5f, -0.5f, -0.5f,			0.0f, 1.0f,		0.0f, 1.0f, 1.0f, 1.0f }, // BOTTOM
+			{  0.5f, -0.5f, -0.5f,			1.0f, 1.0f,		0.0f, 1.0f, 1.0f, 1.0f }, // BOTTOM
+			{  0.5f, -0.5f,  0.5f,			1.0f, 0.0f,		0.0f, 1.0f, 1.0f, 1.0f }, // BOTTOM
+			{  0.5f, -0.5f,  0.5f,			1.0f, 0.0f,		0.0f, 1.0f, 1.0f, 1.0f }, // BOTTOM
+			{ -0.5f, -0.5f,  0.5f,			0.0f, 0.0f,		0.0f, 1.0f, 1.0f, 1.0f }, // BOTTOM
+			{ -0.5f, -0.5f, -0.5f,			0.0f, 1.0f,		0.0f, 1.0f, 1.0f, 1.0f }, // BOTTOM
 
-			{ -0.5f,  0.5f, -0.5f,			0.0f, 1.0f },
-			{  0.5f,  0.5f, -0.5f,			1.0f, 1.0f },
-			{  0.5f,  0.5f,  0.5f,			1.0f, 0.0f },
-			{  0.5f,  0.5f,  0.5f,			1.0f, 0.0f },
-			{ -0.5f,  0.5f,  0.5f,			0.0f, 0.0f },
-			{ -0.5f,  0.5f, -0.5f,			0.0f, 1.0f }
+			{ -0.5f,  0.5f, -0.5f,			0.0f, 1.0f,		1.0f, 0.0f, 1.0f, 1.0f }, // TOP
+			{  0.5f,  0.5f, -0.5f,			1.0f, 1.0f,		1.0f, 0.0f, 1.0f, 1.0f }, // TOP
+			{  0.5f,  0.5f,  0.5f,			1.0f, 0.0f,		1.0f, 0.0f, 1.0f, 1.0f }, // TOP
+			{  0.5f,  0.5f,  0.5f,			1.0f, 0.0f,		1.0f, 0.0f, 1.0f, 1.0f }, // TOP
+			{ -0.5f,  0.5f,  0.5f,			0.0f, 0.0f,		1.0f, 0.0f, 1.0f, 1.0f }, // TOP
+			{ -0.5f,  0.5f, -0.5f,			0.0f, 1.0f,		1.0f, 0.0f, 1.0f, 1.0f }  // TOP
 		};
 
 		VertexBuffer vertex_buffer( vertices.data(), static_cast< unsigned int >( vertices.size() ) );
@@ -86,6 +86,7 @@ int main()
 		VertexBufferLayout vertex_buffer_layout;
 		vertex_buffer_layout.Push< float >( 3 ); // NDC positions.
 		vertex_buffer_layout.Push< float >( 2 ); // Tex. coords.
+		vertex_buffer_layout.Push< float >( 4 ); // Vertex colors.
 		VertexArray vertex_array( vertex_buffer, vertex_buffer_layout );
 
 		Drawable cube( shader, vertex_array );
@@ -113,14 +114,21 @@ int main()
 
 		Transform cube_transform;
 
+		const Vector3 cube_rotation_axis( Constants< float >::Sqrt_Half(), Constants< float >::Sqrt_Half(), 0.0f );
+
 		while( !glfwWindowShouldClose( window ) )
 		{
 			Input::Process( window );
 
 			shader.Bind();
 
-			const float time = static_cast< float >( glfwGetTime() );
-			cube_transform.SetRotation( time * 50.0_deg, Vector3( 0.5f, 1.0f, 0.0f ) );
+			const float time     = static_cast< float >( glfwGetTime() );
+			const float sin_time = Math::Sin( Radians( time ) );
+
+			cube_transform.SetRotation( Quaternion( sin_time * 50.0_deg, cube_rotation_axis ) );
+			cube_transform.SetTranslation( sin_time * Vector3::Right() );
+			cube_transform.SetScaling( Vector3( UNIFORM_INITIALIZATION, Math::Abs( sin_time ) ) );
+
 			shader.SetMatrix( "transformation_world", cube_transform.GetFinalMatrix() );
 
 			renderer.Update( window );

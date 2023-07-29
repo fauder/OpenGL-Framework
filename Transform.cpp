@@ -8,11 +8,8 @@ namespace Framework
 	Transform::Transform()
 		:
 		scale( Vector3( 1.0f, 1.0f, 1.0f ) ),
-		rotation_euler_inDegrees( Vector3() ),
-		translation( Vector3() ),
-		rotation_axis( Vector3() ),
-		rotation_angle( 0.0f ),
-		rotation_usingRepresentation_eulerAngles( true ),
+		rotation(),
+		translation(),
 		scaling_needsUpdate( true ),
 		rotation_needsUpdate( true ),
 		translation_needsUpdate( true ),
@@ -23,11 +20,8 @@ namespace Framework
 	Transform::Transform( const Vector3& scale )
 		:
 		scale( scale ),
-		rotation_euler_inDegrees( Vector3() ),
-		translation( Vector3() ),
-		rotation_axis( Vector3() ),
-		rotation_angle( 0.0f ),
-		rotation_usingRepresentation_eulerAngles( true ),
+		rotation(),
+		translation(),
 		scaling_needsUpdate( true ),
 		rotation_needsUpdate( true ),
 		translation_needsUpdate( true ),
@@ -38,11 +32,8 @@ namespace Framework
 	Transform::Transform( const Vector3& scale, const Vector3& translation )
 		:
 		scale( scale ),
-		rotation_euler_inDegrees( Vector3() ),
+		rotation(),
 		translation( translation ),
-		rotation_axis( Vector3() ),
-		rotation_angle( 0.0f ),
-		rotation_usingRepresentation_eulerAngles( true ),
 		scaling_needsUpdate( true ),
 		rotation_needsUpdate( true ),
 		translation_needsUpdate( true ),
@@ -50,14 +41,11 @@ namespace Framework
 	{
 	}
 
-	Transform::Transform( const Vector3& scale, const Vector3& rotation_euler_inDegrees, const Vector3& translation )
+	Transform::Transform( const Vector3& scale, const Quaternion& rotation, const Vector3& translation )
 		:
 		scale( scale ),
-		rotation_euler_inDegrees( rotation_euler_inDegrees ),
+		rotation( rotation ),
 		translation( translation ),
-		rotation_axis( Vector3() ),
-		rotation_angle( 0.0f ),
-		rotation_usingRepresentation_eulerAngles( true ),
 		scaling_needsUpdate( true ),
 		rotation_needsUpdate( true ),
 		translation_needsUpdate( true ),
@@ -77,22 +65,13 @@ namespace Framework
 		return *this;
 	}
 
-	Transform& Transform::SetRotation( const Vector3& rotation_euler_inDegrees )
+	Transform& Transform::SetRotation( const Quaternion& rotation )
 	{
-		// TODO: Switch to quaternions instead of euler angle triplets so we can represent both euler-angles & angle-axis representations uniformly and also query for both from the quaternion.
-		rotation_usingRepresentation_eulerAngles = true;
-		this->rotation_euler_inDegrees = rotation_euler_inDegrees;
-		rotation_needsUpdate = final_matrix_needsUpdate = true;
+	#ifdef _DEBUG
+		ASSERT( rotation.IsNormalized() && R"(Transform::SetRotation(): The quaternion "rotation" is not normalized!)" );
+	#endif // _DEBUG
 
-		return *this;
-	}
-
-	Transform& Transform::SetRotation( Degrees angle, const Vector3& axis )
-	{
-		// TODO: Switch to quaternions instead of euler angle triplets so we can represent both euler-angles & angle-axis representations uniformly and also query for both from the quaternion.
-		rotation_usingRepresentation_eulerAngles = false;
-		this->rotation_angle = angle;
-		this->rotation_axis = axis;
+		this->rotation = rotation;
 		rotation_needsUpdate = final_matrix_needsUpdate = true;
 
 		return *this;
@@ -112,22 +91,9 @@ namespace Framework
 	}
 
 	/* Usage: First query whether using this representation or not. */
-	const Vector3& Transform::GetRotationEuler() const
+	const Quaternion& Transform::GetRotation() const
 	{
-		return rotation_euler_inDegrees;
-	}
-
-	/* Usage: First query whether using this representation or not.
-		Angle is in degrees. */
-	Degrees Transform::GetRotationAngleAroundAxis() const
-	{
-		return rotation_angle;
-	}
-
-	/* Usage: First query whether using this representation or not. */
-	const Vector3& Transform::GetRotationAxis() const
-	{
-		return rotation_axis;
+		return rotation;
 	}
 
 	const Vector3& Transform::GetTranslation() const
@@ -150,15 +116,7 @@ namespace Framework
 	{
 		if( rotation_needsUpdate )
 		{
-			if( rotation_usingRepresentation_eulerAngles )
-				Math::EulerToMatrix( rotation_and_translation_matrix,
-									 Degrees( rotation_euler_inDegrees.X() ),
-									 Degrees( rotation_euler_inDegrees.Y() ),
-									 Degrees( rotation_euler_inDegrees.Z() ) );
-			else
-				Matrix::RotationAroundAxis( rotation_and_translation_matrix,
-											rotation_angle, rotation_axis );
-
+			rotation_and_translation_matrix = Math::QuaternionToMatrix( rotation );
 			rotation_needsUpdate = false;
 		}
 
