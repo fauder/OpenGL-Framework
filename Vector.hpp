@@ -114,14 +114,14 @@ namespace Framework::Math
 		static constexpr Vector Zero()		{ return Vector{}; }
 		static constexpr Vector One()		{ return Vector{ Coordinate( 1 ) }; }
 
-		static consteval Vector Left()		requires( Size >= 1 ) { return Vector{ -1.0f }; }
-		static consteval Vector Right()		requires( Size >= 1 ) { return Vector{ +1.0f }; }
-		static consteval Vector Down()		requires( Size >= 2 ) { return Vector{ 0.0f, -1.0f }; }
-		static consteval Vector Up()		requires( Size >= 2 ) { return Vector{ 0.0f, +1.0f }; }
+		static consteval Vector Left()		requires( Size >= 1 ) { return Vector{ -Coordinate( 1 ) }; }
+		static consteval Vector Right()		requires( Size >= 1 ) { return Vector{ +Coordinate( 1 ) }; }
+		static consteval Vector Down()		requires( Size >= 2 ) { return Vector{ Coordinate( 0 ), -Coordinate( 1 ) }; }
+		static consteval Vector Up()		requires( Size >= 2 ) { return Vector{ Coordinate( 0 ), +Coordinate( 1 ) }; }
 		/* Using right-handed coordinate system. */
-		static consteval Vector Backward()	requires( Size >= 3 ) { return Vector{ 0.0f, 0.0f, +1.0f }; }
+		static consteval Vector Backward()	requires( Size >= 3 ) { return Vector{ Coordinate( 0 ), Coordinate( 0 ), +Coordinate( 1 ) }; }
 		/* Using right-handed coordinate system. */
-		static consteval Vector Forward()	requires( Size >= 3 ) { return Vector{ 0.0f, 0.0f, -1.0f }; }
+		static consteval Vector Forward()	requires( Size >= 3 ) { return Vector{ Coordinate( 0 ), Coordinate( 0 ), -Coordinate( 1 ) }; }
 
 		constexpr bool IsZero() const
 		{
@@ -326,7 +326,7 @@ namespace Framework::Math
 		{
 			if( const auto magnitude = Magnitude(); magnitude > Constants< Coordinate >::Epsilon() )
 			{
-				const Coordinate one_over_magnitude = 1.0f / Magnitude();
+				const Coordinate one_over_magnitude = Coordinate( 1 ) / Magnitude();
 				return *this * one_over_magnitude;
 			}
 
@@ -335,7 +335,7 @@ namespace Framework::Math
 
 		Vector& Normalize() requires std::floating_point< Coordinate >
 		{
-			const Coordinate one_over_magnitude = 1.0f / Magnitude();
+			const Coordinate one_over_magnitude = Coordinate( 1 ) / Magnitude();
 			*this *= one_over_magnitude;
 			return *this;
 		}
