@@ -26,7 +26,7 @@ int main()
 	
 	const auto width_pixels  = 800;
 	const auto height_pixels = 600;
-	Renderer renderer( window, width_pixels, height_pixels, 1000, 100 );
+	Renderer renderer( &window, width_pixels, height_pixels, 1000, 100 );
 
 	const auto aspect_ratio = float( width_pixels ) / height_pixels;
 

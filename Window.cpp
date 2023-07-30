@@ -11,7 +11,7 @@ namespace Framework::Window
 		glViewport( 0, 0, width_new, height_new );
 	}
 
-	void InitializeGLFWAndCreateWindow( GLFWwindow*& window, const int width, const int height, const int pos_x, const int pos_y )
+	GLFWwindow* InitializeGLFWAndCreateWindow( const int width, const int height, const int pos_x, const int pos_y )
 	{
 		glfwInit();
 		glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
@@ -21,7 +21,7 @@ namespace Framework::Window
 		//glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE ); // Needed for Mac OS X.
 
 		glfwWindowHint( GLFW_VISIBLE, GLFW_FALSE ); // Start hidden as we will move it shortly.
-		window = glfwCreateWindow( width, height, "LearnOpenGL", NULL, NULL );
+		auto* window = glfwCreateWindow( width, height, "LearnOpenGL", NULL, NULL );
 		if( window == nullptr )
 		{
 			glfwTerminate();
@@ -32,5 +32,7 @@ namespace Framework::Window
 		glfwShowWindow( window );
 
 		glfwMakeContextCurrent( window );
+
+		return window;
 	}
 }
