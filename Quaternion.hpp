@@ -72,7 +72,7 @@ namespace Framework::Math
 		{
 			const RadiansType half_angle = angle * ComponentType( 0.5 );
 			w   = Cos( half_angle );
-			xyz = SinFromCos( w ) * rotation_axis_normalized;
+			xyz = Sin( half_angle ) * rotation_axis_normalized;
 
 	#ifdef _DEBUG
 			ASSERT( rotation_axis_normalized.IsNormalized() && "QuaternionBase::QuaternionBase( angle, axis ): The axis vector provided is not normalized!" );
@@ -101,7 +101,7 @@ namespace Framework::Math
 		constexpr RadiansType HalfAngle() const
 		{
 		#ifdef _DEBUG
-			ASSERT( IsNormalized() && R"(QuaternionBase::HaflAngle(): The quaternion "*this" is not normalized!)" );
+			ASSERT( IsNormalized() && R"(QuaternionBase::HalfAngle(): The quaternion "*this" is not normalized!)" );
 		#endif // _DEBUG
 
 			return RadiansType( Acos( w ) );
