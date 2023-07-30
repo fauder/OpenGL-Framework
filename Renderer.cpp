@@ -28,14 +28,14 @@ namespace Framework
 		EnableDepthTest();
 	}
 
-	void Renderer::Update( GLFWwindow* window ) const
+	void Renderer::Update( GLFWwindow* window )
 	{
 		GLCALL( glClearColor( 0.2f, 0.3f, 0.3f, 1.0f ) );
 		GLCALL( glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) );
 
-		for( const auto& drawable : drawable_list )
+		for( auto drawable : drawable_list )
 		{
-			drawable.Draw();
+			drawable->Draw();
 		}
 
 		glfwSwapBuffers( window );
@@ -47,7 +47,7 @@ namespace Framework
 		glfwTerminate();
 	}
 
-	void Renderer::AddDrawable( const Drawable& drawable )
+	void Renderer::AddDrawable( Drawable* drawable )
 	{
 		drawable_list.push_back( drawable );
 	}

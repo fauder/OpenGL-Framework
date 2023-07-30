@@ -25,9 +25,9 @@ namespace Framework
 	public:
 		Renderer( GLFWwindow*& window, const int width = 800, const int height = 600, const int pos_x = 0, const int pos_y = 0 );
 
-		void Update( GLFWwindow* window ) const;
+		void Update( GLFWwindow* window );
 		void CleanUp() const;
-		void AddDrawable( const Drawable& drawable );
+		void AddDrawable( Drawable* drawable );
 		void SetPolygonMode( const PolygonMode mode ) const;
 		void EnableDepthTest() const;
 		void DisableDepthTest() const;
@@ -37,6 +37,6 @@ namespace Framework
 		void InitializeGLAD() const;
 
 	private:
-		std::vector< Drawable > drawable_list;
+		std::vector< Drawable* > drawable_list;
 	};
 }
