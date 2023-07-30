@@ -6,6 +6,7 @@
 // Project Includes.
 #include "Shader.h"
 #include "VertexArray.h"
+#include "Transform.h"
 
 namespace Framework
 {
@@ -15,13 +16,16 @@ namespace Framework
 	class Drawable
 	{
 	public:
-		Drawable( const Shader& shader, const VertexArray& vertex_array );
+		Drawable( Shader& shader, const VertexArray& vertex_array );
 		~Drawable();
 
-		void Draw() const;
+		void Draw();
+
+	public:
+		Transform transform;
 
 	private:
-		const Shader& shader;
+		Shader& shader;
 		const VertexArray& vertex_array;
 	};
 }

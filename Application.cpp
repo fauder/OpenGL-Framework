@@ -89,9 +89,11 @@ int main()
 		vertex_buffer_layout.Push< float >( 4 ); // Vertex colors.
 		VertexArray vertex_array( vertex_buffer, vertex_buffer_layout );
 
-		Drawable cube( shader, vertex_array );
+		Drawable cube_1( shader, vertex_array );
+		Drawable cube_2( shader, vertex_array );
 
-		renderer.AddDrawable( cube );
+		renderer.AddDrawable( &cube_1 );
+		renderer.AddDrawable( &cube_2 );
 		renderer.SetPolygonMode( PolygonMode::FILL );
 
 		Texture texture_container( "Asset/Texture/container.jpg", GL_RGB );
@@ -112,8 +114,6 @@ int main()
 		shader.SetMatrix( "transformation_view",		view );
 		shader.SetMatrix( "transformation_projection",	projection );
 
-		Transform cube_transform;
-
 		const Vector3 cube_rotation_axis( Constants< float >::Sqrt_Half(), Constants< float >::Sqrt_Half(), 0.0f );
 
 		while( !glfwWindowShouldClose( window ) )
@@ -125,11 +125,13 @@ int main()
 			const float time     = static_cast< float >( glfwGetTime() );
 			const float sin_time = Math::Sin( Radians( time ) );
 
-			cube_transform.SetRotation( Quaternion( sin_time * 50.0_deg, cube_rotation_axis ) );
-			cube_transform.SetTranslation( sin_time * Vector3::Right() );
-			cube_transform.SetScaling( Vector3( UNIFORM_INITIALIZATION, Math::Abs( sin_time ) ) );
+			cube_1.transform.SetRotation( Quaternion( sin_time * 65.0_deg, cube_rotation_axis ) );
+			cube_1.transform.SetTranslation( sin_time * Vector3::Right() );
+			cube_1.transform.SetScaling( Vector3( UNIFORM_INITIALIZATION, Math::Clamp( Math::Abs( sin_time ), 0.1f, 1.0f ) ) );
 
-			shader.SetMatrix( "transformation_world", cube_transform.GetFinalMatrix() );
+			cube_2.transform.SetRotation( Quaternion( -sin_time * 65.0_deg, cube_rotation_axis ) );
+			cube_2.transform.SetTranslation( -sin_time * Vector3::Up() );
+			cube_2.transform.SetScaling( Vector3( UNIFORM_INITIALIZATION, Math::Clamp( Math::Abs( sin_time * 0.5f ), 0.1f, 1.0f ) ) );
 
 			renderer.Update( window );
 		}
