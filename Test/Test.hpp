@@ -7,6 +7,7 @@
 #include "../Color.hpp"
 #include "../Input.h"
 #include "../Renderer.h"
+#include "../ImGuiSetup.h"
 
 namespace Framework::Test
 {
@@ -27,16 +28,23 @@ namespace Framework::Test
 			window( window ? *window : nullptr ),
 			renderer( &this->window, width_pixels, height_pixels, pos_x, pos_y, clear_color )
 		{
+			Framework::ImGuiSetup::Initialize( this->window );
 		}
 
 		~Test()
 		{
+			Framework::ImGuiSetup::Shutdown();
 			renderer.CleanUp();
 		}
 
 		void Run() override
 		{
 			Derived()->OnRun();
+		}
+
+		void ProcessInput()
+		{
+			Derived()->OnProcessInput();
 		}
 
 		void Update()
@@ -49,20 +57,31 @@ namespace Framework::Test
 			Derived()->OnRender();
 		}
 
+		void RenderImGui()
+		{
+			Derived()->OnRenderImGui();
+		}
+
 		/* Default implementations for derived classes. */
 
 		void OnRun()
 		{
 			while( !glfwWindowShouldClose( window ) )
 			{
+				ProcessInput();
 				Update();
+				renderer.BeginFrame();
 				Render();
-				renderer.Update();
+				renderer.DrawFrame();
+				RenderImGui();
+				renderer.EndFrame();
 			}
 		}
 
-		void OnUpdate() { Input::Process( window ); }
-		void OnRender() { renderer.Update(); }
+		void OnProcessInput()	{ Input::Process( window ); }
+		void OnUpdate()			{}
+		void OnRender()			{}
+		void OnRenderImGui()	{}
 
 	private:
 		ActualTest* Derived() { return static_cast< ActualTest* >( this ); }
