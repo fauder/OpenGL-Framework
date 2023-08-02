@@ -26,7 +26,10 @@ namespace Framework
 	public:
 		Renderer( GLFWwindow** window = nullptr, const int width_pixels = 800, const int height_pixels = 600, const int pos_x = 0, const int pos_y = 0, const Color4 clear_color = Color4::Clear_Default() );
 
-		void Update();
+		void BeginFrame() const;
+		void DrawFrame();
+		void EndFrame() const;
+
 		void CleanUp() const;
 
 		void Clear() const;

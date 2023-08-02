@@ -35,15 +35,19 @@ namespace Framework
 		EnableDepthTest();
 	}
 
-	void Renderer::Update()
+	void Renderer::BeginFrame() const
 	{
 		Clear();
+	}
 
+	void Renderer::DrawFrame()
+	{
 		for( auto drawable : drawable_list )
-		{
 			drawable->Draw();
-		}
+	}
 
+	void Renderer::EndFrame() const
+	{
 		glfwSwapBuffers( window );
 		glfwPollEvents();
 	}
