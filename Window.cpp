@@ -21,7 +21,7 @@ namespace Framework::Window
 		//glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE ); // Needed for Mac OS X.
 
 		glfwWindowHint( GLFW_VISIBLE, GLFW_FALSE ); // Start hidden as we will move it shortly.
-		auto* window = glfwCreateWindow( width, height, "LearnOpenGL", NULL, NULL );
+		auto* window = glfwCreateWindow( width, height, "LearnOpenGL", nullptr, nullptr );
 		if( window == nullptr )
 		{
 			glfwTerminate();
