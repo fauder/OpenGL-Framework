@@ -160,6 +160,7 @@
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Test\Test_ClearColor.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vendor\stb_image.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -183,6 +184,8 @@
     <ClInclude Include="Matrix.hpp" />
     <ClInclude Include="Polar.hpp" />
     <ClInclude Include="Quaternion.hpp" />
+    <ClInclude Include="Test\Test.hpp" />
+    <ClInclude Include="Test\Test_ClearColor.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="TypeTraits.h" />
     <ClInclude Include="Unit.h" />

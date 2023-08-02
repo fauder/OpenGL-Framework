@@ -49,6 +49,9 @@
     <ClCompile Include="Math.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Test\Test_ClearColor.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.hpp">
@@ -144,6 +147,12 @@
     <ClInclude Include="TypeTraits.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="Test\Test.hpp">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\Test_ClearColor.h">
+      <Filter>Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -166,6 +175,9 @@
     </Filter>
     <Filter Include="_NatVis">
       <UniqueIdentifier>{85873892-b746-46ac-b611-01ae68eb7958}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test">
+      <UniqueIdentifier>{6c58545a-26d7-412a-bcaf-d72678147a90}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
