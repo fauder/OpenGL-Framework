@@ -6,9 +6,6 @@
 
 namespace Framework
 {
-	/* Static member variable initializations. */
-	const Framework::Color4 Texture::DEFAULT_BORDER_COLOR{ 1.0f, 1.0f, 0.0f, 1.0f };
-
 	Texture::Texture( const char* file_path, GLenum color_format )
 		:
 		id( 0 )
@@ -23,7 +20,7 @@ namespace Framework
 
 			GLCALL( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER ) );
 			GLCALL( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER ) );
-			GLCALL( glTexParameterfv( GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, DEFAULT_BORDER_COLOR.Data() ) );
+			GLCALL( glTexParameterfv( GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, DefaultBorderColor().Data() ) );
 
 			GLCALL( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR ) );
 			GLCALL( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR ) );

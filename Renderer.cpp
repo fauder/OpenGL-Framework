@@ -7,18 +7,25 @@
 
 namespace Framework
 {
-	Renderer::Renderer( GLFWwindow*& window, const int width, const int height, const int pos_x, const int pos_y )
+	Renderer::Renderer( GLFWwindow** created_window, const int width_pixels, const int height_pixels, const int pos_x, const int pos_y, const Color4 clear_color )
+		:
+		pixel_width( width_pixels ),
+		pixel_height( height_pixels ),
+		aspect_ratio( float( pixel_width ) / pixel_height ),
+		color_clear( clear_color )
 	{
 		try
 		{
-			Window::InitializeGLFWAndCreateWindow( window, width, height, pos_x, pos_y );
+			window = Window::InitializeGLFWAndCreateWindow( pixel_width, pixel_height, pos_x, pos_y );
 
 			// GLAD needs the created window's context made current BEFORE it is initialized.
 			InitializeGLAD();
 
-			Window::Framebuffer_Size_Callback( window, width, height );
+			Window::Framebuffer_Size_Callback( window, pixel_width, pixel_height );
 			glfwSetFramebufferSizeCallback( window, Window::Framebuffer_Size_Callback );
 
+			if( created_window != nullptr )
+				*created_window = window;
 		}
 		catch( const std::logic_error& e )
 		{
@@ -28,10 +35,9 @@ namespace Framework
 		EnableDepthTest();
 	}
 
-	void Renderer::Update( GLFWwindow* window )
+	void Renderer::Update()
 	{
-		GLCALL( glClearColor( 0.2f, 0.3f, 0.3f, 1.0f ) );
-		GLCALL( glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) );
+		Clear();
 
 		for( auto drawable : drawable_list )
 		{
@@ -45,6 +51,24 @@ namespace Framework
 	void Renderer::CleanUp() const
 	{
 		glfwTerminate();
+	}
+
+	void Renderer::Clear() const
+	{
+		GLCALL( glClearColor( color_clear.R(), color_clear.G(), color_clear.B(), color_clear.A() ) );
+		GLCALL( glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) );
+	}
+
+	void Renderer::Clear( GLbitfield mask ) const
+	{
+		GLCALL( glClearColor( color_clear.R(), color_clear.G(), color_clear.B(), color_clear.A() ) );
+		GLCALL( glClear( mask ) );
+	}
+
+	void Renderer::Clear( const Color4 clear_color, GLbitfield mask ) const
+	{
+		GLCALL( glClearColor( clear_color.R(), clear_color.G(), clear_color.B(), clear_color.A() ) );
+		GLCALL( glClear( mask ) );
 	}
 
 	void Renderer::AddDrawable( Drawable* drawable )

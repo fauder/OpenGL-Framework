@@ -109,10 +109,10 @@ namespace Framework::Math
 		}
 
 	/* Other Queries. */
-		static consteval std::size_t Dimension()		{ return Size; }
+		static consteval std::size_t Dimension() { return Size; }
 
-		static constexpr Vector Zero()		{ return Vector{}; }
-		static constexpr Vector One()		{ return Vector{ Coordinate( 1 ) }; }
+		static consteval Vector Zero()		{ return Vector{}; }
+		static consteval Vector One()		{ return Vector{ Coordinate( 1 ) }; }
 
 		static consteval Vector Left()		requires( Size >= 1 ) { return Vector{ -Coordinate( 1 ) }; }
 		static consteval Vector Right()		requires( Size >= 1 ) { return Vector{ +Coordinate( 1 ) }; }

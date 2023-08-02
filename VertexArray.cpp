@@ -6,7 +6,8 @@ namespace Framework
 {
 	VertexArray::VertexArray( const VertexBuffer& vertex_buffer, const VertexBufferLayout& vertex_buffer_layout )
 		:
-		vertex_count( vertex_buffer.VertexCount() )
+		vertex_count( vertex_buffer.VertexCount() ),
+		id_vertex_buffer( vertex_buffer.ID() )
 	{
 		GLCALL( glGenVertexArrays( 1, &id ) );
 
@@ -27,6 +28,7 @@ namespace Framework
 
 	VertexArray::~VertexArray()
 	{
+		GLCALL( glDeleteBuffers( 1, &id_vertex_buffer ) );
 		GLCALL( glDeleteVertexArrays( 1, &id ) );
 	}
 

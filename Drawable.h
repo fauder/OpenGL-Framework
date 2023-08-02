@@ -16,7 +16,7 @@ namespace Framework
 	class Drawable
 	{
 	public:
-		Drawable( Shader& shader, const VertexArray& vertex_array );
+		Drawable( Shader* shader, const VertexArray* vertex_array );
 		~Drawable();
 
 		void Draw();
@@ -25,7 +25,7 @@ namespace Framework
 		Transform transform;
 
 	private:
-		Shader& shader;
-		const VertexArray& vertex_array;
+		Shader* shader;
+		const VertexArray* vertex_array;
 	};
 }
