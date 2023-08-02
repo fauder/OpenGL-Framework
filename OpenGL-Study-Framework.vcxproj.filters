@@ -55,6 +55,27 @@
     <ClCompile Include="Test\Test_Transform_2Cubes.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="Vendor\imgui.cpp">
+      <Filter>Vendor</Filter>
+    </ClCompile>
+    <ClCompile Include="Vendor\imgui_demo.cpp">
+      <Filter>Vendor</Filter>
+    </ClCompile>
+    <ClCompile Include="Vendor\imgui_draw.cpp">
+      <Filter>Vendor</Filter>
+    </ClCompile>
+    <ClCompile Include="Vendor\imgui_impl_glfw.cpp">
+      <Filter>Vendor</Filter>
+    </ClCompile>
+    <ClCompile Include="Vendor\imgui_tables.cpp">
+      <Filter>Vendor</Filter>
+    </ClCompile>
+    <ClCompile Include="Vendor\imgui_widgets.cpp">
+      <Filter>Vendor</Filter>
+    </ClCompile>
+    <ClCompile Include="Vendor\imgui_impl_opengl3.cpp">
+      <Filter>Vendor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.hpp">
@@ -158,6 +179,33 @@
     </ClInclude>
     <ClInclude Include="Test\Test_Transform_2Cubes.h">
       <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Vendor\imconfig.h">
+      <Filter>Vendor</Filter>
+    </ClInclude>
+    <ClInclude Include="Vendor\imgui.h">
+      <Filter>Vendor</Filter>
+    </ClInclude>
+    <ClInclude Include="Vendor\imgui_impl_glfw.h">
+      <Filter>Vendor</Filter>
+    </ClInclude>
+    <ClInclude Include="Vendor\imgui_internal.h">
+      <Filter>Vendor</Filter>
+    </ClInclude>
+    <ClInclude Include="Vendor\imstb_rectpack.h">
+      <Filter>Vendor</Filter>
+    </ClInclude>
+    <ClInclude Include="Vendor\imstb_textedit.h">
+      <Filter>Vendor</Filter>
+    </ClInclude>
+    <ClInclude Include="Vendor\imstb_truetype.h">
+      <Filter>Vendor</Filter>
+    </ClInclude>
+    <ClInclude Include="Vendor\imgui_impl_opengl3.h">
+      <Filter>Vendor</Filter>
+    </ClInclude>
+    <ClInclude Include="Vendor\imgui_impl_opengl3_loader.h">
+      <Filter>Vendor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
