@@ -5,6 +5,7 @@
 
 namespace Framework
 {
+	/* While a CleanUp() function is provided, expected usage is to not invoke it, as a VertexArray will take care of this on destruction. */
 	class VertexBuffer
 	{
 	public:
@@ -22,6 +23,10 @@ namespace Framework
 
 		void Bind() const;
 		void Unbind() const;
+
+		void CleanUp() const;
+
+		inline GLuint ID() const { return id; }
 
 		inline unsigned int Size() const { return size; }
 		inline unsigned int VertexCount() const { return vertex_count; }

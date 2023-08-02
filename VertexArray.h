@@ -22,5 +22,7 @@ namespace Framework
 	private:
 		unsigned int id;
 		unsigned int vertex_count;
+
+		unsigned int id_vertex_buffer;
 	};
 }
