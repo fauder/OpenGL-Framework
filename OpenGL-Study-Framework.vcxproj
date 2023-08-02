@@ -164,6 +164,7 @@
     <ClCompile Include="Test\Test_Transform_2Cubes.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vendor\imgui.cpp" />
+    <ClCompile Include="ImGuiSetup.cpp" />
     <ClCompile Include="Vendor\imgui_demo.cpp" />
     <ClCompile Include="Vendor\imgui_draw.cpp" />
     <ClCompile Include="Vendor\imgui_impl_glfw.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="Vector.hpp" />
     <ClInclude Include="Vendor\imconfig.h" />
     <ClInclude Include="Vendor\imgui.h" />
+    <ClInclude Include="ImGuiSetup.h" />
     <ClInclude Include="Vendor\imgui_impl_glfw.h" />
     <ClInclude Include="Vendor\imgui_impl_opengl3.h" />
     <ClInclude Include="Vendor\imgui_impl_opengl3_loader.h" />

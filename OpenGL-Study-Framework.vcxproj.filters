@@ -76,6 +76,9 @@
     <ClCompile Include="Vendor\imgui_impl_opengl3.cpp">
       <Filter>Vendor</Filter>
     </ClCompile>
+    <ClCompile Include="ImGuiSetup.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.hpp">
@@ -203,6 +206,9 @@
     </ClInclude>
     <ClInclude Include="Vendor\imgui_impl_opengl3.h">
       <Filter>Vendor</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiSetup.h">
+      <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Vendor\imgui_impl_opengl3_loader.h">
       <Filter>Vendor</Filter>
