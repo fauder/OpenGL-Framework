@@ -1,6 +1,5 @@
 // Project Includes.
 #include "Test_ClearColor.h"
-#include "../Input.h"
 
 namespace Framework::Test
 {
@@ -8,14 +7,4 @@ namespace Framework::Test
 		:
 		Test( window, clear_color, width_pixels, height_pixels, pos_x, pos_y )
 	{}
-
-	void Test_ClearColor::Run()
-	{
-		while( !glfwWindowShouldClose( window ) )
-		{
-			Input::Process( window );
-
-			renderer.Update();
-		}
-	}
 }

@@ -1,7 +1,11 @@
 #pragma once
 
+// Make sure GLAD is included before GLFW3!
+#include <glad/glad.h>
+
 // Project Includes.
 #include "../Color.hpp"
+#include "../Input.h"
 #include "../Renderer.h"
 
 namespace Framework::Test
@@ -25,14 +29,44 @@ namespace Framework::Test
 		{
 		}
 
-		void Run() override
+		~Test()
 		{
-			Derived()->Run();
+			renderer.CleanUp();
 		}
 
+		void Run() override
+		{
+			Derived()->OnRun();
+		}
+
+		void Update()
+		{
+			Derived()->OnUpdate();
+		}
+
+		void Render()
+		{
+			Derived()->OnRender();
+		}
+
+		/* Default implementations for derived classes. */
+
+		void OnRun()
+		{
+			while( !glfwWindowShouldClose( window ) )
+			{
+				Update();
+				Render();
+				renderer.Update();
+			}
+		}
+
+		void OnUpdate() { Input::Process( window ); }
+		void OnRender() { renderer.Update(); }
+
 	private:
-		Test* Derived() { return static_cast< ActualTest* >( this ); }
-		Test* Derived() const { return static_cast< ActualTest* >( this ); }
+		ActualTest* Derived() { return static_cast< ActualTest* >( this ); }
+		ActualTest* Derived() const { return static_cast< ActualTest* >( this ); }
 
 	protected:
 		GLFWwindow* window;
