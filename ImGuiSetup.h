@@ -9,4 +9,7 @@ namespace Framework::ImGuiSetup
 {
     void Initialize( GLFWwindow* );
     void Shutdown();
+
+    void BeginFrame();
+    void EndFrame();
 }

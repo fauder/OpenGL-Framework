@@ -40,4 +40,17 @@ namespace Framework::ImGuiSetup
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
     }
+
+    void BeginFrame()
+    {
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+    }
+
+    void EndFrame()
+    {
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData( ImGui::GetDrawData() );
+    }
 }

@@ -10,9 +10,7 @@ namespace Framework::Test
 {
 	void Test_ImGui::OnRenderImGui()
 	{
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
+        const auto& io = ImGui::GetIO();
 
         static bool show_demo_window = true;
 
@@ -22,13 +20,6 @@ namespace Framework::Test
         if( show_demo_window )
             ImGui::ShowDemoWindow( &show_demo_window );
 
-        ImGui::Render();
-
-        int display_w, display_h;
-        glfwGetFramebufferSize( window, &display_w, &display_h );
-        /*glViewport( 0, 0, display_w, display_h );
-        glClearColor( clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w );
-        glClear( GL_COLOR_BUFFER_BIT );*/
-        ImGui_ImplOpenGL3_RenderDrawData( ImGui::GetDrawData() );
+        ImGui::Text( "Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate );
 	}
 }

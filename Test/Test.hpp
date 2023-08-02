@@ -69,11 +69,17 @@ namespace Framework::Test
 			while( !glfwWindowShouldClose( window ) )
 			{
 				ProcessInput();
+
 				Update();
+
 				renderer.BeginFrame();
 				Render();
 				renderer.DrawFrame();
+
+				ImGuiSetup::BeginFrame();
 				RenderImGui();
+				ImGuiSetup::EndFrame();
+
 				renderer.EndFrame();
 			}
 		}
