@@ -27,9 +27,10 @@ int main()
 
 	std::map< std::string, std::unique_ptr< TestInterface > > tests_by_name;
 
-	tests_by_name[ "clear_color" ] = std::make_unique< Test_ClearColor >();
+	//tests_by_name[ "clear_color" ] = std::make_unique< Test_ClearColor >();
+	tests_by_name[ "transform_2_cubes" ] = std::make_unique< Test_Transfom_2Cubes >();
 
-	const auto& current_test = tests_by_name[ "clear_color" ];
+	const auto& current_test = tests_by_name[ "transform_2_cubes" ];
 
 	current_test->Run();
 

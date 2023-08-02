@@ -161,6 +161,7 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Test\Test_ClearColor.cpp" />
+    <ClCompile Include="Test\Test_Transform_2Cubes.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vendor\stb_image.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -186,6 +187,7 @@
     <ClInclude Include="Quaternion.hpp" />
     <ClInclude Include="Test\Test.hpp" />
     <ClInclude Include="Test\Test_ClearColor.h" />
+    <ClInclude Include="Test\Test_Transform_2Cubes.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="TypeTraits.h" />
     <ClInclude Include="Unit.h" />
