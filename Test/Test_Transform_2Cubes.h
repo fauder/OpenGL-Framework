@@ -7,7 +7,7 @@
 // std Includes.
 #include <memory>
 
-namespace Framework
+namespace Framework::Test
 {
 	class Test_Transfom_2Cubes : public Test< Test_Transfom_2Cubes >
 	{

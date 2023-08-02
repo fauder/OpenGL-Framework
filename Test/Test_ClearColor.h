@@ -3,7 +3,7 @@
 // Project Includes.
 #include "Test.hpp"
 
-namespace Framework
+namespace Framework::Test
 {
 	class Test_ClearColor : public Test< Test_ClearColor >
 	{

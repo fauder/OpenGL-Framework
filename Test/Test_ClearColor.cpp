@@ -2,7 +2,7 @@
 #include "Test_ClearColor.h"
 #include "../Input.h"
 
-namespace Framework
+namespace Framework::Test
 {
 	Test_ClearColor::Test_ClearColor( GLFWwindow** window, Color4 clear_color, const unsigned int width_pixels, const unsigned int height_pixels, const int pos_x, const int pos_y )
 		:

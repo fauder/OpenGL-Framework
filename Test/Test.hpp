@@ -4,7 +4,7 @@
 #include "../Color.hpp"
 #include "../Renderer.h"
 
-namespace Framework
+namespace Framework::Test
 {
 	class TestInterface
 	{

@@ -23,7 +23,7 @@
 
 int main()
 {
-	using namespace Framework;
+	using namespace Framework::Test;
 
 	std::map< std::string, std::unique_ptr< TestInterface > > tests_by_name;
 

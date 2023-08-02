@@ -5,7 +5,7 @@
 #include "../Matrix.h"
 #include "../Texture.h"
 
-namespace Framework
+namespace Framework::Test
 {
 	using namespace Framework::Math::Literals;
 
