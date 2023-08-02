@@ -37,8 +37,7 @@ namespace Framework
 
 	void Renderer::Update()
 	{
-		GLCALL( glClearColor( 0.2f, 0.3f, 0.3f, 1.0f ) );
-		GLCALL( glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) );
+		Clear();
 
 		for( auto drawable : drawable_list )
 		{
@@ -52,6 +51,24 @@ namespace Framework
 	void Renderer::CleanUp() const
 	{
 		glfwTerminate();
+	}
+
+	void Renderer::Clear() const
+	{
+		GLCALL( glClearColor( color_clear.R(), color_clear.G(), color_clear.B(), color_clear.A() ) );
+		GLCALL( glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) );
+	}
+
+	void Renderer::Clear( GLbitfield mask ) const
+	{
+		GLCALL( glClearColor( color_clear.R(), color_clear.G(), color_clear.B(), color_clear.A() ) );
+		GLCALL( glClear( mask ) );
+	}
+
+	void Renderer::Clear( const Color4 clear_color, GLbitfield mask ) const
+	{
+		GLCALL( glClearColor( clear_color.R(), clear_color.G(), clear_color.B(), clear_color.A() ) );
+		GLCALL( glClear( mask ) );
 	}
 
 	void Renderer::AddDrawable( Drawable* drawable )

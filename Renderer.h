@@ -29,6 +29,10 @@ namespace Framework
 		void Update();
 		void CleanUp() const;
 
+		void Clear() const;
+		void Clear( GLbitfield mask ) const;
+		void Clear( const Color4 clear_color, GLbitfield mask = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) const;
+
 		void AddDrawable( Drawable* drawable );
 
 		void SetPolygonMode( const PolygonMode mode ) const;
