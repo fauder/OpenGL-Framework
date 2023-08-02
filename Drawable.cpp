@@ -4,7 +4,7 @@
 
 namespace Framework
 {
-	Drawable::Drawable( Shader& shader, const VertexArray& vertex_array )
+	Drawable::Drawable( Shader* shader, const VertexArray* vertex_array )
 		:
 		shader( shader ),
 		vertex_array( vertex_array )
@@ -17,9 +17,9 @@ namespace Framework
 
 	void Drawable::Draw()
 	{
-		vertex_array.Bind();
-		shader.SetMatrix( "transformation_world", transform.GetFinalMatrix() );
-		shader.Bind();
-		GLCALL( glDrawArrays( GL_TRIANGLES, 0, vertex_array.VertexCount() ) );
+		vertex_array->Bind();
+		shader->SetMatrix( "transformation_world", transform.GetFinalMatrix() );
+		shader->Bind();
+		GLCALL( glDrawArrays( GL_TRIANGLES, 0, vertex_array->VertexCount() ) );
 	}
 }
