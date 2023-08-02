@@ -73,6 +73,9 @@
     <ClCompile Include="Vendor\imgui_widgets.cpp">
       <Filter>Vendor</Filter>
     </ClCompile>
+    <ClCompile Include="Test\Test_ImGui.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
     <ClCompile Include="Vendor\imgui_impl_opengl3.cpp">
       <Filter>Vendor</Filter>
     </ClCompile>
@@ -203,6 +206,9 @@
     </ClInclude>
     <ClInclude Include="Vendor\imstb_truetype.h">
       <Filter>Vendor</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\Test_ImGui.h">
+      <Filter>Test</Filter>
     </ClInclude>
     <ClInclude Include="Vendor\imgui_impl_opengl3.h">
       <Filter>Vendor</Filter>
