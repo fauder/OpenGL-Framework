@@ -82,6 +82,9 @@
     <ClCompile Include="ImGuiSetup.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Test\Test_Menu.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.hpp">
@@ -218,6 +221,9 @@
     </ClInclude>
     <ClInclude Include="Vendor\imgui_impl_opengl3_loader.h">
       <Filter>Vendor</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\Test_Menu.h">
+      <Filter>Test</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

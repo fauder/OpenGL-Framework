@@ -3,8 +3,17 @@
 
 namespace Framework::Test
 {
-	Test_ClearColor::Test_ClearColor( GLFWwindow** window, Color4 clear_color, const unsigned int width_pixels, const unsigned int height_pixels, const int pos_x, const int pos_y )
+	Test_ClearColor::Test_ClearColor( Renderer& renderer, Color4 clear_color )
 		:
-		Test( window, clear_color, width_pixels, height_pixels, pos_x, pos_y )
-	{}
+		Test( renderer ),
+		color_clear( clear_color ),
+		color_clear_original( renderer.GetClearColor() )
+	{
+		renderer.SetClearColor( clear_color );
+	}
+
+	Test_ClearColor::~Test_ClearColor()
+	{
+		renderer.SetClearColor( color_clear_original );
+	}
 }

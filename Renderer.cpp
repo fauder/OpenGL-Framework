@@ -69,15 +69,30 @@ namespace Framework
 		GLCALL( glClear( mask ) );
 	}
 
-	void Renderer::Clear( const Color4 clear_color, GLbitfield mask ) const
+	void Renderer::Clear( const Color4& clear_color, GLbitfield mask ) const
 	{
 		GLCALL( glClearColor( clear_color.R(), clear_color.G(), clear_color.B(), clear_color.A() ) );
 		GLCALL( glClear( mask ) );
 	}
 
+	void Renderer::SetClearColor( const Color4& clear_color )
+	{
+		color_clear = clear_color;
+	}
+
+	const Color4& Renderer::GetClearColor() const
+	{
+		return color_clear;
+	}
+
 	void Renderer::AddDrawable( Drawable* drawable )
 	{
 		drawable_list.push_back( drawable );
+	}
+
+	void Renderer::RemoveDrawable( Drawable* drawable )
+	{
+		drawable_list.erase( std::find( drawable_list.cbegin(), drawable_list.cend(), drawable ) );
 	}
 
 	void Renderer::SetPolygonMode( const PolygonMode mode ) const
