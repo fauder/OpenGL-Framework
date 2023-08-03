@@ -20,12 +20,19 @@ namespace Framework::Test
 	public:
 		Test_Menu( Renderer& renderer, std::unique_ptr< TestInterface >& current_test );
 
-		template< class TestClass >
-		void Register( const std::string& test_name = "" ) // TODO: Need to std::forward the parameters other than Renderer to the lambda.
+		template< class TestClass, typename... ConstructorParams >
+		void Register( ConstructorParams... params )
 		{
-			const auto name = test_name.empty() ? ExtractTestNameFromTypeName( typeid( TestClass ).name() ) : test_name;
-			test_creation_info_by_name[ name ] = [ & ]() { return std::make_unique< TestClass >( renderer ); };
+			const auto name = ExtractTestNameFromTypeName( typeid( TestClass ).name() );
+			test_creation_info_by_name[ name ] = [ & ]() { return std::make_unique< TestClass >( renderer, std::forward< ConstructorParams >( params )... ); };
 		}
+
+		template< class TestClass, typename... ConstructorParams >
+		void Register( const std::string& test_name, ConstructorParams... params )
+		{
+			test_creation_info_by_name[ test_name ] = [ & ]() { return std::make_unique< TestClass >( renderer, params... ); };
+		}
+
 		void Unregister( const std::string& name );
 
 	protected:
