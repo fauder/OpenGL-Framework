@@ -14,7 +14,7 @@ namespace Framework::Test
 	class TestInterface
 	{
 	public:
-		virtual void Run() = 0;
+		virtual void Execute() = 0;
 		virtual ~TestInterface() {}
 	};
 
@@ -22,24 +22,26 @@ namespace Framework::Test
 	class Test : public TestInterface
 	{
 	public:
-		Test( GLFWwindow** window = nullptr, const Color4 clear_color = Color4::Clear_Default(),
-			  const unsigned int width_pixels = 800, const unsigned int height_pixels = 600, const int pos_x = 1000, const int pos_y = 100 )
+		Test( Renderer& renderer )
 			:
-			window( window ? *window : nullptr ),
-			renderer( &this->window, width_pixels, height_pixels, pos_x, pos_y, clear_color )
+			renderer( renderer ),
+			window( renderer.GetWindow() ),
+			executing( true ),
+			name( ExtractTestNameFromTypeName( typeid( *this ).name() ) )
 		{
-			Framework::ImGuiSetup::Initialize( this->window );
 		}
 
 		~Test()
 		{
-			Framework::ImGuiSetup::Shutdown();
-			renderer.CleanUp();
 		}
 
-		void Run() override
+		const std::string& GetName() const { return name; }
+
+		inline void StopExecution() { executing = false; }
+
+		void Execute() override
 		{
-			Derived()->OnRun();
+			Derived()->OnExecute();
 		}
 
 		void ProcessInput()
@@ -59,21 +61,38 @@ namespace Framework::Test
 
 		void RenderImGui()
 		{
+			RenderImGui_Menu_BackButton();
 			Derived()->OnRenderImGui();
+		}
+
+	protected:
+		std::string ExtractTestNameFromTypeName( const std::string& type_name ) const
+		{
+			const std::string test_type_name( type_name );
+			const auto start_pos = test_type_name.find( '_', 0 ) + 1;
+			const auto end_pos = test_type_name.find( '>', 0 );
+			return test_type_name.substr( start_pos, end_pos != std::string::npos ? end_pos - start_pos : end_pos );
 		}
 
 		/* Default implementations for derived classes. */
 
-		void OnRun()
+		void OnExecute()
 		{
-			while( !glfwWindowShouldClose( window ) )
+			executing = true;
+			while( executing && !glfwWindowShouldClose( window ) )
 			{
 				ProcessInput();
+
 				Update();
+
 				renderer.BeginFrame();
 				Render();
 				renderer.DrawFrame();
+
+				ImGuiSetup::BeginFrame();
 				RenderImGui();
+				ImGuiSetup::EndFrame();
+
 				renderer.EndFrame();
 			}
 		}
@@ -86,9 +105,23 @@ namespace Framework::Test
 	private:
 		ActualTest* Derived() { return static_cast< ActualTest* >( this ); }
 		ActualTest* Derived() const { return static_cast< ActualTest* >( this ); }
+		void RenderImGui_Menu_BackButton()
+		{
+			ImGui::Begin( "Test Menu" );
+
+			ImGui::Text( std::string( R"(Executing Test ")" + name + R"(".)" ).c_str() );
+			if( ImGui::Button( "<-" ) )
+				executing = false;
+
+			ImGui::End();
+		}
 
 	protected:
+		Renderer& renderer;
 		GLFWwindow* window;
-		Renderer renderer;
+		std::string name;
+
+	private:
+		bool executing;
 	};
 }

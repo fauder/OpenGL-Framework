@@ -34,9 +34,13 @@ namespace Framework
 
 		void Clear() const;
 		void Clear( GLbitfield mask ) const;
-		void Clear( const Color4 clear_color, GLbitfield mask = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) const;
+		void Clear( const Color4& clear_color, GLbitfield mask = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) const;
+
+		const Color4& GetClearColor() const;
+		void SetClearColor( const Color4& clear_color );
 
 		void AddDrawable( Drawable* drawable );
+		void RemoveDrawable( Drawable* drawable );
 
 		void SetPolygonMode( const PolygonMode mode ) const;
 
@@ -44,6 +48,7 @@ namespace Framework
 		void DisableDepthTest() const;
 
 		inline const GLFWwindow* GetWindow() const { return window; }
+		inline GLFWwindow* GetWindow() { return window; }
 
 		constexpr unsigned int	PixelWidth() const	{ return pixel_width; }
 		constexpr unsigned int	PixelHeight() const { return pixel_height; }

@@ -8,9 +8,9 @@ namespace Framework::Test
 {
 	using namespace Framework::Math::Literals;
 
-	Test_Transfom_2Cubes::Test_Transfom_2Cubes( GLFWwindow** window, const Color4 clear_color, const unsigned int width_pixels, const unsigned int height_pixels, const int pos_x, const int pos_y )
+	Test_Transfom_2Cubes::Test_Transfom_2Cubes( Renderer& renderer )
 		:
-		Test( window, clear_color, width_pixels, height_pixels, pos_x, pos_y )
+		Test( renderer )
 	{
 		using namespace Framework;
 
@@ -94,6 +94,12 @@ namespace Framework::Test
 
 		shader->SetMatrix( "transformation_view", view );
 		shader->SetMatrix( "transformation_projection", projection );
+	}
+
+	Test_Transfom_2Cubes::~Test_Transfom_2Cubes()
+	{
+		renderer.RemoveDrawable( cube_1.get() );
+		renderer.RemoveDrawable( cube_2.get() );
 	}
 
 	void Test_Transfom_2Cubes::OnRender()

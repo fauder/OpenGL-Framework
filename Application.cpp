@@ -4,6 +4,7 @@
 // Project Includes.
 #include "Drawable.h"
 #include "IndexBuffer.h"
+#include "ImGuiSetup.h"
 #include "Input.h"
 #include "Matrix.h"
 #include "Renderer.h"
@@ -13,29 +14,52 @@
 #include "Vector.hpp"
 #include "VertexArray.h"
 
+#include "Test/Test_Menu.h"
 #include "Test/Test_ClearColor.h"
 #include "Test/Test_Transform_2Cubes.h"
 #include "Test/Test_ImGui.h"
 
-// std Includes.
-#include <vector>
-#include <map>
+using namespace Framework;
+using namespace Framework::Test;
 
 int main()
 {
-	using namespace Framework::Test;
+	GLFWwindow* window = nullptr;
+	Renderer renderer( &window, 800, 600, 1000, 100 );
 
-	// TODO: Switch to keeping lambdas inside the map, so the Tests are not "built" (e.q., constructed) initially.
+	Framework::ImGuiSetup::Initialize( window );
 
-	std::map< std::string, std::unique_ptr< TestInterface > > tests_by_name;
+	/* renderer.CleanUp() will destroy the OpenGL context, which will cause GlGetError() calls (in OpenGL types' destructors) to return an error and cause an endless loop.
+	 * To prevent it, all Test code is vacuumed inside a local scope, to ensure all destructors run before renderer.CleanUp(). */
+	{
+		std::unique_ptr< TestInterface > test_current;
+		std::unique_ptr< Test_Menu > test_menu = std::make_unique< Test_Menu >( renderer, test_current );
 
-	//tests_by_name[ "clear_color" ] = std::make_unique< Test_ClearColor >( nullptr, Framework::Color4::Yellow() );
-	//tests_by_name[ "transform_2_cubes" ] = std::make_unique< Test_Transfom_2Cubes >();
-	tests_by_name[ "imgui" ] = std::make_unique< Test_ImGui >();
+		test_menu->Register< Test_ClearColor >( Color4::Cyan() );
+		test_menu->Register< Test_Transfom_2Cubes >();
+		test_menu->Register< Test_ImGui >();
 
-	const auto& current_test = tests_by_name[ "imgui" ];
+		bool continue_executing_tests = false;
 
-	current_test->Run();
+		do
+		{
+			test_menu->Execute();
+
+			continue_executing_tests = ( bool )test_current;
+
+			if( test_current )
+			{
+				test_current->Execute();
+				test_current.reset();
+			}
+
+		}
+		while( continue_executing_tests );
+	}
+
+	Framework::ImGuiSetup::Shutdown();
+
+	renderer.CleanUp();
 
 	return 0;
 }
