@@ -62,6 +62,7 @@ namespace Framework::Test
 			Derived()->OnRenderImGui();
 		}
 
+	protected:
 		/* Default implementations for derived classes. */
 
 		void OnRun()
