@@ -109,7 +109,7 @@ namespace Framework::Test
 		{
 			ImGui::Begin( "Test Menu" );
 
-			ImGui::Text( std::string( R"(Executing Test ")" + name + R"(".)" ).c_str() );
+			ImGui::Text( std::string( R"(Executing Test ")" + name + R"("...)" ).c_str() );
 			if( ImGui::Button( "<-" ) )
 				executing = false;
 
