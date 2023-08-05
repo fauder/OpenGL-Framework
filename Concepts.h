@@ -5,7 +5,7 @@
 
 namespace Framework::Concepts
 {
-	template< typename T   > concept Arithmetic = std::integral< T > || std::floating_point< T >;
+	template< typename T > concept Arithmetic = std::integral< T > || std::floating_point< T >;
 
-	template< std::size_t value > concept NonZero    = ( value != 0 );
+	template< std::size_t value > concept NonZero = ( value != 0 );
 }

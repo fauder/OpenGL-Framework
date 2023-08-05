@@ -174,9 +174,6 @@
     <ClInclude Include="Quaternion.hpp">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="ConditionalCompilation.h">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="TypeTraits.h">
       <Filter>Header</Filter>
     </ClInclude>
