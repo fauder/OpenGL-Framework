@@ -53,7 +53,7 @@ namespace Framework
 
 	int Shader::GetUniformLocation( const char* name )
 	{
-		if( layout_location_map.count( name ) == 1 )
+		if( layout_location_map.contains( name ) )
 			return layout_location_map[ name ];
 		else
 		{
