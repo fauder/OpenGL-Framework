@@ -9,7 +9,7 @@ namespace Framework
 		:
 		scale( Vector3( 1.0f, 1.0f, 1.0f ) ),
 		rotation(),
-		translation(),
+		translation( ZERO_INITIALIZATION ),
 		scaling_needsUpdate( true ),
 		rotation_needsUpdate( true ),
 		translation_needsUpdate( true ),
@@ -21,7 +21,7 @@ namespace Framework
 		:
 		scale( scale ),
 		rotation(),
-		translation(),
+		translation( ZERO_INITIALIZATION ),
 		scaling_needsUpdate( true ),
 		rotation_needsUpdate( true ),
 		translation_needsUpdate( true ),
