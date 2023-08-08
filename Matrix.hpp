@@ -77,6 +77,51 @@ namespace Framework::Math
 					data[ i ][ j ] = values[ i * ColumnSize + j ];
 		}
 
+#pragma warning(disable:26495) // Suppress "variable is uninitialized" warning, as not initializing it is the whole point of this constructor.
+		/* Construct from an upper sub-matrix & a vector for the last row.
+		 * Sub-matrix & last row_vector can be ANY size smaller than the size of the matrix to be constructed.
+		 */
+		template< std::size_t SubMatrixSize, std::size_t VectorSize > requires( RowSize == ColumnSize /* Only allow square matrices. */ && SubMatrixSize < RowSize && VectorSize < RowSize )
+		constexpr Matrix( const Matrix< Type, SubMatrixSize, SubMatrixSize >& upper_sub_matrix, const Vector< Type, VectorSize >& last_row_vector )
+		{
+			/* Initialize the portion covered by the provided upper sub-matrix. */
+			Utility::constexpr_for< 0, SubMatrixSize, +1 >( [ & ]( const auto row_index )
+			{
+				Utility::constexpr_for< 0, SubMatrixSize, +1 >( [ & ]( const auto column_index )
+				{
+					data[ row_index ][ column_index ] = upper_sub_matrix.data[ row_index ][ column_index ];
+				} );
+
+				/* Set elements not covered by the upper sub-matrix to zero. */
+				Utility::constexpr_for< SubMatrixSize, RowSize, +1 >( [ & ]( const auto column_index )
+				{
+					data[ row_index ][ column_index ] = Type( 0 );
+				} );
+			} );
+
+			/* If there are any rows between the last row-vector & the upper sub-matrix provided, initialize those rows to zero. */
+			Utility::constexpr_for< SubMatrixSize, RowSize, +1 >( [ & ]( const auto row_index )
+			{
+				Utility::constexpr_for< 0, RowSize /* Same as ColumnSize. */, +1 >( [ & ]( const auto column_index )
+				{
+					data[ row_index ][ column_index ] = Type( 0 );
+				} );
+			} );
+
+			/* Initialize last row. */
+			Utility::constexpr_for< 0, VectorSize, +1 >( [ & ]( const auto index )
+			{
+				data[ RowSize - 1 ][ index ] = last_row_vector.data[ index ];
+			} );
+
+			/* Initialize elements of the last row not covered by the provided vector to zero, except for the last element, which is set to 1. */
+			Utility::constexpr_for< VectorSize, RowSize /* Same as ColumnSize. */, +1 >( [ & ]( const auto index )
+			{
+				data[ RowSize - 1 ][ index ] = Type( index == RowSize - 1 );
+			} );
+		}
+#pragma warning(default:26495)
+
 	/* Comparison operators. */
 		bool operator== ( const Matrix& right_hand_side ) const
 		{
