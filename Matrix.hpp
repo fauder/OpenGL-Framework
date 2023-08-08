@@ -6,6 +6,7 @@
 #include "Initialization.h"
 #include "TypeTraits.h"
 #include "Utility.hpp"
+#include "Vector.hpp"
 
 // std Includes.
 #include <array>
@@ -120,47 +121,47 @@ namespace Framework::Math
 			return *this;
 		}
 
-		template< typename VectorType >
-		constexpr Matrix& SetDiagonals( const VectorType& vector ) requires( RowSize == ColumnSize && VectorType::Dimension() <= RowSize )
+		template< std::size_t VectorSize >
+		constexpr Matrix& SetDiagonals( const Vector< Type, VectorSize >& vector ) requires( RowSize == ColumnSize && VectorSize <= RowSize )
 		{
-			for( auto i = 0; i < VectorType::Dimension(); i++ )
+			for( auto i = 0; i < VectorSize; i++ )
 				data[ i ][ i ] = vector[ i ];
 
 			return *this;
 		}
 
-		template< typename VectorType >
-		constexpr Matrix& SetRow( const VectorType& vector, const unsigned int row_index = 0, const unsigned int start_index_inRow = 0 ) requires( VectorType::Dimension() <= RowSize )
+		template< std::size_t VectorSize >
+		constexpr Matrix& SetRow( const Vector< Type, VectorSize >& vector, const unsigned int row_index = 0, const unsigned int start_index_inRow = 0 ) requires( VectorSize <= RowSize )
 		{
 			ASSERT( row_index < RowSize && "Row index out of bounds." );
-			ASSERT( start_index_inRow + VectorType::Dimension() <= ColumnSize && "Given vector does not fit inside the row when starting from start_index_inRow." );
+			ASSERT( start_index_inRow + VectorSize <= ColumnSize && "Given vector does not fit inside the row when starting from start_index_inRow." );
 
-			for( unsigned int i = 0; i < VectorType::Dimension(); i++ )
+			for( unsigned int i = 0; i < VectorSize; i++ )
 				data[ row_index ][ i + start_index_inRow ] = vector[ i ];
 
 			return *this;
 		}
 
-		template< typename VectorType >
-		constexpr Matrix& SetColumn( const VectorType& vector, const unsigned int column_index = 0, const unsigned int start_index_inColumn = 0 ) requires( VectorType::Dimension() <= ColumnSize )
+		template< std::size_t VectorSize >
+		constexpr Matrix& SetColumn( const Vector< Type, VectorSize >& vector, const unsigned int column_index = 0, const unsigned int start_index_inColumn = 0 ) requires( VectorSize <= ColumnSize )
 		{
 			ASSERT( column_index < ColumnSize && "Column index out of bounds." );
-			ASSERT( start_index_inColumn + VectorType::Dimension() <= RowSize && "Given vector does not fit inside the column when starting from start_index_inColumn." );
+			ASSERT( start_index_inColumn + VectorSize <= RowSize && "Given vector does not fit inside the column when starting from start_index_inColumn." );
 
-			for( unsigned int i = 0; i < VectorType::Dimension(); i++ )
+			for( unsigned int i = 0; i < VectorSize; i++ )
 				data[ i + start_index_inColumn ][ column_index ] = vector[ i ];
 
 			return *this;
 		}
 
-		template< typename VectorType >
-		constexpr Matrix& SetScaling( const VectorType& vector ) requires( RowSize == ColumnSize && VectorType::Dimension() <= RowSize - 1 )
+		template< std::size_t VectorSize >
+		constexpr Matrix& SetScaling( const Vector< Type, VectorSize >& vector ) requires( RowSize == ColumnSize && VectorSize <= RowSize - 1 )
 		{
 			return SetDiagonals( vector );
 		}
 
-		template< typename VectorType >
-		constexpr Matrix& SetTranslation( const VectorType& vector ) requires( RowSize == ColumnSize && VectorType::Dimension() <= RowSize - 1 )
+		template< std::size_t VectorSize >
+		constexpr Matrix& SetTranslation( const Vector< Type, VectorSize >& vector ) requires( RowSize == ColumnSize && VectorSize <= RowSize - 1 )
 		{
 			return SetRow( vector, RowSize - 1 );
 		}
@@ -185,6 +186,13 @@ namespace Framework::Math
 			return result;
 		}
 
+		/* Vector-matrix multiplication. */
+		template< Concepts::Arithmetic Type_, std::size_t RowSize_, std::size_t ColumnSize_ > // Have to use different template parameters here because C++...
+		friend constexpr Vector< Type_, RowSize_ > operator* ( const Vector< Type_, RowSize_ >& vector, const Matrix< Type_, RowSize_, ColumnSize_ >& matrix );
+
+		/* Vector-matrix multiplication. */
+		template< Concepts::Arithmetic Type_, std::size_t RowSize_, std::size_t ColumnSize_ > // Have to use different template parameters here because C++...
+		friend constexpr Vector< Type_, RowSize_ >& operator*= ( const Vector< Type_, RowSize_ >& vector, const Matrix< Type_, RowSize_, ColumnSize_ >& matrix );
 		Matrix& Transpose()
 		{
 			for( auto i = 0; i < RowSize; i++ )
@@ -204,7 +212,7 @@ namespace Framework::Math
 		constexpr Type Trace() const requires( RowSize == ColumnSize )
 		{
 			Type result( 0 );
-			Utility::constexpr_for< 0, RowSize, 1 >( [ & ]( const auto index )
+			Utility::constexpr_for< 0, RowSize, +1 >( [ & ]( const auto index )
 			{
 				result += data[ index ][ index ];
 			} );
@@ -216,6 +224,25 @@ namespace Framework::Math
 		/* Row-major. */
 		Type data[ RowSize ][ ColumnSize ];
 	};
+
+	/* Vector-matrix multiplication. */
+	template< Concepts::Arithmetic Type_, std::size_t RowSize, std::size_t ColumnSize >
+	constexpr Vector< Type_, RowSize > operator* ( const Vector< Type_, RowSize >& vector, const Matrix< Type_, RowSize, ColumnSize >& matrix )
+	{
+		Vector< Type_, RowSize > vector_transformed;
+		for( auto j = 0; j < ColumnSize; j++ )
+			for( auto k = 0; k < RowSize; k++ )
+				vector_transformed[ j ] += vector[ k ] * matrix[ k ][ j ];
+
+		return vector_transformed;
+	}
+
+	/* Vector-matrix multiplication. */
+	template< Concepts::Arithmetic Type_, std::size_t RowSize, std::size_t ColumnSize >
+	constexpr Vector< Type_, RowSize >& operator*= ( const Vector< Type_, RowSize >& vector, const Matrix< Type_, RowSize, ColumnSize >& matrix )
+	{
+		return *this = *this * matrix;
+	}
 }
 
 namespace Framework

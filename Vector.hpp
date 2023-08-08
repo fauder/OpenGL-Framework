@@ -2,7 +2,7 @@
 
 // Project Includes.
 #include "Concepts.h"
-#include "Matrix.hpp"
+#include "Initialization.h"
 #include "Utility.hpp"
 #include "TypeTraits.h"
 
@@ -72,9 +72,9 @@ namespace Framework::Math
 
 			for( auto i = 0; i < Size; i++ )
 				if constexpr( std::is_integral_v< Coordinate > )
-					Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result &= data[ index ] == right_hand_side.data[ index ]; } );
+					Utility::constexpr_for< 0, Size, +1 >( [ & ]( const auto index ) { result &= data[ index ] == right_hand_side.data[ index ]; } );
 				else
-					Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result &= Math::IsEqual( data[ index ], right_hand_side.data[ index ] ); } );
+					Utility::constexpr_for< 0, Size, +1 >( [ & ]( const auto index ) { result &= Math::IsEqual( data[ index ], right_hand_side.data[ index ] ); } );
 
 			return result;
 		}
@@ -127,9 +127,9 @@ namespace Framework::Math
 		{
 			bool nonZero_component_encountered = false;
 			if constexpr( std::is_integral_v< Coordinate > )
-				Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { nonZero_component_encountered |= data[ index ] != 0; } );
+				Utility::constexpr_for< 0, Size, +1 >( [ & ]( const auto index ) { nonZero_component_encountered |= data[ index ] != 0; } );
 			else
-				Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { nonZero_component_encountered |= !Math::IsZero( data[ index ] ); } );
+				Utility::constexpr_for< 0, Size, +1 >( [ & ]( const auto index ) { nonZero_component_encountered |= !Math::IsZero( data[ index ] ); } );
 
 			return !nonZero_component_encountered;
 		}
@@ -142,20 +142,20 @@ namespace Framework::Math
 	/* Arithmetic Operations: Unary operators. */
 		constexpr Vector operator- () const
 		{
-			return *this * -1; // Utilize operator * (scalar).
+			return *this * Coordinate( -1 ); // Utilize operator * (scalar).
 		}
 
 	/* Arithmetic Operations: Binary operators (with a vector). */
 		constexpr Vector operator+ ( const Vector& right_hand_side ) const
 		{
 			Vector result( *this );
-			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result.data[ index ] += right_hand_side.data[ index ]; } );
+			Utility::constexpr_for< 0, Size, +1 >( [ & ]( const auto index ) { result.data[ index ] += right_hand_side.data[ index ]; } );
 			return result;
 		}
 
 		constexpr Vector& operator+= ( const Vector& right_hand_side )
 		{
-			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] += right_hand_side.data[ index ]; } );
+			Utility::constexpr_for< 0, Size, +1 >( [ & ]( const auto index ) { data[ index ] += right_hand_side.data[ index ]; } );
 
 			return *this;
 		}
@@ -163,13 +163,13 @@ namespace Framework::Math
 		constexpr Vector operator- ( const Vector& right_hand_side ) const
 		{
 			Vector result( *this );
-			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result.data[ index ] -= right_hand_side.data[ index ]; } );
+			Utility::constexpr_for< 0, Size, +1 >( [ & ]( const auto index ) { result.data[ index ] -= right_hand_side.data[ index ]; } );
 			return result;
 		}
 
 		constexpr Vector& operator-= ( const Vector& right_hand_side )
 		{
-			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] -= right_hand_side.data[ index ]; } );
+			Utility::constexpr_for< 0, Size, +1 >( [ & ]( const auto index ) { data[ index ] -= right_hand_side.data[ index ]; } );
 
 			return *this;
 		}
@@ -177,13 +177,13 @@ namespace Framework::Math
 		constexpr Vector operator* ( const Vector& right_hand_side ) const
 		{
 			Vector result( *this );
-			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result.data[ index ] *= right_hand_side.data[ index ]; } );
+			Utility::constexpr_for< 0, Size, +1 >( [ & ]( const auto index ) { result.data[ index ] *= right_hand_side.data[ index ]; } );
 			return result;
 		}
 
 		constexpr Vector& operator*= ( const Vector& right_hand_side )
 		{
-			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] *= right_hand_side.data[ index ]; } );
+			Utility::constexpr_for< 0, Size, +1 >( [ & ]( const auto index ) { data[ index ] *= right_hand_side.data[ index ]; } );
 
 			return *this;
 		}
@@ -191,13 +191,13 @@ namespace Framework::Math
 		constexpr Vector operator/ ( const Vector& right_hand_side ) const
 		{
 			Vector result( *this );
-			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result.data[ index ] /= right_hand_side.data[ index ]; } );
+			Utility::constexpr_for< 0, Size, +1 >( [ & ]( const auto index ) { result.data[ index ] /= right_hand_side.data[ index ]; } );
 			return result;
 		}
 
 		constexpr Vector& operator/= ( const Vector& right_hand_side )
 		{
-			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] /= right_hand_side.data[ index ]; } );
+			Utility::constexpr_for< 0, Size, +1 >( [ & ]( const auto index ) { data[ index ] /= right_hand_side.data[ index ]; } );
 
 			return *this;
 		}
@@ -206,14 +206,14 @@ namespace Framework::Math
 		constexpr Vector operator+ ( const Coordinate scalar ) const
 		{
 			Vector result( *this );
-			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result.data[ index ] += scalar; } );
+			Utility::constexpr_for< 0, Size, +1 >( [ & ]( const auto index ) { result.data[ index ] += scalar; } );
 
 			return result;
 		}
 
 		constexpr Vector& operator+= ( const Coordinate scalar )
 		{
-			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] += scalar; } );
+			Utility::constexpr_for< 0, Size, +1 >( [ & ]( const auto index ) { data[ index ] += scalar; } );
 
 			return *this;
 		}
@@ -221,14 +221,14 @@ namespace Framework::Math
 		constexpr Vector operator- ( const Coordinate scalar ) const
 		{
 			Vector result( *this );
-			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result.data[ index ] -= scalar; } );
+			Utility::constexpr_for< 0, Size, +1 >( [ & ]( const auto index ) { result.data[ index ] -= scalar; } );
 
 			return result;
 		}
 
 		constexpr Vector& operator-= ( const Coordinate scalar )
 		{
-			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] -= scalar; } );
+			Utility::constexpr_for< 0, Size, +1 >( [ & ]( const auto index ) { data[ index ] -= scalar; } );
 
 			return *this;
 		}
@@ -236,14 +236,14 @@ namespace Framework::Math
 		constexpr Vector operator* ( const Coordinate scalar ) const
 		{
 			Vector result( *this );
-			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result.data[ index ] *= scalar; } );
+			Utility::constexpr_for< 0, Size, +1 >( [ & ]( const auto index ) { result.data[ index ] *= scalar; } );
 
 			return result;
 		}
 
 		constexpr Vector& operator*= ( const Coordinate scalar )
 		{
-			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] *= scalar; } );
+			Utility::constexpr_for< 0, Size, +1 >( [ & ]( const auto index ) { data[ index ] *= scalar; } );
 
 			return *this;
 		}
@@ -252,11 +252,11 @@ namespace Framework::Math
 		{
 			Vector result( *this );
 			if constexpr( std::is_integral_v< Coordinate > )
-				Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result.data[ index ] /= scalar; } ); // Divide directly as division of 1/scalar will give zero when scalar > 1.
+				Utility::constexpr_for< 0, Size, +1 >( [ & ]( const auto index ) { result.data[ index ] /= scalar; } ); // Divide directly as division of 1/scalar will give zero when scalar > 1.
 			else
 			{
 				const auto inverse_of_scalar = Coordinate( 1 ) / scalar; // We can calculate the inverse safely.
-				Utility::constexpr_for< 0, Size, 1 >( [&]( const auto index ) { result.data[ index ] *= inverse_of_scalar; } );
+				Utility::constexpr_for< 0, Size, +1 >( [&]( const auto index ) { result.data[ index ] *= inverse_of_scalar; } );
 			}
 
 			return result;
@@ -265,11 +265,11 @@ namespace Framework::Math
 		constexpr Vector& operator/= ( const Coordinate scalar )
 		{
 			if constexpr( std::is_integral_v< Coordinate > )
-				Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { data[ index ] /= scalar; } ); // Divide directly as division of 1/scalar will give zero when scalar > 1.
+				Utility::constexpr_for< 0, Size, +1 >( [ & ]( const auto index ) { data[ index ] /= scalar; } ); // Divide directly as division of 1/scalar will give zero when scalar > 1.
 			else
 			{
 				const auto inverse_of_scalar = Coordinate( 1 ) / scalar; // We can calculate the inverse safely.
-				Utility::constexpr_for< 0, Size, 1 >( [&]( const auto index ) { data[ index ] *= inverse_of_scalar; } );
+				Utility::constexpr_for< 0, Size, +1 >( [&]( const auto index ) { data[ index ] *= inverse_of_scalar; } );
 			}
 
 			return *this;
@@ -278,26 +278,26 @@ namespace Framework::Math
 	/* Arithmetic Operations: Binary operators (with a scalar), of the the form scalar-operator-vector. */
 		constexpr friend Vector operator + ( const Coordinate scalar, const Vector& vector )
 		{
-			Vector result( UNIFORM_INITIALIZATION, scalar );
-			return result + vector;
+			const Vector result( UNIFORM_INITIALIZATION, scalar );
+			return result + vector; // Leverage already defined operator +( scalar ).
 		}
 
 		constexpr friend Vector operator - ( const Coordinate scalar, const Vector& vector )
 		{
-			Vector result( UNIFORM_INITIALIZATION, scalar );
-			return result - vector;
+			const Vector result( UNIFORM_INITIALIZATION, scalar );
+			return result - vector; // Leverage already defined operator -( scalar ).
 		}
 
 		constexpr friend Vector operator * ( const Coordinate scalar, const Vector& vector )
 		{
-			Vector result( UNIFORM_INITIALIZATION, scalar );
-			return result * vector;
+			const Vector result( UNIFORM_INITIALIZATION, scalar );
+			return result * vector; // Leverage already defined operator *( scalar ).
 		}
 
 		constexpr friend Vector operator / ( const Coordinate scalar, const Vector& vector )
 		{
-			Vector result( UNIFORM_INITIALIZATION, scalar );
-			return result / vector;
+			const Vector result( UNIFORM_INITIALIZATION, scalar );
+			return result / vector; // Leverage already defined operator /( scalar ).
 		}
 
 	/* Other Arithmetic Operations. */
@@ -306,7 +306,7 @@ namespace Framework::Math
 		{
 			Coordinate result( 0 );
 
-			Utility::constexpr_for< 0, Size, 1 >( [ & ]( const auto index ) { result += data[ index ] * data[ index ]; } );
+			Utility::constexpr_for< 0, Size, +1 >( [ & ]( const auto index ) { result += data[ index ] * data[ index ]; } );
 
 			return result;
 		}
@@ -340,25 +340,6 @@ namespace Framework::Math
 			return *this;
 		}
 
-		/* Vector-matrix multiplication. */
-		template< std::size_t ColumnSize >
-		constexpr Vector< Coordinate, ColumnSize > operator* ( const Matrix< Coordinate, Size, ColumnSize >& transform_matrix ) const
-		{
-			Vector< Coordinate, ColumnSize > vector_transformed;
-			for( auto j = 0; j < ColumnSize; j++ )
-				for( auto k = 0; k < Size; k++ )
-					vector_transformed[ j ] += data[ k ] * transform_matrix[ k ][ j ];
-
-			return vector_transformed;
-		}
-
-		/* Vector-matrix multiplication. */
-		template< std::size_t ColumnSize >
-		constexpr Vector< Coordinate, ColumnSize >& operator*= ( const Matrix< Coordinate, Size, ColumnSize >& transform_matrix )
-		{
-			return *this = *this * transform_matrix;
-		}
-
 	protected:
 		Coordinate data[ Size ];
 	};
@@ -368,7 +349,7 @@ namespace Framework::Math
 	{
 		Coordinate result( 0 );
 
-		Utility::constexpr_for< 0, Size, 1 >( [&]( const auto index ) { result += u.data[ index ] * v.data[ index ]; } );
+		Utility::constexpr_for< 0, Size, +1 >( [&]( const auto index ) { result += u.data[ index ] * v.data[ index ]; } );
 
 		return result;
 	}

@@ -1,6 +1,7 @@
 // Project Includes.
 #include "Math.h"
 #include "Polar.hpp"
+#include "Matrix.hpp"
 #include "TypeTraits.h"
 
 namespace Framework::Math
