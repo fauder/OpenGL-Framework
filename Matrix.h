@@ -126,6 +126,19 @@ namespace Framework::Matrix
 		);
 	}
 
+	/* In row-major form. */ constexpr Matrix4x4 Translation( const Vector3 delta )
+	{
+		return Matrix4x4
+		(
+			{
+				1.0f,		0.0f,		0.0f,		0.0f,
+				0.0f,		1.0f,		0.0f,		0.0f,
+				0.0f,		0.0f,		1.0f,		0.0f,
+				delta.X(),	delta.Y(),	delta.Z(),	1.0f
+			}
+		);
+	}
+
 	/* In row-major form. */ constexpr Matrix4x4 TranslationOnY( const float delta )
 	{
 		return Matrix4x4
