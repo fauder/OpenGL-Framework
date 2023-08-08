@@ -26,6 +26,7 @@ namespace Framework
 		const Vector3& GetTranslation() const;
 
 		const Matrix4x4& GetFinalMatrix();
+		const Matrix4x4 GetInverseOfFinalMatrix();
 
 	private:
 		const Matrix4x4& GetScalingMatrix();
