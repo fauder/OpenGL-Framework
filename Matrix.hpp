@@ -40,6 +40,14 @@ namespace Framework::Math
 					data[ i ][ i ] = Type( 1 );
 		}
 
+		/* Initialize diagonals. */
+		constexpr Matrix( const Vector< Type, RowSize >& vector ) requires( RowSize == ColumnSize )
+			:
+			data{}
+		{
+			SetDiagonals( vector );
+		}
+
 		constexpr explicit Matrix( Initialization::ZeroInitialization )
 			:
 			data{}
