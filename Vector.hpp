@@ -97,10 +97,10 @@ namespace Framework::Math
 		constexpr Coordinate Z() const requires( Size >= 3 ) { return data[ 2 ]; };
 		constexpr Coordinate W() const requires( Size >= 4 ) { return data[ 3 ]; };
 
-		constexpr Coordinate& X() requires( Size >= 1 ) { return data[ 0 ]; };
-		constexpr Coordinate& Y() requires( Size >= 2 ) { return data[ 1 ]; };
-		constexpr Coordinate& Z() requires( Size >= 3 ) { return data[ 2 ]; };
-		constexpr Coordinate& W() requires( Size >= 4 ) { return data[ 3 ]; };
+		constexpr Vector& SetX( const Coordinate value ) requires( Size >= 1 ) { data[ 0 ] = value; return *this; };
+		constexpr Vector& SetY( const Coordinate value ) requires( Size >= 2 ) { data[ 1 ] = value; return *this; };
+		constexpr Vector& SetZ( const Coordinate value ) requires( Size >= 3 ) { data[ 2 ] = value; return *this; };
+		constexpr Vector& SetW( const Coordinate value ) requires( Size >= 4 ) { data[ 3 ] = value; return *this; };
 
 		template< typename... Values >
 		constexpr Vector& Set( Values... values )
