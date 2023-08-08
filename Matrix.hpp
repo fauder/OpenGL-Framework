@@ -289,6 +289,13 @@ namespace Framework::Math
 		/* Vector-matrix multiplication. */
 		template< Concepts::Arithmetic Type_, std::size_t RowSize_, std::size_t ColumnSize_ > // Have to use different template parameters here because C++...
 		friend constexpr Vector< Type_, RowSize_ >& operator*= ( const Vector< Type_, RowSize_ >& vector, const Matrix< Type_, RowSize_, ColumnSize_ >& matrix );
+
+		/* Arithmetic Operations: Unary operators. */
+		constexpr Matrix operator- () const
+		{
+			return *this * Type( -1 );
+		}
+
 		Matrix& Transpose()
 		{
 			for( auto i = 0; i < RowSize; i++ )
