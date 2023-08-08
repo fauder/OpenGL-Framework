@@ -15,6 +15,7 @@
 #include "VertexArray.h"
 
 #include "Test/Test_Menu.h"
+#include "Test/Test_Camera.h"
 #include "Test/Test_ClearColor.h"
 #include "Test/Test_Transform_2Cubes.h"
 #include "Test/Test_ImGui.h"
@@ -35,6 +36,7 @@ int main()
 		std::unique_ptr< TestInterface > test_current;
 		std::unique_ptr< Test_Menu > test_menu = std::make_unique< Test_Menu >( renderer, test_current );
 
+		test_menu->Register< Test_Camera >();
 		test_menu->Register< Test_ClearColor >( Color4::Cyan() );
 		test_menu->Register< Test_Transfom_2Cubes >();
 		test_menu->Register< Test_ImGui >();

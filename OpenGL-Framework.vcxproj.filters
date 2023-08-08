@@ -85,6 +85,9 @@
     <ClCompile Include="Test\Test_Menu.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="Test\Test_Camera.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.hpp">
@@ -220,6 +223,9 @@
       <Filter>Vendor</Filter>
     </ClInclude>
     <ClInclude Include="Test\Test_Menu.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\Test_Camera.h">
       <Filter>Test</Filter>
     </ClInclude>
   </ItemGroup>

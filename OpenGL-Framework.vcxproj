@@ -160,6 +160,7 @@
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Test\Test_Camera.cpp" />
     <ClCompile Include="Test\Test_Menu.cpp" />
     <ClCompile Include="Test\Test_ClearColor.cpp" />
     <ClCompile Include="Test\Test_ImGui.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="Test\Test_ClearColor.h" />
     <ClInclude Include="Test\Test_ImGui.h" />
     <ClInclude Include="Test\Test_Transform_2Cubes.h" />
+    <ClInclude Include="Test\Test_Camera.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="TypeTraits.h" />
     <ClInclude Include="Unit.h" />
