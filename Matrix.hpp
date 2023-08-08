@@ -228,6 +228,29 @@ namespace Framework::Math
 		}
 
 		template< std::size_t VectorSize >
+		constexpr Vector< Type, VectorSize > GetRow( const unsigned int row_index = 0, const unsigned int start_index_inRow = 0 ) const requires( VectorSize <= RowSize )
+		{
+			ASSERT( row_index < RowSize && "Row index out of bounds." );
+			ASSERT( start_index_inRow + VectorSize <= ColumnSize && "Given vector does not fit inside the row when starting from start_index_inRow." );
+
+			return Vector< Type, VectorSize >( *( reinterpret_cast< const Vector< Type, VectorSize >* >( data[ row_index ] + start_index_inRow ) ) );
+		}
+
+		template< std::size_t VectorSize >
+		constexpr Vector< Type, VectorSize > GetColumn( const unsigned int column_index = 0, const unsigned int start_index_inColumn = 0 ) const requires( VectorSize <= ColumnSize )
+		{
+			ASSERT( column_index < ColumnSize && "Column index out of bounds." );
+			ASSERT( start_index_inColumn + VectorSize <= RowSize && "Given vector does not fit inside the column when starting from start_index_inColumn." );
+
+			Vector< Type, VectorSize > vector( NO_INITIALIZATION );
+
+			for( unsigned int i = 0; i < VectorSize; i++ )
+				vector.data[ i ] = data[ i + start_index_inColumn ][ column_index ];
+
+			return vector;
+		}
+
+		template< std::size_t VectorSize >
 		constexpr Matrix& SetScaling( const Vector< Type, VectorSize >& vector ) requires( RowSize == ColumnSize && VectorSize <= RowSize - 1 )
 		{
 			return SetDiagonals( vector );
