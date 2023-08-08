@@ -41,11 +41,14 @@ int main()
 		test_menu->Register< Test_Transfom_2Cubes >();
 		test_menu->Register< Test_ImGui >();
 
+		test_menu->AutoExecute< Test_Camera >();
+
 		bool continue_executing_tests = false;
 
 		do
 		{
-			test_menu->Execute();
+			if( !test_current )
+				test_menu->Execute();
 
 			continue_executing_tests = ( bool )test_current;
 

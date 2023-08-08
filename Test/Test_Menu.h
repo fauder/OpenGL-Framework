@@ -33,6 +33,14 @@ namespace Framework::Test
 			test_creation_info_by_name[ test_name ] = [ &, ... params = std::forward< ConstructorParams >( params ) ]() { return std::make_unique< TestClass >( renderer, params ... ); };
 		}
 
+		template< class TestClass >
+		void AutoExecute()
+		{
+			const auto name = ExtractTestNameFromTypeName( typeid( TestClass ).name() );
+			StopExecution();
+			test_current = test_creation_info_by_name[ name ]();
+		}
+
 		void Unregister( const std::string& name );
 
 	protected:
