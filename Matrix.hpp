@@ -18,6 +18,9 @@ namespace Framework::Math
 		requires Concepts::NonZero< RowSize > && Concepts::NonZero< ColumnSize >
 	class Matrix
 	{
+		template< Concepts::Arithmetic, std::size_t RowSize_, std::size_t ColumnSize_ > requires Concepts::NonZero< RowSize_ >&& Concepts::NonZero< ColumnSize_ >
+		friend class Matrix;
+
 	public:
 	/* Constructors. */
 		constexpr Matrix( const Matrix& other )             = default;
@@ -125,7 +128,7 @@ namespace Framework::Math
 		constexpr Matrix& SetDiagonals( const Vector< Type, VectorSize >& vector ) requires( RowSize == ColumnSize && VectorSize <= RowSize )
 		{
 			for( auto i = 0; i < VectorSize; i++ )
-				data[ i ][ i ] = vector[ i ];
+				data[ i ][ i ] = vector.data[ i ];
 
 			return *this;
 		}
@@ -137,7 +140,7 @@ namespace Framework::Math
 			ASSERT( start_index_inRow + VectorSize <= ColumnSize && "Given vector does not fit inside the row when starting from start_index_inRow." );
 
 			for( unsigned int i = 0; i < VectorSize; i++ )
-				data[ row_index ][ i + start_index_inRow ] = vector[ i ];
+				data[ row_index ][ i + start_index_inRow ] = vector.data[ i ];
 
 			return *this;
 		}
@@ -149,7 +152,7 @@ namespace Framework::Math
 			ASSERT( start_index_inColumn + VectorSize <= RowSize && "Given vector does not fit inside the column when starting from start_index_inColumn." );
 
 			for( unsigned int i = 0; i < VectorSize; i++ )
-				data[ i + start_index_inColumn ][ column_index ] = vector[ i ];
+				data[ i + start_index_inColumn ][ column_index ] = vector.data[ i ];
 
 			return *this;
 		}
@@ -232,7 +235,7 @@ namespace Framework::Math
 		Vector< Type_, RowSize > vector_transformed;
 		for( auto j = 0; j < ColumnSize; j++ )
 			for( auto k = 0; k < RowSize; k++ )
-				vector_transformed[ j ] += vector[ k ] * matrix[ k ][ j ];
+				vector_transformed[ j ] += vector[ k ] * matrix.data[ k ][ j ];
 
 		return vector_transformed;
 	}
