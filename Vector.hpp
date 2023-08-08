@@ -327,7 +327,7 @@ namespace Framework::Math
 
 		Vector Normalized() const requires( std::floating_point< Coordinate > )
 		{
-			if( const auto magnitude = Magnitude(); magnitude > Constants< Coordinate >::Epsilon() )
+			if( const auto magnitude = Magnitude(); magnitude > TypeTraits< Coordinate >::Epsilon() )
 			{
 				const Coordinate one_over_magnitude = Coordinate( 1 ) / Magnitude();
 				return *this * one_over_magnitude;
