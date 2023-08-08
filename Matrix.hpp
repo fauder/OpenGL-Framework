@@ -46,7 +46,7 @@ namespace Framework::Math
 		{}
 
 #pragma warning(disable:26495) // Suppress "variable is uninitialized" warning, as not initializing it is the whole point of this constructor.
-		explicit Matrix( Initialization::NoInitialization )
+		constexpr explicit Matrix( Initialization::NoInitialization )
 		{}
 #pragma warning(default:26495)
 
@@ -146,6 +146,23 @@ namespace Framework::Math
 		const Type* Data() const { return &data[ 0 ][ 0 ]; };
 		constexpr Type* operator[] ( const unsigned int row_index ) { return data[ row_index ]; }
 		constexpr const Type* operator[] ( const unsigned int row_index ) const { return data[ row_index ]; }
+		
+		/* For now, just allow square sub-matrices. */
+		template< std::size_t Size >
+		constexpr Matrix< Type, Size, Size > SubMatrix() const requires( RowSize == ColumnSize && Size < RowSize /* If Size == RowSize, no need to create a new Matrix.So, do not use <= , use < instead. */ )
+		{
+			Matrix< Type, Size, Size > sub_matrix( NO_INITIALIZATION );
+
+			Utility::constexpr_for< 0, Size, +1 >( [ & ]( const auto row_index )
+			{
+				Utility::constexpr_for< 0, Size, +1 >( [ & ]( const auto column_index )
+				{
+					sub_matrix[ row_index ][ column_index ] = data[ row_index ][ column_index ];
+				} );
+			} );
+
+			return sub_matrix;
+		}
 
 		template< typename... Values >
 		constexpr Matrix& Set( Values... values )
