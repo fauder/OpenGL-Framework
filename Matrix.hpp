@@ -23,10 +23,10 @@ namespace Framework::Math
 
 	public:
 	/* Constructors. */
-		constexpr Matrix( const Matrix& other )             = default;
-		constexpr Matrix( Matrix&& donor )                  = default;
-		constexpr Matrix& operator= ( const Matrix& other ) = default;
-		constexpr Matrix& operator= ( Matrix&& donor )      = default;
+		constexpr Matrix( const Matrix& other )					= default;
+		constexpr Matrix( Matrix&& donor ) noexcept				= default;
+		constexpr Matrix& operator= ( const Matrix& other )		= default;
+		constexpr Matrix& operator= ( Matrix&& donor ) noexcept	= default;
 
 		constexpr ~Matrix() = default;
 

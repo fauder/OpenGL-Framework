@@ -40,10 +40,10 @@ namespace Framework::Math
 			w( 1 )
 		{}
 
-		constexpr Quaternion( const Quaternion& other )				= default;
-		constexpr Quaternion( Quaternion && donor )					= default;
-		constexpr Quaternion& operator= ( const Quaternion& other )	= default;
-		constexpr Quaternion& operator= ( Quaternion && donor )		= default;
+		constexpr Quaternion( const Quaternion& other )					 = default;
+		constexpr Quaternion( Quaternion && donor )	noexcept			 = default;
+		constexpr Quaternion& operator= ( const Quaternion& other )		 = default;
+		constexpr Quaternion& operator= ( Quaternion && donor )	noexcept = default;
 
 		constexpr ~Quaternion() = default;
 
