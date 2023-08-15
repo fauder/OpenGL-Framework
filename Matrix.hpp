@@ -86,6 +86,18 @@ namespace Framework::Math
 		}
 
 #pragma warning(disable:26495) // Suppress "variable is uninitialized" warning, as not initializing it is the whole point of this constructor.
+		template< typename... Vectors >
+		constexpr Matrix( Vectors... row_vectors ) requires( sizeof...( Vectors ) == RowSize )
+		{
+			// Utilize fold expressions with a lambda to "loop over" the parameter pack.
+			int row_index = 0;
+			( /* Lambda: */ [ & ]
+			{
+				SetRow( row_vectors, row_index++ );
+			}
+			( ), ... );
+		}
+
 		/* Construct from an upper sub-matrix & a vector for the last row.
 		 * Sub-matrix & last row_vector can be ANY size smaller than the size of the matrix to be constructed.
 		 */
