@@ -3,6 +3,7 @@
 in vec2 out_tex_coords;
 in vec4 out_color_vertex;
 
+uniform int use_vertex_color; // TODO: Get rid of this once Material class is implemented (Material = Shader + Uniforms).
 uniform sampler2D texture_sampler_1;
 uniform sampler2D texture_sampler_2;
 
@@ -12,5 +13,5 @@ void main()
 {
     vec4 tex_sample_1 = texture( texture_sampler_1, out_tex_coords );
     vec4 tex_sample_2 = texture( texture_sampler_2, out_tex_coords );
-    frag_color = mix( tex_sample_1, tex_sample_2, 0.5 ) * out_color_vertex;
+    frag_color = mix( tex_sample_1, tex_sample_2, 0.5 ) * mix( vec4( 1 ), out_color_vertex, float( use_vertex_color ) );
 }

@@ -87,6 +87,8 @@ namespace Framework::Test
 		shader->SetInt( "texture_sampler_1", 0 );
 		shader->SetInt( "texture_sampler_2", 1 );
 
+		//shader->SetInt( "use_vertex_color", 1 );
+
 		/* Putting the "camera" on z +3 means moving the world to z -3.*/
 		const auto view = Matrix::Translation( 0.0f, 0.0f, -3.0f );
 
