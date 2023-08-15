@@ -28,6 +28,7 @@ namespace Framework
 {
 	using Vector2   = Math::Vector< float, 2 >;
 	using Vector3   = Math::Vector< float, 3 >;
+	using Matrix3x3 = Math::Matrix< float, 3, 3 >;
 	using Matrix4x4 = Math::Matrix< float, 4, 4 >;
 }
 
@@ -84,8 +85,89 @@ namespace Framework::Math
 	/* Describes an extrinsic (fixed-axis) rotation, in this order: first heading (around y), then pitch (around x) and finally bank (around z). */
 	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Framework::Matrix4x4 EulerToMatrix( Framework::Radians heading_around_y, Framework::Radians pitch_around_x, Framework::Radians bank_around_z );
 	/* Describes an extrinsic (fixed-axis) rotation, in this order: first heading (around y), then pitch (around x) and finally bank (around z). */
-	/* In row-major form. Right-handed. Counter-clockwise rotation. */ void EulerToMatrix( Framework::Matrix4x4& matrix, Framework::Radians heading_around_y, Framework::Radians pitch_around_x, Framework::Radians bank_around_z );
-	/* In row-major form. Right-handed. Counter-clockwise rotation. */ void MatrixToEuler( const Framework::Matrix4x4& matrix, Framework::Radians& heading_around_y, Framework::Radians& pitch_around_x, Framework::Radians& bank_around_z );
+	/* In row-major form. Right-handed. Counter-clockwise rotation. */ Framework::Matrix3x3 EulerToMatrix3x3( Framework::Radians heading_around_y, Framework::Radians pitch_around_x, Framework::Radians bank_around_z );
+	
+	/* In-place modification of the upper-left 3x3 portion. */
+	/* In row-major form. Right-handed. Clockwise rotation.
+	 * Describes an extrinsic (fixed-axis) rotation, in this order:    bank (around z) -> pitch (around x) -> heading (around y).
+	 * an Euler rotation (is intrinsic, body-axis),  in this order: heading (around y) -> pitch (around x) -> bank (around z), which means */
+	template< Concepts::Arithmetic Type, std::size_t MatrixSize >
+	void EulerToMatrix( Matrix< Type, MatrixSize, MatrixSize >& matrix, Framework::Radians heading_around_y, Framework::Radians pitch_around_x, Framework::Radians bank_around_z ) requires( MatrixSize >= 3 )
+	{
+		const auto sin_pitch   = Math::Sin( pitch_around_x );
+		const auto sin_heading = Math::Sin( heading_around_y );
+		const auto sin_bank    = Math::Sin( bank_around_z );
+
+		const auto cos_pitch   = Math::Cos( pitch_around_x );
+		const auto cos_heading = Math::Cos( heading_around_y );
+		const auto cos_bank    = Math::Cos( bank_around_z );
+
+		const auto cos_bank_cos_heading = cos_bank * cos_heading;
+		const auto sin_pitch_sin_heading = sin_pitch * sin_heading;
+
+		matrix[ 0 ][ 0 ] = cos_bank_cos_heading + sin_bank * sin_pitch_sin_heading;		matrix[ 0 ][ 1 ] = sin_bank * cos_pitch;	matrix[ 0 ][ 2 ] = -cos_bank * sin_heading + sin_bank * sin_pitch * cos_heading;
+		matrix[ 1 ][ 0 ] = -sin_bank * cos_heading + cos_bank * sin_pitch_sin_heading;	matrix[ 1 ][ 1 ] = cos_bank * cos_pitch;	matrix[ 1 ][ 2 ] = sin_bank * sin_heading + sin_pitch * cos_bank_cos_heading;	
+		matrix[ 2 ][ 0 ] = cos_pitch * sin_heading;										matrix[ 2 ][ 1 ] = -sin_pitch;				matrix[ 2 ][ 2 ] = cos_pitch * cos_heading;									
+	}
+
+	/* Expects matrix in row-major form. Right-handed. Clockwise rotation.
+	 * The matrix should describe an extrinsic (fixed-axis) rotation, in this order:	bank (around z) -> pitch (around x) -> heading (around y), which results in
+	 * the Euler rotation (that is intrinsic & around body-axes) in this order:		 heading (around y) -> pitch (around x) -> bank (around z). */
+	template< Concepts::Arithmetic Type, std::size_t MatrixSize >
+	void MatrixToEuler( const Matrix< Type, MatrixSize, MatrixSize >& matrix, Framework::Radians& heading_around_y, Framework::Radians& pitch_around_x, Framework::Radians& bank_around_z ) requires( MatrixSize >= 3 )
+	{
+		/* The matrix' values for reference:
+		{
+			matrix[ 0 ][ 0 ] = cos_bank_cos_heading + sin_bank * sin_pitch_sin_heading		matrix[ 0 ][ 1 ] = sin_bank * cos_pitch		matrix[ 0 ][ 2 ] = -cos_bank * sin_heading + sin_bank * sin_pitch * cos_heading
+			matrix[ 1 ][ 0 ] = -sin_bank * cos_heading + cos_bank * sin_pitch_sin_heading	matrix[ 1 ][ 1 ] = cos_bank * cos_pitch		matrix[ 1 ][ 2 ] = sin_bank * sin_heading + sin_pitch * cos_bank_cos_heading
+			matrix[ 2 ][ 0 ] = cos_pitch * sin_heading										matrix[ 2 ][ 1 ] = -sin_pitch				matrix[ 2 ][ 2 ] = cos_pitch * cos_heading
+		}*/
+
+		using namespace Math::Literals;
+
+		const auto sin_pitch = -matrix[ 2 ][ 1 ];
+
+		if( sin_pitch <= -1.0f )
+			pitch_around_x = Radians( -Constants< float >::Half_Pi() );
+		else if( sin_pitch >= +1.0f )
+			pitch_around_x = Radians( Constants< float >::Half_Pi() );
+		else
+			pitch_around_x = Math::Asin( sin_pitch );
+
+		const auto cos_pitch = Math::Cos( pitch_around_x );
+
+		if( Math::IsZero( cos_pitch ) ) // Which means pitch is +90 or -90 -> gimbal lock!
+		{
+			// Set bank to zero & assign all rotation around the vertical axis to heading.
+			bank_around_z = 0.0_rad;
+
+			// Since bank = 0, it means that cos_bank = 1 & sin_bank = 0. Reminder: cos_pitch is also 0.
+
+			/* Updated matrix' values for reference:
+			{
+				matrix[ 0 ][ 0 ] = cos_heading					matrix[ 0 ][ 1 ] = 0				matrix[ 0 ][ 2 ] = -sin_heading
+				matrix[ 1 ][ 0 ] = sin_pitch_sin_heading		matrix[ 1 ][ 1 ] = 0				matrix[ 1 ][ 2 ] = sin_pitch * cos_heading
+				matrix[ 2 ][ 0 ] = 0							matrix[ 2 ][ 1 ] = -sin_pitch		matrix[ 2 ][ 2 ] = 0
+			}*/
+
+			heading_around_y = Math::Atan2( -matrix[ 0 ][ 2 ], matrix[ 0 ][ 0 ] );
+		}
+		else
+		{
+			/*
+			const auto sin_heading = matrix[ 2 ][ 0 ] / cos_pitch;
+			const auto cos_heading = matrix[ 2 ][ 2 ] / cos_pitch;
+			*/
+
+			/* Since cos_pitch is a common denominator between these two terms, we can directly pass the numerators of these fractions to atan2() instead. */
+
+			heading_around_y = Math::Atan2( matrix[ 2 ][ 0 ], matrix[ 2 ][ 2 ] );
+
+			/* Similar method for bank: */
+
+			bank_around_z = Math::Atan2( matrix[ 0 ][ 1 ], matrix[ 1 ][ 1 ] );
+		}
+	}
 
 /* Conversions Between Cartesian, Polar, Cylindrical & Spherical Coordinates. */
 	Polar2 ToPolar2( const Vector2& cartesian );
