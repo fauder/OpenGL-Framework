@@ -36,7 +36,7 @@ namespace Framework::Math
 		/* Identity quaternion w=1 & n=<0,0,0>. */
 		constexpr Quaternion()
 			:
-			xyz(),
+			xyz( ZERO_INITIALIZATION ),
 			w( 1 )
 		{}
 

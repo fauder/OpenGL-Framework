@@ -13,7 +13,7 @@ namespace Framework
 	public:
 		constexpr Color3()
 			:
-			Base()
+			Base( ZERO_INITIALIZATION )
 		{}
 
 		constexpr Color3( const unsigned int r, const unsigned int g, const unsigned int b )
@@ -47,7 +47,7 @@ namespace Framework
 	public:
 		constexpr Color4()
 			:
-			Base()
+			Base( ZERO_INITIALIZATION )
 		{}
 
 		constexpr Color4( const unsigned int r, const unsigned int g, const unsigned int b, const unsigned int a )

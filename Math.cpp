@@ -120,7 +120,7 @@ namespace Framework::Math
 	Polar2 ToPolar2( const Vector2& cartesian )
 	{
 		if( cartesian.IsZero() )
-			return Polar2{};
+			return Polar2( ZERO_INITIALIZATION );
 
 		return Polar2( cartesian.Magnitude(), Radians( std::atan2( cartesian.Y(), cartesian.X() ) ) );
 	}
@@ -130,7 +130,7 @@ namespace Framework::Math
 		const auto r = polar2.R();
 
 		if( IsZero( r ) )
-			return Vector2{};
+			return Vector2( ZERO_INITIALIZATION );
 
 
 		return Vector2( std::cos( float( polar2.Theta() ) ) * r, std::sin( float( polar2.Theta() ) ) * r );
@@ -141,7 +141,7 @@ namespace Framework::Math
 		const auto x = cartesian.X(), y = cartesian.Y(), z = cartesian.Z();
 
 		if( cartesian.IsZero() )
-			return Polar3_Cylindrical{};
+			return Polar3_Cylindrical( ZERO_INITIALIZATION );
 
 		return Polar3_Cylindrical( Math::Hypothenuse( x, y ), Radians( std::atan2( y, x ) ), z );
 	}
@@ -151,7 +151,7 @@ namespace Framework::Math
 		const auto r = polar3.R(), z = polar3.Z();
 
 		if( IsZero( r ) && IsZero( z ) )
-			return Vector3{};
+			return Vector3( ZERO_INITIALIZATION );
 
 		return Vector3( r * std::cos( float( polar3.Theta() ) ), r * std::sin( float( polar3.Theta() ) ), z );
 	}
@@ -161,7 +161,7 @@ namespace Framework::Math
 		const auto x = cartesian.X(), y = cartesian.Y(), z = cartesian.Z();
 
 		if( cartesian.IsZero() )
-			return Polar3_Spherical{};
+			return Polar3_Spherical( ZERO_INITIALIZATION );
 
 		const auto xy_plane_distance = Math::Hypothenuse( x, y );
 
@@ -173,7 +173,7 @@ namespace Framework::Math
 		const auto r = polar3.R();
 
 		if( IsZero( r ) )
-			return Vector3{};
+			return Vector3( ZERO_INITIALIZATION );
 
 		const auto latitude_inRadians = 90.0f - polar3.Phi(); // Latitude is also called the Angle of Inclination.
 		const auto xy_plane_distance  = r * std::cos( float( latitude_inRadians ) );
@@ -188,7 +188,7 @@ namespace Framework::Math
 		const auto x = cartesian.X(), y = cartesian.Y(), z = cartesian.Z();
 
 		if( cartesian.IsZero() )
-			return Polar3_Spherical_Game{};
+			return Polar3_Spherical_Game( ZERO_INITIALIZATION );
 
 		const auto xz_projection_of_r = Math::Hypothenuse( x, z );
 
@@ -200,7 +200,7 @@ namespace Framework::Math
 		const auto r = polar3.R();
 
 		if( IsZero( r ) )
-			return Vector3{};
+			return Vector3( ZERO_INITIALIZATION );
 
 		const auto xz_projection_of_r = r * std::cos( float( polar3.Pitch() ) );
 

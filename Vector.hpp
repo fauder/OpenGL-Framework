@@ -21,7 +21,7 @@ namespace Framework::Math
 
 	public:
 	/* Constructors. */
-		constexpr Vector() : data{} {}
+		constexpr Vector( Initialization::ZeroInitialization ) : data{} {}
 
 		constexpr Vector( const Vector& other )					= default;
 		constexpr Vector( Vector && donor )						= default;
@@ -114,7 +114,7 @@ namespace Framework::Math
 	/* Other Queries. */
 		static consteval std::size_t Dimension() { return Size; }
 
-		static consteval Vector Zero()		{ return Vector{}; }
+		static consteval Vector Zero()		{ return Vector{ ZERO_INITIALIZATION }; }
 		static consteval Vector One()		{ return Vector{ Coordinate( 1 ) }; }
 
 		static consteval Vector Left()		requires( Size >= 1 ) { return Vector{ -Coordinate( 1 ) }; }
@@ -327,13 +327,13 @@ namespace Framework::Math
 
 		Vector Normalized() const requires( std::floating_point< Coordinate > )
 		{
-			if( const auto magnitude = Magnitude(); magnitude > Constants< Coordinate >::Epsilon() )
+			if( const auto magnitude = Magnitude(); magnitude > TypeTraits< Coordinate >::Epsilon() )
 			{
 				const Coordinate one_over_magnitude = Coordinate( 1 ) / Magnitude();
 				return *this * one_over_magnitude;
 			}
 
-			return {};
+			return { ZERO_INITIALIZATION };
 		}
 
 		Vector& Normalize() requires std::floating_point< Coordinate >
