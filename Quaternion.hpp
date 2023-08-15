@@ -91,11 +91,14 @@ namespace Framework::Math
 			return !operator==( right_hand_side );
 		}
 
-	/* Other Queries. */
+	/* Getters & Setters. */
 		constexpr ComponentType X() const { return x; }
 		constexpr ComponentType Y() const { return y; }
 		constexpr ComponentType Z() const { return z; }
 		constexpr ComponentType W() const { return w; }
+
+	/* Other Queries. */
+		static consteval Quaternion Identity() { return {}; }
 
 		constexpr RadiansType HalfAngle() const
 		{
@@ -340,14 +343,17 @@ namespace Framework::Math
 
 		/* Geometric derivation. Computationally more efficient than the naive (algebraic) derivation. */
 		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
-		friend constexpr Quaternion< ComponentType_ > Slerp( Quaternion< ComponentType_ >& q1, Quaternion< ComponentType_ > q2, const ComponentType_ t );
+		friend constexpr Quaternion< ComponentType_ > Slerp( const Quaternion< ComponentType_ >& q1, Quaternion< ComponentType_ > q2, const ComponentType_ t );
 
 		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
 		friend constexpr Matrix< ComponentType_, 4, 4 > QuaternionToMatrix( const Quaternion< ComponentType_ >& quaternion );
 
-		/* Source: https://gamemath.com/book/orient.html#euler_to_matrix. */
 		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
-		friend constexpr Quaternion< ComponentType_ > MatrixToQuaternion( const Matrix< ComponentType_, 4, 4 >& matrix );
+		friend constexpr Matrix< ComponentType_, 3, 3 > QuaternionToMatrix3x3( const Quaternion< ComponentType_ >& quaternion );
+
+		/* Source: https://gamemath.com/book/orient.html#euler_to_matrix. */
+		template< std::floating_point ComponentType_, std::size_t MatrixSize_ > requires( MatrixSize_ > 3 ) // Have to use a different template parameter here because C++...
+		friend constexpr Quaternion< ComponentType_ > MatrixToQuaternion( const Matrix< ComponentType_, MatrixSize_, MatrixSize_ >& matrix );
 
 		/* Source: https://gamemath.com/book/orient.html#quaternion_to_euler_angles. */
 		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
@@ -419,7 +425,7 @@ namespace Framework::Math
 
 	/* Geometric derivation. Computationally more efficient than the naive (algebraic) derivation. */
 	template< std::floating_point ComponentType >
-	constexpr Quaternion< ComponentType > Slerp( Quaternion< ComponentType >& q1, Quaternion< ComponentType > q2, const ComponentType t )
+	constexpr Quaternion< ComponentType > Slerp( const Quaternion< ComponentType >& q1, Quaternion< ComponentType > q2, const ComponentType t )
 	{
 	#ifdef _DEBUG
 		ASSERT( q1.IsNormalized() && R"(Quaternion::Slerp() : The quaternion q1 is not normalized!)" );
@@ -469,7 +475,7 @@ namespace Framework::Math
 		const auto two_w_y = ComponentType( 2 ) * quaternion.w * quaternion.y;
 		const auto two_w_z = ComponentType( 2 ) * quaternion.w * quaternion.z;
 
-		return Framework::Matrix4x4
+		return Matrix< ComponentType, 4, 4 >
 		(
 			{
 				ComponentType( 1 ) - two_y2 - two_z2,		two_x_y + two_w_z,							two_x_z - two_w_y,							ComponentType( 0 ),
@@ -480,9 +486,36 @@ namespace Framework::Math
 		);
 	}
 
-	/* Source: https://gamemath.com/book/orient.html#euler_to_matrix. */
 	template< std::floating_point ComponentType >
-	constexpr Quaternion< ComponentType > MatrixToQuaternion( const Matrix< ComponentType, 4, 4 >& matrix )
+	constexpr Matrix< ComponentType, 3, 3 > QuaternionToMatrix3x3( const Quaternion< ComponentType >& quaternion )
+	{
+	#ifdef _DEBUG
+		ASSERT( quaternion.IsNormalized() && R"(Math::QuaternionToMatrix(): The quaternion is not normalized!)" );
+	#endif // _DEBUG
+
+		const auto two_x2  = ComponentType( 2 ) * quaternion.x * quaternion.x;
+		const auto two_y2  = ComponentType( 2 ) * quaternion.y * quaternion.y;
+		const auto two_z2  = ComponentType( 2 ) * quaternion.z * quaternion.z;
+		const auto two_x_y = ComponentType( 2 ) * quaternion.x * quaternion.y;
+		const auto two_x_z = ComponentType( 2 ) * quaternion.x * quaternion.z;
+		const auto two_y_z = ComponentType( 2 ) * quaternion.y * quaternion.z;
+		const auto two_w_x = ComponentType( 2 ) * quaternion.w * quaternion.x;
+		const auto two_w_y = ComponentType( 2 ) * quaternion.w * quaternion.y;
+		const auto two_w_z = ComponentType( 2 ) * quaternion.w * quaternion.z;
+
+		return Matrix< ComponentType, 3, 3 >
+		(
+			{
+				ComponentType( 1 ) - two_y2 - two_z2,		two_x_y + two_w_z,							two_x_z - two_w_y,					
+				two_x_y - two_w_z,							ComponentType( 1 ) - two_x2 - two_z2,		two_y_z + two_w_x,					
+				two_x_z + two_w_y,							two_y_z - two_w_x,							ComponentType( 1 ) - two_x2 - two_y2
+			}
+		);
+	}
+
+	/* Source: https://gamemath.com/book/orient.html#euler_to_matrix. */
+	template< std::floating_point ComponentType, std::size_t MatrixSize > requires( MatrixSize >= 3 )
+	constexpr Quaternion< ComponentType > MatrixToQuaternion( const Matrix< ComponentType, MatrixSize, MatrixSize >& matrix )
 	{
 		ComponentType w, x, y, z;
 
@@ -512,7 +545,7 @@ namespace Framework::Math
 		}
 
 		// Perform square root and division.
-		float biggestVal = sqrt( four_biggest_squared_minus1 + ComponentType( 1 ) ) * ComponentType( 0.5 );
+		float biggestVal = Sqrt( four_biggest_squared_minus1 + ComponentType( 1 ) ) * ComponentType( 0.5 );
 		float mult = ComponentType( 0.25 ) / biggestVal;
 
 		// Apply table to compute quaternion values
