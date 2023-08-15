@@ -88,6 +88,9 @@
     <ClCompile Include="Test\Test_Camera.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="ImGuiUtility.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.hpp">
@@ -227,6 +230,9 @@
     </ClInclude>
     <ClInclude Include="Test\Test_Camera.h">
       <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiUtility.h">
+      <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
