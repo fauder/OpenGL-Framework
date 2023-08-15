@@ -18,15 +18,15 @@ namespace Framework::Math
 		requires Concepts::NonZero< RowSize > && Concepts::NonZero< ColumnSize >
 	class Matrix
 	{
-		template< Concepts::Arithmetic, std::size_t RowSize_, std::size_t ColumnSize_ > requires Concepts::NonZero< RowSize_ >&& Concepts::NonZero< ColumnSize_ >
+		template< Concepts::Arithmetic, std::size_t RowSize_, std::size_t ColumnSize_ > requires Concepts::NonZero< RowSize_ > && Concepts::NonZero< ColumnSize_ >
 		friend class Matrix;
 
 	public:
 	/* Constructors. */
-		constexpr Matrix( const Matrix& other )             = default;
-		constexpr Matrix( Matrix&& donor )                  = default;
-		constexpr Matrix& operator= ( const Matrix& other ) = default;
-		constexpr Matrix& operator= ( Matrix&& donor )      = default;
+		constexpr Matrix( const Matrix& other )					= default;
+		constexpr Matrix( Matrix&& donor ) noexcept				= default;
+		constexpr Matrix& operator= ( const Matrix& other )		= default;
+		constexpr Matrix& operator= ( Matrix&& donor ) noexcept	= default;
 
 		constexpr ~Matrix() = default;
 
@@ -86,11 +86,23 @@ namespace Framework::Math
 		}
 
 #pragma warning(disable:26495) // Suppress "variable is uninitialized" warning, as not initializing it is the whole point of this constructor.
+		template< typename... Vectors >
+		constexpr Matrix( Vectors... row_vectors ) requires( sizeof...( Vectors ) == RowSize )
+		{
+			// Utilize fold expressions with a lambda to "loop over" the parameter pack.
+			int row_index = 0;
+			( /* Lambda: */ [ & ]
+			{
+				SetRow( row_vectors, row_index++ );
+			}
+			( ), ... );
+		}
+
 		/* Construct from an upper sub-matrix & a vector for the last row.
 		 * Sub-matrix & last row_vector can be ANY size smaller than the size of the matrix to be constructed.
 		 */
-		template< std::size_t SubMatrixSize, std::size_t VectorSize > requires( RowSize == ColumnSize /* Only allow square matrices. */ && SubMatrixSize < RowSize && VectorSize < RowSize )
-		constexpr Matrix( const Matrix< Type, SubMatrixSize, SubMatrixSize >& upper_sub_matrix, const Vector< Type, VectorSize >& last_row_vector )
+		template< std::size_t SubMatrixSize, std::size_t VectorSize = RowSize - 1 > requires( RowSize == ColumnSize /* Only allow square matrices. */ && SubMatrixSize < RowSize && VectorSize < RowSize )
+		constexpr Matrix( const Matrix< Type, SubMatrixSize, SubMatrixSize >& upper_sub_matrix, const Vector< Type, VectorSize >& last_row_vector = Vector< Type, VectorSize >::Zero() )
 		{
 			/* Initialize the portion covered by the provided upper sub-matrix. */
 			Utility::constexpr_for< 0, SubMatrixSize, +1 >( [ & ]( const auto row_index )
@@ -173,20 +185,18 @@ namespace Framework::Math
 		}
 
 		template< typename... Values >
-		constexpr Matrix& Set( Values... values )
+		constexpr Matrix& Set( Values... values ) requires( sizeof...( Values ) <= RowSize * ColumnSize )
 		{
-			static_assert( sizeof...( values ) <= ElementCount(), "More values passed than total element count." );
-
 			// Utilize fold expressions with a lambda to "loop over" the parameter pack.
-			int columnIndex = 0;
-			int rowIndex = 0;
+			int column_index = 0;
+			int row_index = 0;
 			( /* Lambda: */ [&]
 				{
-					data[ rowIndex ][ columnIndex ] = values;
-					if( ++columnIndex == ColumnSize )
+					data[ row_index ][ column_index ] = values;
+					if( ++column_index == ColumnSize )
 					{
-						columnIndex = 0;
-						rowIndex++;
+						column_index = 0;
+						row_index++;
 					}
 				}
 			( ), ... );
@@ -266,6 +276,8 @@ namespace Framework::Math
 		static consteval std::size_t RowCount()     { return RowSize; }
 		static consteval std::size_t ColumnCount()  { return ColumnSize; }
 		static consteval std::size_t ElementCount() { return RowSize * ColumnSize; }
+
+		static consteval Matrix Identity()			{ return Matrix(); }
 
 	/* Arithmetic Operations. */
 

@@ -23,10 +23,10 @@ namespace Framework::Math
 	/* Constructors. */
 		constexpr Vector( Initialization::ZeroInitialization ) : data{} {}
 
-		constexpr Vector( const Vector& other )					= default;
-		constexpr Vector( Vector && donor )						= default;
-		constexpr Vector& operator = ( const Vector & other )	= default;
-		constexpr Vector& operator = ( Vector && donor )		= default;
+		constexpr Vector( const Vector& other )					  = default;
+		constexpr Vector( Vector && donor )	noexcept			  = default;
+		constexpr Vector& operator = ( const Vector & other )	  = default;
+		constexpr Vector& operator = ( Vector && donor ) noexcept = default;
 
 		constexpr ~Vector() = default;
 

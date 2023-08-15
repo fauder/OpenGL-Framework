@@ -116,7 +116,7 @@ namespace Framework
 	{
 		if( rotation_needsUpdate )
 		{
-			rotation_and_translation_matrix = Math::QuaternionToMatrix( rotation );
+			rotation_and_translation_matrix = Matrix4x4( Math::QuaternionToMatrix3x3( rotation ), rotation_and_translation_matrix.GetRow< 3 >( 3 ) );
 			rotation_needsUpdate = false;
 		}
 
@@ -146,7 +146,7 @@ namespace Framework
 		 * Scaling Matrix: We can simply use the inverses (with respect to multiplication) of diagonal elements' values to reverse the scaling operation.
 		 * Rotation And Translation Matrix:
 		 *		We can simply transpose the rotation part (upper 3x3 portion of the 4x4 matrix) since rotation matrices are orthogonal.
-		 *		We can simply use the inverses (with respect to addition) of translation elemenets (first 3 elements of the last row of the 4x4 matrix) to reverse the translation operation.
+		 *		We can simply use the inverses (with respect to addition) of translation elements (first 3 elements of the last row of the 4x4 matrix) to reverse the translation operation.
 		*/
 
 		// Force-update the matrices to get up-to-date values.
@@ -155,9 +155,10 @@ namespace Framework
 
 		const Vector4 inverse_scale( 1.0f / scaling_matrix[ 0 ][ 0 ], 1.0f / scaling_matrix[ 1 ][ 1 ], 1.0f / scaling_matrix[ 2 ][ 2 ], 1.0f );
 
-		const Matrix4x4 inverse_scaling( inverse_scale );
-		const Matrix4x4 inverse_rotation_and_translation_matrix( rotation_and_translation_matrix.SubMatrix< 3 >().Transposed(), -rotation_and_translation_matrix.GetRow< 3 >( 3 /* Last Row. */));
+		const Matrix4x4 inverse_scaling_matrix( inverse_scale );
+		const Matrix4x4 inverse_rotation_matrix( rotation_and_translation_matrix.SubMatrix< 3 >().Transposed() );
+		const Matrix4x4 inverse_translation_matrix( Matrix4x4{}.SetTranslation( -rotation_and_translation_matrix.GetRow< 3 >( 3 /* Last Row. */ ) ) );
 
-		return inverse_rotation_and_translation_matrix * inverse_scaling;
+		return inverse_translation_matrix * inverse_rotation_matrix * inverse_scaling_matrix;
 	}
 }
