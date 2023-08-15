@@ -89,8 +89,8 @@ namespace Framework::Math
 		/* Construct from an upper sub-matrix & a vector for the last row.
 		 * Sub-matrix & last row_vector can be ANY size smaller than the size of the matrix to be constructed.
 		 */
-		template< std::size_t SubMatrixSize, std::size_t VectorSize > requires( RowSize == ColumnSize /* Only allow square matrices. */ && SubMatrixSize < RowSize && VectorSize < RowSize )
-		constexpr Matrix( const Matrix< Type, SubMatrixSize, SubMatrixSize >& upper_sub_matrix, const Vector< Type, VectorSize >& last_row_vector )
+		template< std::size_t SubMatrixSize, std::size_t VectorSize = RowSize - 1 > requires( RowSize == ColumnSize /* Only allow square matrices. */ && SubMatrixSize < RowSize && VectorSize < RowSize )
+		constexpr Matrix( const Matrix< Type, SubMatrixSize, SubMatrixSize >& upper_sub_matrix, const Vector< Type, VectorSize >& last_row_vector = Vector< Type, VectorSize >::Zero() )
 		{
 			/* Initialize the portion covered by the provided upper sub-matrix. */
 			Utility::constexpr_for< 0, SubMatrixSize, +1 >( [ & ]( const auto row_index )
