@@ -155,9 +155,10 @@ namespace Framework
 
 		const Vector4 inverse_scale( 1.0f / scaling_matrix[ 0 ][ 0 ], 1.0f / scaling_matrix[ 1 ][ 1 ], 1.0f / scaling_matrix[ 2 ][ 2 ], 1.0f );
 
-		const Matrix4x4 inverse_scaling( inverse_scale );
-		const Matrix4x4 inverse_rotation_and_translation_matrix( rotation_and_translation_matrix.SubMatrix< 3 >().Transposed(), -rotation_and_translation_matrix.GetRow< 3 >( 3 /* Last Row. */));
+		const Matrix4x4 inverse_scaling_matrix( inverse_scale );
+		const Matrix4x4 inverse_rotation_matrix( rotation_and_translation_matrix.SubMatrix< 3 >().Transposed() );
+		const Matrix4x4 inverse_translation_matrix( Matrix4x4{}.SetTranslation( -rotation_and_translation_matrix.GetRow< 3 >( 3 /* Last Row. */ ) ) );
 
-		return inverse_rotation_and_translation_matrix * inverse_scaling;
+		return inverse_translation_matrix * inverse_rotation_matrix * inverse_scaling_matrix;
 	}
 }
