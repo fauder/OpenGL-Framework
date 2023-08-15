@@ -367,6 +367,39 @@ namespace Framework::Math
 		template< std::floating_point ComponentType_ > // Have to use a different template parameter here because C++...
 		friend constexpr Quaternion< ComponentType_ > EulerToQuaternion( const Degrees< ComponentType_ > heading_around_y, const Degrees< ComponentType_ > pitch_around_x, const Degrees< ComponentType_ > bank_around_z );
 
+		template< std::floating_point ComponentType >
+		static constexpr Quaternion< ComponentType > LookRotation_Naive( const Vector< ComponentType, 3 >& to_target_normalized, const Vector< ComponentType, 3 >& world_up_normalized )
+		{
+		#ifdef _DEBUG
+			ASSERT( to_target_normalized.IsNormalized() && R"(Math::LookRotation(): "to_target_normalized" is not normalized!)" );
+			ASSERT(  world_up_normalized.IsNormalized() && R"(Math::LookRotation():  "world_up_normalized" is not normalized!)" );
+		#endif // _DEBUG
+
+			const auto to_right_normalized = Math::Cross( world_up_normalized,  to_target_normalized ).Normalized();
+			const auto to_up_normalized    = Math::Cross( to_target_normalized,	 to_right_normalized ).Normalized();
+
+			return Quaternion< ComponentType >
+			{
+				Math::Angle(  to_target_normalized, Vector< ComponentType, 3 >::Forward() ), // 1 Dot() + 1 Acos().
+				Math::Cross( -to_target_normalized, Vector< ComponentType, 3 >::Forward() ).Normalized() // 1 Cross() + 1 Vector3::Normalized().
+			};
+		}
+
+		template< std::floating_point ComponentType >
+		static constexpr Quaternion< ComponentType > LookRotation( const Vector< ComponentType, 3 >& to_target_normalized, const Vector< ComponentType, 3 >& world_up_normalized )
+		{
+		#ifdef _DEBUG
+			ASSERT( to_target_normalized.IsNormalized() && R"(Math::LookRotation(): "to_target_normalized" is not normalized!)" );
+			ASSERT(  world_up_normalized.IsNormalized() && R"(Math::LookRotation():  "world_up_normalized" is not normalized!)" );
+		#endif // _DEBUG
+
+			const auto to_right_normalized = Math::Cross( world_up_normalized,  to_target_normalized ).Normalized();
+			const auto to_up_normalized    = Math::Cross( to_target_normalized,	 to_right_normalized ).Normalized();
+
+			/* We have constructed a right-handed basis, but it is rotated by 180.0 degrees compared to the default basis. Keeping the Y axis the same, negating the X & Z axes will revert this rotation. */
+			return MatrixToQuaternion( Matrix< ComponentType, 3, 3 >( -to_right_normalized, to_up_normalized, -to_target_normalized ) ).Normalized();
+		}
+
 	private:
 		union
 		{
