@@ -13,6 +13,9 @@ namespace Framework::Test
 		Test_ClearColor( Renderer& renderer, Color4 clear_color = Color4::Clear_Default() );
 		~Test_ClearColor() override;
 
+	protected:
+		void OnRenderImGui();
+
 	private:
 		Color4 color_clear, color_clear_original;
 	};
