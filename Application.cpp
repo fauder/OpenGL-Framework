@@ -15,7 +15,7 @@
 #include "VertexArray.h"
 
 #include "Test/Test_Menu.h"
-#include "Test/Test_Camera.h"
+#include "Test/Test_Camera_LookAt.h"
 #include "Test/Test_ClearColor.h"
 #include "Test/Test_Transform_2Cubes.h"
 #include "Test/Test_ImGui.h"
@@ -26,7 +26,7 @@ using namespace Framework::Test;
 int main()
 {
 	GLFWwindow* window = nullptr;
-	Renderer renderer( &window, 800, 600, 1000, 100 );
+	Renderer renderer( &window, 1600, 900, 800, 200 );
 
 	Framework::ImGuiSetup::Initialize( window );
 
@@ -36,12 +36,12 @@ int main()
 		std::unique_ptr< TestInterface > test_current;
 		std::unique_ptr< Test_Menu > test_menu = std::make_unique< Test_Menu >( renderer, test_current );
 
-		test_menu->Register< Test_Camera >();
+		test_menu->Register< Test_Camera_LookAt >();
 		test_menu->Register< Test_ClearColor >( Color4::Cyan() );
 		test_menu->Register< Test_Transfom_2Cubes >();
 		test_menu->Register< Test_ImGui >();
 
-		test_menu->AutoExecute< Test_Camera >();
+		test_menu->AutoExecute< Test_Camera_LookAt >();
 
 		bool continue_executing_tests = false;
 

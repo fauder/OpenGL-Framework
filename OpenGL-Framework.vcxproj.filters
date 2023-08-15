@@ -85,7 +85,7 @@
     <ClCompile Include="Test\Test_Menu.cpp">
       <Filter>Test</Filter>
     </ClCompile>
-    <ClCompile Include="Test\Test_Camera.cpp">
+    <ClCompile Include="Test\Test_Camera_LookAt.cpp">
       <Filter>Test</Filter>
     </ClCompile>
     <ClCompile Include="ImGuiUtility.cpp">
@@ -228,7 +228,7 @@
     <ClInclude Include="Test\Test_Menu.h">
       <Filter>Test</Filter>
     </ClInclude>
-    <ClInclude Include="Test\Test_Camera.h">
+    <ClInclude Include="Test\Test_Camera_LookAt.h">
       <Filter>Test</Filter>
     </ClInclude>
     <ClInclude Include="ImGuiUtility.h">
@@ -274,6 +274,9 @@
       <Filter>Asset\Texture</Filter>
     </Image>
     <Image Include="Asset\Texture\awesomeface.png">
+      <Filter>Asset\Texture</Filter>
+    </Image>
+    <Image Include="Asset\Texture\test_tex_cube.png">
       <Filter>Asset\Texture</Filter>
     </Image>
   </ItemGroup>
