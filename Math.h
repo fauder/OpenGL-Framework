@@ -78,8 +78,22 @@ namespace Framework::Math
 	template< std::floating_point Value >
 	Value Sqrt( const Value value ) { return std::sqrt( value ); }
 
+	template< typename Value, std::floating_point PercentType >
+	Value Lerp( const Value value_a, const Value value_b, const PercentType t ) { return ( PercentType( 1 ) - t ) * value_a + t * value_b; }
+
 	template< std::totally_ordered Value >
 	Value Clamp( const Value value, const Value minimum, const Value maximum ) { return value < minimum ? minimum : value > maximum ? maximum : value; }
+
+	template< Concepts::Arithmetic Value, std::size_t Size >
+	Radians< Value > Angle( const Vector< Value, Size >& a, const Vector< Value, Size >& b )
+	{
+	#ifdef _DEBUG
+		ASSERT( a.IsNormalized() && R"(Math::Angle(): The vector "a" is not normalized!)" );
+		ASSERT( b.IsNormalized() && R"(Math::Angle(): The vector "b" is not normalized!)" );
+	#endif
+
+		return Math::Acos( Math::Clamp( Dot( a, b ), Value( -1 ), Value( +1 ) ) );
+	}
 
 /* Conversions Between Rotation Representations. */
 	/* Describes an extrinsic (fixed-axis) rotation, in this order: first heading (around y), then pitch (around x) and finally bank (around z). */
