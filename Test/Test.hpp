@@ -101,7 +101,7 @@ namespace Framework::Test
 		void OnProcessInput()	{ Input::Process( window ); }
 		void OnUpdate()			{}
 		void OnRender()			{}
-		void OnRenderImGui()	{}
+		void OnRenderImGui()	{ RenderImGui_FPS(); }
 
 	private:
 		ActualTest* Derived() { return static_cast< ActualTest* >( this ); }
@@ -116,6 +116,12 @@ namespace Framework::Test
 				executing = false;
 
 			ImGui::End();
+		}
+
+		void RenderImGui_FPS() const
+		{
+			const auto& io = ImGui::GetIO();
+			ImGui::Text( "Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate );
 		}
 
 	protected:
