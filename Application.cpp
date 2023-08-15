@@ -48,12 +48,16 @@ int main()
 		do
 		{
 			if( !test_current )
+			{
+				glfwSetWindowTitle( window, "OpenGL Framework: Test Menu" );
 				test_menu->Execute();
+			}
 
 			continue_executing_tests = ( bool )test_current;
 
 			if( test_current )
 			{
+				glfwSetWindowTitle( window, ( "OpenGL Framework: Test/" + test_current->GetName() ).c_str());
 				test_current->Execute();
 				test_current.reset();
 			}
