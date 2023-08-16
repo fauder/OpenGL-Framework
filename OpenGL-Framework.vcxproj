@@ -167,6 +167,7 @@
     <ClCompile Include="Test\Test_ClearColor.cpp" />
     <ClCompile Include="Test\Test_ImGui.cpp" />
     <ClCompile Include="Test\Test_Transform_2Cubes.cpp" />
+    <ClCompile Include="Test\Test_Camera_WalkAround.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vendor\imgui.cpp" />
     <ClCompile Include="ImGuiSetup.cpp" />
@@ -205,6 +206,7 @@
     <ClInclude Include="Test\Test_ImGui.h" />
     <ClInclude Include="Test\Test_Transform_2Cubes.h" />
     <ClInclude Include="Test\Test_Camera_LookAt.h" />
+    <ClInclude Include="Test\Test_Camera_WalkAround.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="TypeTraits.h" />
     <ClInclude Include="Unit.h" />
