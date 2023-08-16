@@ -28,7 +28,8 @@ namespace Framework::Test
 			renderer( renderer ),
 			window( renderer.GetWindow() ),
 			executing( true ),
-			name( ExtractTestNameFromTypeName( typeid( *this ).name() ) )
+			name( ExtractTestNameFromTypeName( typeid( *this ).name() ) ),
+			time_previous( 0.0f )
 		{
 		}
 
@@ -82,6 +83,8 @@ namespace Framework::Test
 			executing = true;
 			while( executing && !glfwWindowShouldClose( window ) )
 			{
+				CalculateDeltaTime();
+
 				ProcessInput();
 
 				Update();
@@ -101,11 +104,18 @@ namespace Framework::Test
 		void OnProcessInput()	{ Input::Process( window ); }
 		void OnUpdate()			{}
 		void OnRender()			{}
-		void OnRenderImGui()	{ RenderImGui_FPS(); }
+		void OnRenderImGui()	{ RenderImGui_FrameStatistics(); }
 
 	private:
 		ActualTest* Derived() { return static_cast< ActualTest* >( this ); }
 		ActualTest* Derived() const { return static_cast< ActualTest* >( this ); }
+
+		void CalculateDeltaTime()
+		{
+			const float current_time = static_cast< float >( glfwGetTime() );
+			time_delta               = current_time - time_previous;
+			time_previous            = current_time;
+		}
 
 		void RenderImGui_Menu_BackButton()
 		{
@@ -118,10 +128,16 @@ namespace Framework::Test
 			ImGui::End();
 		}
 
-		void RenderImGui_FPS() const
+		void RenderImGui_FrameStatistics() const
 		{
-			const auto& io = ImGui::GetIO();
-			ImGui::Text( "Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate );
+			if( ImGui::Begin( "Frame Statistics." ) )
+			{
+				const auto& io = ImGui::GetIO();
+				ImGui::Text( "ImGui: Application average %.3f ms/frame (%.1f FPS).", 1000.0f / io.Framerate, io.Framerate );
+				ImGui::Text( "Framework: Delta Time %.3f ms.", time_delta * 1000.0f );
+			}
+
+			ImGui::End();
 		}
 
 	protected:
@@ -129,7 +145,11 @@ namespace Framework::Test
 		GLFWwindow* window;
 		std::string name;
 
+		float time_delta;
+
 	private:
 		bool executing;
+
+		float time_previous;
 	};
 }
