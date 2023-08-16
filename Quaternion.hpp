@@ -368,7 +368,7 @@ namespace Framework::Math
 		friend constexpr Quaternion< ComponentType_ > EulerToQuaternion( const Degrees< ComponentType_ > heading_around_y, const Degrees< ComponentType_ > pitch_around_x, const Degrees< ComponentType_ > bank_around_z );
 
 		template< std::floating_point ComponentType >
-		static constexpr Quaternion< ComponentType > LookRotation_Naive( const Vector< ComponentType, 3 >& to_target_normalized, const Vector< ComponentType, 3 >& world_up_normalized )
+		static constexpr Quaternion< ComponentType > LookRotation_Naive( const Vector< ComponentType, 3 >& to_target_normalized, const Vector< ComponentType, 3 >& world_up_normalized = Vector< ComponentType, 3 >::Up() )
 		{
 		#ifdef _DEBUG
 			ASSERT( to_target_normalized.IsNormalized() && R"(Math::LookRotation(): "to_target_normalized" is not normalized!)" );
@@ -386,7 +386,7 @@ namespace Framework::Math
 		}
 
 		template< std::floating_point ComponentType >
-		static constexpr Quaternion< ComponentType > LookRotation( const Vector< ComponentType, 3 >& to_target_normalized, const Vector< ComponentType, 3 >& world_up_normalized )
+		static constexpr Quaternion< ComponentType > LookRotation( const Vector< ComponentType, 3 >& to_target_normalized, const Vector< ComponentType, 3 >& world_up_normalized = Vector< ComponentType, 3 >::Up() )
 		{
 		#ifdef _DEBUG
 			ASSERT( to_target_normalized.IsNormalized() && R"(Math::LookRotation(): "to_target_normalized" is not normalized!)" );
