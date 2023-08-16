@@ -91,6 +91,9 @@
     <ClCompile Include="ImGuiUtility.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.hpp">

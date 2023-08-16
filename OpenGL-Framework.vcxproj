@@ -150,6 +150,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="Drawable_Indexed.cpp" />
     <ClCompile Include="glad.c" />
@@ -184,6 +185,7 @@
   <ItemGroup>
     <ClInclude Include="Angle.hpp" />
     <ClInclude Include="Assert.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Color.hpp" />
     <ClInclude Include="Concepts.h" />
     <ClInclude Include="Constants.h" />
