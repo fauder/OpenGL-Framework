@@ -28,6 +28,8 @@ namespace Framework
 		const Matrix4x4& GetFinalMatrix();
 		const Matrix4x4 GetInverseOfFinalMatrix();
 
+		inline bool NeedsUpdate() const { return final_matrix_needsUpdate; }
+
 	private:
 		const Matrix4x4& GetScalingMatrix();
 		const Matrix4x4& GetRotationAndTranslationMatrix();
