@@ -21,6 +21,14 @@ namespace Framework
 		Transform& SetRotation( const Quaternion& quaternion );
 		Transform& SetTranslation( const Vector3& translation );
 
+		Transform& OffsetScaling( const Vector3& delta );
+		Transform& MultiplyScaling( const Vector3& multiplier );
+		Transform& MultiplyScaling( const float multiplier );
+
+		Transform& OffsetTranslation( const Vector3& delta );
+		Transform& MultiplyTranslation( const Vector3& multiplier );
+		Transform& MultiplyTranslation( const float multiplier );
+
 		const Vector3& GetScaling() const;
 		const Quaternion& GetRotation() const;
 		const Vector3& GetTranslation() const;

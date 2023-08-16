@@ -85,6 +85,36 @@ namespace Framework
 		return *this;
 	}
 
+	Transform& Transform::OffsetScaling( const Vector3& delta )
+	{
+		return SetScaling( scale + delta );
+	}
+
+	Transform& Transform::MultiplyScaling( const Vector3& multiplier )
+	{
+		return SetScaling( scale * multiplier );
+	}
+
+	Transform& Transform::MultiplyScaling( const float multiplier )
+	{
+		return SetScaling( scale * multiplier );
+	}
+
+	Transform& Transform::OffsetTranslation( const Vector3& delta )
+	{
+		return SetTranslation( translation + delta );
+	}
+
+	Transform& Transform::MultiplyTranslation( const Vector3& multiplier )
+	{
+		return SetTranslation( translation * multiplier );
+	}
+
+	Transform& Transform::MultiplyTranslation( const float multiplier )
+	{
+		return SetTranslation( translation * multiplier );
+	}
+
 	const Vector3& Transform::GetScaling() const
 	{
 		return scale;
