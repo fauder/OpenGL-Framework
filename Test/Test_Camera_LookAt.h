@@ -4,7 +4,7 @@
 #include "Test.hpp"
 #include "../Drawable.h"
 #include "../Texture.h"
-#include "../Transform.h"
+#include "../Camera.h"
 
 // std Includes.
 #include <memory>
@@ -32,7 +32,7 @@ namespace Framework::Test
 		std::unique_ptr< Drawable > cube_1;
 		std::unique_ptr< Texture > texture_test_cube;
 
-		Transform camera_transform;
+		Camera camera;
 
 		enum class LookAtMethod : int
 		{

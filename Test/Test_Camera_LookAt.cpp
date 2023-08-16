@@ -11,7 +11,6 @@ namespace Framework::Test
 	Test_Camera_LookAt::Test_Camera_LookAt( Renderer& renderer )
 		:
 		Test( renderer ),
-		camera_transform(),
 		method_lookAt( LookAtMethod::LookAtMatrix ),
 		rotation_plane( RotationPlane::ZX ),
 		time_current( 0.0f ),
@@ -109,31 +108,32 @@ namespace Framework::Test
 			time_cos      = Math::Cos( Radians( time_current ) );
 			time_mod_2_pi = std::fmod( time_current, Constants< float >::Two_Pi() );
 		}
+
+		const auto inverse_zoom = 1.0f / zoom;
+
+		Vector3 camera_position = camera.transform.GetTranslation();
+
+		switch( rotation_plane )
+		{
+			case Framework::Test::Test_Camera_LookAt::RotationPlane::ZX:
+				camera.transform.SetTranslation( camera_position = camera_position
+												 .SetX( time_cos * inverse_zoom )
+												 .SetZ( time_sin * inverse_zoom ) );
+				break;
+			case Framework::Test::Test_Camera_LookAt::RotationPlane::YZ:
+				camera.transform.SetTranslation( camera_position = camera_position
+												 .SetY( time_sin * inverse_zoom )
+												 .SetZ( time_cos * inverse_zoom ) );
+				break;
+			default:
+				break;
+		}
 	}
 
 	void Test_Camera_LookAt::OnRender()
 	{
 		const Vector3 target( ZERO_INITIALIZATION ); // Look at the origin.
-
-		const auto inverse_zoom = 1.0f / zoom;
-
-		Vector3 camera_position = camera_transform.GetTranslation();
-
-		switch( rotation_plane )
-		{
-			case Framework::Test::Test_Camera_LookAt::RotationPlane::ZX:
-				camera_transform.SetTranslation( camera_position = camera_position
-													.SetX( time_cos * inverse_zoom )
-													.SetZ( time_sin * inverse_zoom ) );
-				break;
-			case Framework::Test::Test_Camera_LookAt::RotationPlane::YZ:
-				camera_transform.SetTranslation( camera_position = camera_position
-													.SetY( time_sin * inverse_zoom )
-													.SetZ( time_cos * inverse_zoom ) );
-				break;
-			default:
-				break;
-		}
+		Vector3 camera_position = camera.transform.GetTranslation();
 
 		const auto lookAt_direction( ( target - camera_position ).Normalized() );
 
@@ -146,21 +146,21 @@ namespace Framework::Test
 		}
 		else if( method_lookAt == LookAtMethod::QuaternionLookRotation ) // Alternatively, we can also take the inverse of the camera object's transform matrix, yielding the same result.
 		{
-			camera_transform.SetRotation( Quaternion::LookRotation( lookAt_direction,
+			camera.transform.SetRotation( Quaternion::LookRotation( lookAt_direction,
 																	rotation_plane == RotationPlane::ZX
 																		? Vector3::Up()
 																		: Math::Cross( Vector3::Right(), lookAt_direction ).Normalize() ) );
 
-			shader->SetMatrix( "transformation_view", camera_transform.GetInverseOfFinalMatrix() );
+			shader->SetMatrix( "transformation_view", camera.transform.GetInverseOfFinalMatrix() );
 		}
 		else if( method_lookAt == LookAtMethod::QuaternionLookRotation_Naive )
 		{
-			camera_transform.SetRotation( Quaternion::LookRotation_Naive( lookAt_direction,
+			camera.transform.SetRotation( Quaternion::LookRotation_Naive( lookAt_direction,
 																		  rotation_plane == RotationPlane::ZX
 																			? Vector3::Up()
 																			: Math::Cross( Vector3::Right(), lookAt_direction ).Normalize() ) );
 
-			shader->SetMatrix( "transformation_view", camera_transform.GetInverseOfFinalMatrix() );
+			shader->SetMatrix( "transformation_view", camera.transform.GetInverseOfFinalMatrix() );
 		}
 		else if( method_lookAt == LookAtMethod::ManualRotationViaQuaternionSlerp )
 		{
@@ -249,6 +249,6 @@ namespace Framework::Test
 
 	void Test_Camera_LookAt::ResetCameraTranslation()
 	{
-		camera_transform.SetTranslation( Vector3::Backward() / zoom );
+		camera.transform.SetTranslation( Vector3::Backward() / zoom );
 	}
 }
