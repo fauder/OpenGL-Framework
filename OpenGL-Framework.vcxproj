@@ -150,9 +150,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="Drawable_Indexed.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="ImGuiUtility.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Application.cpp" />
@@ -160,11 +162,12 @@
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="Test\Test_Camera.cpp" />
+    <ClCompile Include="Test\Test_Camera_LookAt.cpp" />
     <ClCompile Include="Test\Test_Menu.cpp" />
     <ClCompile Include="Test\Test_ClearColor.cpp" />
     <ClCompile Include="Test\Test_ImGui.cpp" />
     <ClCompile Include="Test\Test_Transform_2Cubes.cpp" />
+    <ClCompile Include="Test\Test_Camera_WalkAround.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vendor\imgui.cpp" />
     <ClCompile Include="ImGuiSetup.cpp" />
@@ -183,11 +186,13 @@
   <ItemGroup>
     <ClInclude Include="Angle.hpp" />
     <ClInclude Include="Assert.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Color.hpp" />
     <ClInclude Include="Concepts.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="Drawable_Indexed.h" />
+    <ClInclude Include="ImGuiUtility.h" />
     <ClInclude Include="Initialization.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Math.h" />
@@ -200,7 +205,8 @@
     <ClInclude Include="Test\Test_ClearColor.h" />
     <ClInclude Include="Test\Test_ImGui.h" />
     <ClInclude Include="Test\Test_Transform_2Cubes.h" />
-    <ClInclude Include="Test\Test_Camera.h" />
+    <ClInclude Include="Test\Test_Camera_LookAt.h" />
+    <ClInclude Include="Test\Test_Camera_WalkAround.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="TypeTraits.h" />
     <ClInclude Include="Unit.h" />
@@ -235,6 +241,7 @@
   <ItemGroup>
     <Image Include="Asset\Texture\awesomeface.png" />
     <Image Include="Asset\Texture\container.jpg" />
+    <Image Include="Asset\Texture\test_tex_cube.png" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="NatVis\Framework.natvis" />

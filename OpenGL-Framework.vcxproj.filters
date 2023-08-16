@@ -85,7 +85,16 @@
     <ClCompile Include="Test\Test_Menu.cpp">
       <Filter>Test</Filter>
     </ClCompile>
-    <ClCompile Include="Test\Test_Camera.cpp">
+    <ClCompile Include="Test\Test_Camera_LookAt.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuiUtility.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Test_Camera_WalkAround.cpp">
       <Filter>Test</Filter>
     </ClCompile>
   </ItemGroup>
@@ -225,7 +234,16 @@
     <ClInclude Include="Test\Test_Menu.h">
       <Filter>Test</Filter>
     </ClInclude>
-    <ClInclude Include="Test\Test_Camera.h">
+    <ClInclude Include="Test\Test_Camera_LookAt.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiUtility.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\Test_Camera_WalkAround.h">
       <Filter>Test</Filter>
     </ClInclude>
   </ItemGroup>
@@ -268,6 +286,9 @@
       <Filter>Asset\Texture</Filter>
     </Image>
     <Image Include="Asset\Texture\awesomeface.png">
+      <Filter>Asset\Texture</Filter>
+    </Image>
+    <Image Include="Asset\Texture\test_tex_cube.png">
       <Filter>Asset\Texture</Filter>
     </Image>
   </ItemGroup>
