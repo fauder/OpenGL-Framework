@@ -114,7 +114,7 @@ namespace Framework::Test
 			delta_position += Vector3::Right();
 
 		if( !delta_position.IsZero() )
-			delta_position.Normalize() *= camera_move_speed;
+			delta_position.Normalize() *= camera_move_speed * time_delta;
 
 		displacement = delta_position.Magnitude();
 	}
@@ -178,8 +178,8 @@ namespace Framework::Test
 
 			auto camera_position = camera.transform.GetTranslation();
 			ImGui::DragFloat3( "Camera Position", reinterpret_cast< float* >( &camera_position ) ); ImGui::SameLine(); if( ImGui::Button( "Reset##camera_position" ) ) ResetCameraTranslation();
-			ImGui::SliderFloat( "Move Speed ", &camera_move_speed, 0.01f, 2.0f, "%.2f", ImGuiSliderFlags_Logarithmic ); ImGui::SameLine(); if( ImGui::Button( "Reset##camera_move_speed" ) ) ResetCameraMoveSpeed();
-			ImGui::InputFloat( "Delta Position", &displacement, 0.0f, 0.0f, "%.2f", ImGuiInputTextFlags_ReadOnly );
+			ImGui::SliderFloat( "Move Speed ", &camera_move_speed, 0.5f, 5.0f, "%.2f", ImGuiSliderFlags_Logarithmic ); ImGui::SameLine(); if( ImGui::Button( "Reset##camera_move_speed" ) ) ResetCameraMoveSpeed();
+			ImGui::InputFloat( "Delta Position", &displacement, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly );
 		}
 
 		ImGui::End();
@@ -197,6 +197,6 @@ namespace Framework::Test
 
 	float Test_Camera_WalkAround::ResetCameraMoveSpeed()
 	{
-		return camera_move_speed = 0.05f;
+		return camera_move_speed = 2.0f;
 	}
 }
