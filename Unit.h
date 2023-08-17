@@ -117,7 +117,7 @@ namespace Framework
 			return DerivedType{ value + right_hand_side };
 		}
 
-		constexpr DerivedType operator+= ( const Type right_hand_side ) const
+		constexpr DerivedType operator+= ( const Type right_hand_side )
 		{
 			value += right_hand_side;
 			return *this;
@@ -128,7 +128,7 @@ namespace Framework
 			return DerivedType{ value - right_hand_side };
 		}
 
-		constexpr DerivedType operator-= ( const Type right_hand_side ) const
+		constexpr DerivedType operator-= ( const Type right_hand_side )
 		{
 			value -= right_hand_side;
 			return *this;
@@ -139,7 +139,7 @@ namespace Framework
 			return DerivedType{ value * right_hand_side };
 		}
 
-		constexpr DerivedType operator*= ( const Type right_hand_side ) const
+		constexpr DerivedType operator*= ( const Type right_hand_side )
 		{
 			value *= right_hand_side;
 			return *this;
@@ -150,7 +150,7 @@ namespace Framework
 			return DerivedType{ value / right_hand_side };
 		}
 
-		constexpr DerivedType operator/= ( const Type right_hand_side ) const
+		constexpr DerivedType operator/= ( const Type right_hand_side )
 		{
 			value /= right_hand_side;
 			return *this;
