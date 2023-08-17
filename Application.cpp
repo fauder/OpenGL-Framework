@@ -2,17 +2,9 @@
 #include <glad/glad.h>
 
 // Project Includes.
-#include "Drawable.h"
-#include "IndexBuffer.h"
 #include "ImGuiSetup.h"
-#include "Input.h"
-#include "Matrix.h"
+#include "Platform.h"
 #include "Renderer.h"
-#include "Shader.h"
-#include "Texture.h"
-#include "Transform.h"
-#include "Vector.hpp"
-#include "VertexArray.h"
 
 #include "Test/Test_Menu.h"
 #include "Test/Test_Camera_WalkAround.h"
@@ -26,10 +18,9 @@ using namespace Framework::Test;
 
 int main()
 {
-	GLFWwindow* window = nullptr;
-	Renderer renderer( &window, 1600, 900, 800, 200 );
+	Renderer renderer( 1600, 900, 800, 200 );
 
-	Framework::ImGuiSetup::Initialize( window );
+	Framework::ImGuiSetup::Initialize();
 
 	/* renderer.CleanUp() will destroy the OpenGL context, which will cause GlGetError() calls (in OpenGL types' destructors) to return an error and cause an endless loop.
 	 * To prevent it, all Test code is vacuumed inside a local scope, to ensure all destructors run before renderer.CleanUp(). */
@@ -51,16 +42,18 @@ int main()
 		{
 			if( !test_current )
 			{
-				glfwSetWindowTitle( window, "OpenGL Framework: Test Menu" );
-				test_menu->Execute();
+				Platform::ChangeTitle( "OpenGL Framework: Test Menu" );
+				test_menu->ResumeExecution(); // Enters its own loop.
 			}
+
+			/* Execution reaches here -> means menu stopped executing -> means either a test was selected by the user or back button was clicked. */
 
 			continue_executing_tests = ( bool )test_current;
 
 			if( test_current )
 			{
-				glfwSetWindowTitle( window, ( "OpenGL Framework: Test/" + test_current->GetName() ).c_str());
-				test_current->Execute();
+				Platform::ChangeTitle( ( "OpenGL Framework: Test/" + test_current->GetName() ).c_str());
+				test_current->Execute(); // Enters its own loop.
 				test_current.reset();
 			}
 

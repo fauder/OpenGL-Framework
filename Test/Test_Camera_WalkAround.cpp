@@ -3,6 +3,7 @@
 
 #include "../Matrix.h"
 #include "../ImGuiUtility.h"
+#include "../Platform.h"
 
 using namespace Framework::Math::Literals;
 
@@ -11,10 +12,7 @@ namespace Framework::Test
 	Test_Camera_WalkAround::Test_Camera_WalkAround( Renderer& renderer )
 		:
 		Test( renderer ),
-		time_current( 0.0f ),
-		time_multiplier( ResetTimeMultiplier() ),
 		camera_move_speed( ResetCameraMoveSpeed() ),
-		test_is_paused( false ),
 		delta_position( ZERO_INITIALIZATION )
 	{
 		using namespace Framework;
@@ -104,13 +102,13 @@ namespace Framework::Test
 
 		delta_position = Vector3::Zero();
 
-		if( glfwGetKey( window, GLFW_KEY_W ) )
+		if( Platform::IsKeyPressed( Platform::KeyCode::KEY_W ) )
 			delta_position += Vector3::Forward();
-		if( glfwGetKey( window, GLFW_KEY_S ) )
+		if( Platform::IsKeyPressed( Platform::KeyCode::KEY_S ) )
 			delta_position += Vector3::Backward();
-		if( glfwGetKey( window, GLFW_KEY_A ) )
+		if( Platform::IsKeyPressed( Platform::KeyCode::KEY_A ) )
 			delta_position += Vector3::Left();
-		if( glfwGetKey( window, GLFW_KEY_D ) )
+		if( Platform::IsKeyPressed( Platform::KeyCode::KEY_D ) )
 			delta_position += Vector3::Right();
 
 		if( !delta_position.IsZero() )
@@ -121,14 +119,6 @@ namespace Framework::Test
 
 	void Test_Camera_WalkAround::OnUpdate()
 	{
-		if( !test_is_paused )
-		{
-			time_current  = static_cast< float >( glfwGetTime() ) * time_multiplier;
-			time_sin      = Math::Sin( Radians( time_current ) );
-			time_cos      = Math::Cos( Radians( time_current ) );
-			time_mod_2_pi = std::fmod( time_current, Constants< float >::Two_Pi() );
-		}
-
 		camera.transform.OffsetTranslation( delta_position );
 	}
 
@@ -148,34 +138,8 @@ namespace Framework::Test
 
 	void Test_Camera_WalkAround::OnRenderImGui()
 	{
-		Test::OnRenderImGui();
-
 		if( ImGui::Begin( "Test: Camera " ) )
 		{
-			ImGui::SeparatorText( "Time Settings" );
-			/* ______________________________________ */
-
-			ImGui::Text( "Time: %.2f seconds", time_current ); ImGui::SameLine();
-
-			if( !test_is_paused && ImGui::Button( "Pause" ) )
-				test_is_paused = true;
-			else if( test_is_paused && ImGui::Button( "Resume" ) )
-				test_is_paused = false;
-
-			auto sin_time   = time_sin;
-			auto cos_time   = time_cos;
-			auto time_mod_1 = std::fmod( time_current, 1.0f );
-
-			ImGui::SliderFloat( "Time Multiplier", &time_multiplier, 0.01f, 5.0f, "x %.2f", ImGuiSliderFlags_Logarithmic ); ImGui::SameLine(); if( ImGui::Button( "Reset##time_multiplier" ) ) ResetTimeMultiplier();
-
-			ImGui::ProgressBar( time_mod_1,	   ImVec2( 0.0f, 0.0f ) ); ImGui::SameLine(); ImGui::TextUnformatted( "Time % 1" );
-			ImGui::ProgressBar( time_mod_2_pi / Constants< float >::Two_Pi(), ImVec2( 0.0f, 0.0f ) ); ImGui::SameLine(); ImGui::TextUnformatted( "Time % (2 * Pi)" );
-			ImGui::SliderFloat( "Sin(Time) ", &sin_time, -1.0f, 1.0f, "%.1f",		ImGuiSliderFlags_NoInput );
-			ImGui::SliderFloat( "Cos(Time) ", &cos_time, -1.0f, 1.0f, "%.1f",		ImGuiSliderFlags_NoInput );
-
-			ImGui::SeparatorText( "Camera Settings" );
-			/* ______________________________________ */
-
 			auto camera_position = camera.transform.GetTranslation();
 			ImGui::DragFloat3( "Camera Position", reinterpret_cast< float* >( &camera_position ) ); ImGui::SameLine(); if( ImGui::Button( "Reset##camera_position" ) ) ResetCameraTranslation();
 			ImGui::SliderFloat( "Move Speed ", &camera_move_speed, 0.5f, 5.0f, "%.2f", ImGuiSliderFlags_Logarithmic ); ImGui::SameLine(); if( ImGui::Button( "Reset##camera_move_speed" ) ) ResetCameraMoveSpeed();
@@ -188,11 +152,6 @@ namespace Framework::Test
 	void Test_Camera_WalkAround::ResetCameraTranslation()
 	{
 		camera.transform.SetTranslation( Vector3::Backward() * 4.0f );
-	}
-
-	float Test_Camera_WalkAround::ResetTimeMultiplier()
-	{
-		return time_multiplier = 1.0f;
 	}
 
 	float Test_Camera_WalkAround::ResetCameraMoveSpeed()

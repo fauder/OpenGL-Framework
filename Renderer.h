@@ -1,15 +1,8 @@
 #pragma once
 
-// GLAD Includes.
-#include <glad/glad.h>
-
-// GLFW Includes.
-#include <GLFW/glfw3.h>
-
 // Project Includes.
 #include "Color.hpp"
 #include "Drawable.h"
-#include "Window.h"
 
 // std Includes.
 #include <vector>
@@ -24,7 +17,7 @@ namespace Framework
 	class Renderer
 	{
 	public:
-		Renderer( GLFWwindow** window = nullptr, const int width_pixels = 800, const int height_pixels = 600, const int pos_x = 0, const int pos_y = 0, const Color4 clear_color = Color4::Clear_Default() );
+		Renderer( const int width_pixels = 800, const int height_pixels = 600, const int pos_x = 0, const int pos_y = 0, const Color4 clear_color = Color4::Clear_Default() );
 
 		void BeginFrame() const;
 		void DrawFrame();
@@ -47,22 +40,14 @@ namespace Framework
 		void EnableDepthTest() const;
 		void DisableDepthTest() const;
 
-		inline const GLFWwindow* GetWindow() const { return window; }
-		inline GLFWwindow* GetWindow() { return window; }
-
 		constexpr unsigned int	PixelWidth() const	{ return pixel_width; }
 		constexpr unsigned int	PixelHeight() const { return pixel_height; }
 		constexpr float			AspectRatio() const { return aspect_ratio; }
-
-	private:
-		/* GLAD needs the created window's context made current BEFORE it is initialized. */
-		void InitializeGLAD() const;
 
 	private:
 		unsigned int pixel_width, pixel_height;
 		float aspect_ratio;
 		std::vector< Drawable* > drawable_list;
 		Color4 color_clear;
-		GLFWwindow* window;
 	};
 }

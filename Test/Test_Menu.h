@@ -43,11 +43,14 @@ namespace Framework::Test
 
 		void Unregister( const std::string& name );
 
+		void ResumeExecution();
+
 	protected:
 		void OnRenderImGui();
 
 	private:
 		std::unique_ptr< TestInterface >& test_current;
 		MapType test_creation_info_by_name;
+		Color4 color_clear;
 	};
 }

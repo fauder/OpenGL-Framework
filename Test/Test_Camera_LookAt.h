@@ -49,16 +49,7 @@ namespace Framework::Test
 			YZ
 		} rotation_plane;
 
-		float time_current;
-		float time_multiplier;
-
-		float time_sin;
-		float time_cos;
-		float time_mod_2_pi;
-
 		float zoom;
-
-		bool test_is_paused;
 
 		static constexpr Vector3 rotation_axis = Vector3( Constants< float >::Sqrt_Half(), Constants< float >::Sqrt_Half(), 0.0f );
 	};

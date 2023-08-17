@@ -26,7 +26,6 @@ namespace Framework::Test
 		void OnRenderImGui();
 
 		void ResetCameraTranslation();
-		float ResetTimeMultiplier();
 		float ResetCameraMoveSpeed();
 
 	private:
@@ -37,16 +36,7 @@ namespace Framework::Test
 
 		Camera camera;
 
-		float time_current;
-		float time_multiplier;
-
-		float time_sin;
-		float time_cos;
-		float time_mod_2_pi;
-
 		float camera_move_speed;
-
-		bool test_is_paused;
 
 		Vector3 delta_position;
 		float displacement;
