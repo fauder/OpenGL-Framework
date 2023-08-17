@@ -106,9 +106,9 @@ namespace Framework::Math
 		Framework::Radians phi;
 	};
 
-	/* Deviates from classical mathematical notation (r, theta, phi), more in-line with video game conventions/needs. In this convention, Y is up, X is right & Z is forward (left-handed).
+	/* Deviates from classical mathematical notation (r, theta, phi), more in-line with video game conventions/needs. In this convention, Y is up, X is right & Z is forward (<0,0,+1>) (left-handed).
 	 * Uses (r, h, p), h = heading, p = pitch.
-	 * Heading = 0 -> facing forward (assuming Pitch is also zero). Its value increases -> clockwise rotation.
+	 * Heading = 0 -> facing forward (<0,0,+1>) (assuming Pitch is also zero). Its value increases -> clockwise rotation.
 	 * Pitch = 0 -> horizontal (on XZ plane). It's values increases -> clockwise rotation around X (i.e, facing "more downward", therefore also called the Angle of Declination).
 	*/
 	class Polar3_Spherical_Game
@@ -132,11 +132,11 @@ namespace Framework::Math
 	/* Getters & Setters. */
 		constexpr float R() const { return r; }
 		float& R() { return r; }
-		/* Heading = 0 means forward (assuming Pitch is also zero).
+		/* Heading = 0 means forward (<0,0,+1>) (assuming Pitch is also zero).
 		 * Increasing Heading means clockwise rotation around the Y axis.
 		 */
 		constexpr Framework::Radians Heading() const { return heading; }
-		/* Heading = 0 means forward (assuming Pitch is also zero).
+		/* Heading = 0 means forward (<0,0,+1>) (assuming Pitch is also zero).
 		 * Increasing Heading means clockwise rotation around the Y axis.
 		 */
 		Framework::Radians& Heading() { return heading; }
@@ -146,6 +146,55 @@ namespace Framework::Math
 		constexpr Framework::Radians Pitch() const { return pitch; }
 		/* Pitch = 0 means horizontal.
 		 * Also called the Angle of Declination, as Z decreases with increasing Pitch.
+		 */
+		Framework::Radians& Pitch() { return pitch; }
+
+	private:
+		float r;
+		Framework::Radians heading;
+		Framework::Radians pitch;
+	};
+
+	/* Deviates from classical mathematical notation (r, theta, phi), more in-line with video game conventions/needs. In this convention, Y is up, X is right & Z is forward (<0,0,-1>) (right-handed).
+	 * Uses (r, h, p), h = heading, p = pitch.
+	 * Heading = 0 -> facing forward (<0,0,-1>) (assuming Pitch is also zero). Its value increases -> counter-clockwise rotation.
+	 * Pitch = 0 -> horizontal (on XZ plane). It's values increases -> counter-clockwise rotation around X (i.e, facing "more upward", therefore also called the Angle of Inclination).
+	*/
+	class Polar3_Spherical_Game_RightHanded
+	{
+	public:
+	/* Constructors. */
+		Polar3_Spherical_Game_RightHanded( Initialization::ZeroInitialization )
+			:
+			r(),
+			heading(),
+			pitch()
+		{}
+
+		Polar3_Spherical_Game_RightHanded( const float r, const Framework::Radians heading, const Framework::Radians pitch )
+			:
+			r( r ),
+			heading( heading ),
+			pitch( pitch )
+		{}
+
+	/* Getters & Setters. */
+		constexpr float R() const { return r; }
+		float& R() { return r; }
+		/* Heading = 0 means forward (<0,0,-1>) (assuming Pitch is also zero).
+		 * Increasing Heading means counter-clockwise rotation around the Y axis.
+		 */
+		constexpr Framework::Radians Heading() const { return heading; }
+		/* Heading = 0 means forward (<0,0,-1>) (assuming Pitch is also zero).
+		 * Increasing Heading means counter-clockwise rotation around the Y axis.
+		 */
+		Framework::Radians& Heading() { return heading; }
+		/* Pitch = 0 means horizontal.
+		 * Also called the Angle of Inclination, as Z increases with increasing Pitch.
+		 */
+		constexpr Framework::Radians Pitch() const { return pitch; }
+		/* Pitch = 0 means horizontal.
+		 * Also called the Angle of Inclination, as Z decreases with increasing Pitch.
 		 */
 		Framework::Radians& Pitch() { return pitch; }
 

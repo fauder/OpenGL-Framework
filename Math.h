@@ -15,6 +15,7 @@ namespace Framework::Math
 	class Polar3_Cylindrical;
 	class Polar3_Spherical;
 	class Polar3_Spherical_Game;
+	class Polar3_Spherical_Game_RightHanded;
 	template< Concepts::Arithmetic Coordinate, std::size_t Size > requires Concepts::NonZero< Size >
 	class Vector;
 	template< Concepts::Arithmetic Type, std::size_t RowSize, std::size_t ColumnSize >
@@ -192,4 +193,6 @@ namespace Framework::Math
 	Vector3 ToVector3( const Polar3_Spherical& polar3 );
 	Polar3_Spherical_Game ToPolar3_Spherical_Game( const Vector3& cartesian );
 	Vector3 ToVector3( const Polar3_Spherical_Game& polar3 );
+	Polar3_Spherical_Game_RightHanded ToPolar3_Spherical_Game_RightHanded( const Vector3& cartesian );
+	Vector3 ToVector3( const Polar3_Spherical_Game_RightHanded& polar3 );
 }
