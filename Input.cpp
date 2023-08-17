@@ -1,13 +1,14 @@
 // Project Includes.
 #include "Input.h"
+#include "Platform.h"
 
 namespace Framework::Input
 {
-	void Process( GLFWwindow* window )
+	void Process()
 	{
-		glfwPollEvents();
-
-		if( glfwGetKey( window, GLFW_KEY_ESCAPE ) == GLFW_PRESS )
-			glfwSetWindowShouldClose( window, true );
+		Platform::PollEvents();
+		
+		if( Platform::IsKeyPressed( Platform::KeyCode::KEY_ESCAPE ) )
+			Platform::SetShouldClose( true );
 	}
 }

@@ -106,8 +106,7 @@ namespace Framework::Test
 
 	void Test_Transfom_2Cubes::OnRender()
 	{
-		const float time = static_cast< float >( glfwGetTime() );
-		const float sin_time = Math::Sin( Radians( time ) );
+		const float sin_time = Math::Sin( Radians( time_current ) );
 
 		cube_1->transform.SetRotation( Quaternion( sin_time * 65.0_deg, rotation_axis ) );
 		cube_1->transform.SetTranslation( sin_time * Vector3::Right() );

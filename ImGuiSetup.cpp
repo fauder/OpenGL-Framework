@@ -1,9 +1,10 @@
 // Project Includes.
 #include "ImGuiSetup.h"
+#include "Platform.h"
 
 namespace Framework::ImGuiSetup
 {
-	void Initialize( GLFWwindow* window )
+	void Initialize()
 	{
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO(); ( void )io;
@@ -13,7 +14,7 @@ namespace Framework::ImGuiSetup
         ImGui::StyleColorsDark();
 
         // Setup Platform/Renderer backends.
-        ImGui_ImplGlfw_InitForOpenGL( window, true );
+        ImGui_ImplGlfw_InitForOpenGL( reinterpret_cast< GLFWwindow* >( Platform::GetWindowHandle() ), true );
         ImGui_ImplOpenGL3_Init();
 
         // Load Fonts

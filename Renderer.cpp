@@ -1,5 +1,6 @@
 // Project Includes.
 #include "Graphics.h"
+#include "Platform.h"
 #include "Renderer.h"
 
 // std Includes.
@@ -7,7 +8,7 @@
 
 namespace Framework
 {
-	Renderer::Renderer( GLFWwindow** created_window, const int width_pixels, const int height_pixels, const int pos_x, const int pos_y, const Color4 clear_color )
+	Renderer::Renderer( const int width_pixels, const int height_pixels, const int pos_x, const int pos_y, const Color4 clear_color )
 		:
 		pixel_width( width_pixels ),
 		pixel_height( height_pixels ),
@@ -16,20 +17,11 @@ namespace Framework
 	{
 		try
 		{
-			window = Window::InitializeGLFWAndCreateWindow( pixel_width, pixel_height, pos_x, pos_y );
-
-			// GLAD needs the created window's context made current BEFORE it is initialized.
-			InitializeGLAD();
-
-			Window::Framebuffer_Size_Callback( window, pixel_width, pixel_height );
-			glfwSetFramebufferSizeCallback( window, Window::Framebuffer_Size_Callback );
-
-			if( created_window != nullptr )
-				*created_window = window;
+			Platform::InitializeAndCreateWindow( pixel_width, pixel_height, pos_x, pos_y );
 		}
 		catch( const std::logic_error& e )
 		{
-			std::cerr << "ERROR::GRAPHICS::CONSTRUCTION_ERROR:\n\t" << e.what() << std::endl;
+			std::cerr << "ERROR::RENDERER::CONSTRUCTION_ERROR:\n\t" << e.what() << std::endl;
 		}
 
 		EnableDepthTest();
@@ -48,13 +40,12 @@ namespace Framework
 
 	void Renderer::EndFrame() const
 	{
-		glfwSwapBuffers( window );
-		glfwPollEvents();
+		Platform::SwapBuffers();
 	}
 
 	void Renderer::CleanUp() const
 	{
-		glfwTerminate();
+		Platform::CleanUp();
 	}
 
 	void Renderer::Clear() const
@@ -108,12 +99,5 @@ namespace Framework
 	void Renderer::DisableDepthTest() const
 	{
 		glDisable( GL_DEPTH_TEST );
-	}
-
-	/* GLAD needs the created window's context made current BEFORE it is initialized. */
-	void Renderer::InitializeGLAD() const
-	{
-		if( !gladLoadGLLoader( ( GLADloadproc )glfwGetProcAddress ) )
-			throw std::logic_error( "ERROR::GRAPHICS::GLAD::FAILED_TO_INITIALIZE!" );
 	}
 }

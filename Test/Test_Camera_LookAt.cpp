@@ -13,10 +13,7 @@ namespace Framework::Test
 		Test( renderer ),
 		method_lookAt( LookAtMethod::LookAtMatrix ),
 		rotation_plane( RotationPlane::ZX ),
-		time_current( 0.0f ),
-		time_multiplier( 1.0f ),
-		zoom( 0.25f ),
-		test_is_paused( false )
+		zoom( 0.25f )
 	{
 		using namespace Framework;
 
@@ -101,14 +98,6 @@ namespace Framework::Test
 
 	void Test_Camera_LookAt::OnUpdate()
 	{
-		if( !test_is_paused )
-		{
-			time_current  = static_cast< float >( glfwGetTime() ) * time_multiplier;
-			time_sin      = Math::Sin( Radians( time_current ) );
-			time_cos      = Math::Cos( Radians( time_current ) );
-			time_mod_2_pi = std::fmod( time_current, Constants< float >::Two_Pi() );
-		}
-
 		const auto inverse_zoom = 1.0f / zoom;
 
 		Vector3 camera_position = camera.transform.GetTranslation();
@@ -189,34 +178,8 @@ namespace Framework::Test
 
 	void Test_Camera_LookAt::OnRenderImGui()
 	{
-		Test::OnRenderImGui();
-
 		if( ImGui::Begin( "Test: Camera " ) )
 		{
-			ImGui::SeparatorText( "Time Settings" );
-			/* ______________________________________ */
-
-			ImGui::Text( "Time: %.2f seconds", time_current ); ImGui::SameLine();
-
-			if( !test_is_paused && ImGui::Button( "Pause" ) )
-				test_is_paused = true;
-			else if( test_is_paused && ImGui::Button( "Resume" ) )
-				test_is_paused = false;
-
-			auto sin_time   = time_sin;
-			auto cos_time   = time_cos;
-			auto time_mod_1 = std::fmod( time_current, 1.0f );
-
-			ImGui::SliderFloat( "Time Multiplier", &time_multiplier, 0.01f, 5.0f, "x %.2f", ImGuiSliderFlags_Logarithmic ); ImGui::SameLine(); if( ImGui::Button( "Reset##time_multiplier" ) ) time_multiplier = 1.0f;
-
-			ImGui::ProgressBar( time_mod_1,	   ImVec2( 0.0f, 0.0f ) ); ImGui::SameLine(); ImGui::TextUnformatted( "Time % 1" );
-			ImGui::ProgressBar( time_mod_2_pi / Constants< float >::Two_Pi(), ImVec2( 0.0f, 0.0f ) ); ImGui::SameLine(); ImGui::TextUnformatted( "Time % (2 * Pi)" );
-			ImGui::SliderFloat( "Sin(Time) ", &sin_time, -1.0f, 1.0f, "%.1f",		ImGuiSliderFlags_NoInput );
-			ImGui::SliderFloat( "Cos(Time) ", &cos_time, -1.0f, 1.0f, "%.1f",		ImGuiSliderFlags_NoInput );
-
-			ImGui::SeparatorText( "Camera Settings" );
-			/* ______________________________________ */
-
 			ImGui::SliderFloat( "Zoom ", &zoom, 0.05f, 0.5f, "%.2f", ImGuiSliderFlags_Logarithmic ); ImGui::SameLine(); if( ImGui::Button( "Reset##zoom" ) ) zoom = 0.25f;
 
 			ImGui::TextUnformatted( "Rotation plane:" ); ImGui::SameLine();

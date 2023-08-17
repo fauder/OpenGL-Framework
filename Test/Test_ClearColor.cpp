@@ -19,6 +19,8 @@ namespace Framework::Test
 
 	void Test_ClearColor::OnRenderImGui()
 	{
+		Test::OnRenderImGui();
+
 		if( ImGui::Begin( "Clear Color Test" ) )
 			if( ImGui::ColorPicker3( "Clear Color", const_cast< float* >( color_clear.Data() ) ) )
 				renderer.SetClearColor( color_clear );

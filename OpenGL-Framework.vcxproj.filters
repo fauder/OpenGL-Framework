@@ -28,7 +28,7 @@
     <ClCompile Include="VertexBuffer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Window.cpp">
+    <ClCompile Include="Platform.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Vendor\stb_image.cpp">
@@ -132,7 +132,7 @@
     <ClInclude Include="VertexBufferLayout.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="Window.h">
+    <ClInclude Include="Platform.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Vendor\stb_image.h">
