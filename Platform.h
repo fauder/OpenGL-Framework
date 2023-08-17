@@ -1,5 +1,8 @@
 #pragma once
 
+// std Includes.
+#include <utility>
+
 /* Contains & abstracts away platform-specific services. */
 namespace Framework::Platform
 {
@@ -141,12 +144,17 @@ namespace Framework::Platform
 	/* Operation. */
 	void Resize( const int width_pixels, const int height_pixels );
 	void RegisterOnResizeCallback();
+	void RegisterOnMouseCallback();
 
 	void SwapBuffers();
 	void PollEvents();
 
 	bool IsKeyPressed( const KeyCode key_code );
 	bool IsKeyReleased( const KeyCode key_code );
+
+	void SetMouseSensitivity( const float new_sensitivity );
+	std::pair< float, float > GetMouseCursorDeltas();
+	std::pair< float, float > GetMouseCursorPositions();
 
 	/* Time-Keeping Facilities. */
 	float GetCurrentTime();

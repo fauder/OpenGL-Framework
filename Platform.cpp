@@ -10,13 +10,25 @@
 // std Includes.
 #include <stdexcept>
 
-GLFWwindow* window; // No need to expose this outside.
+GLFWwindow* WINDOW = nullptr; // No need to expose this outside.
+float MOUSE_CURSOR_X_POS = 0.0f, MOUSE_CURSOR_Y_POS = 0.0f;
+float MOUSE_CURSOR_X_DELTA = 0.0f, MOUSE_CURSOR_Y_DELTA = 0.0f;
+float MOUSE_SENSITIVITY = 1.0f;
 
 namespace Framework::Platform
 {
 	void OnResize( GLFWwindow* window, const int width_new_pixels, const int height_new_pixels )
 	{
 		glViewport( 0, 0, width_new_pixels, height_new_pixels );
+	}
+
+	void OnMouseCursorPositionChanged( GLFWwindow* window, const double x_position, const double y_position )
+	{
+		MOUSE_CURSOR_X_DELTA = MOUSE_SENSITIVITY * ( x_position - MOUSE_CURSOR_X_POS );
+		MOUSE_CURSOR_Y_DELTA = MOUSE_SENSITIVITY * ( y_position - MOUSE_CURSOR_Y_POS );
+
+		MOUSE_CURSOR_X_POS = x_position;
+		MOUSE_CURSOR_Y_POS = y_position;
 	}
 
 	/* GLAD needs the created window's context made current BEFORE it is initialized. */
@@ -36,17 +48,17 @@ namespace Framework::Platform
 		//glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE ); // Needed for Mac OS X.
 
 		glfwWindowHint( GLFW_VISIBLE, GLFW_FALSE ); // Start hidden as we will move it shortly.
-		window = glfwCreateWindow( width_pixels, height_pixels, "OpenGL Framework", nullptr, nullptr );
-		if( window == nullptr )
+		WINDOW = glfwCreateWindow( width_pixels, height_pixels, "OpenGL Framework", nullptr, nullptr );
+		if( WINDOW == nullptr )
 		{
 			glfwTerminate();
 			throw std::logic_error( "ERROR::PLATFORM::GLFW::FAILED TO CREATE GLFW WINDOW!" );
 		}
 
-		glfwSetWindowPos( window, pos_x_pixels, pos_y_pixels );
-		glfwShowWindow( window );
+		glfwSetWindowPos( WINDOW, pos_x_pixels, pos_y_pixels );
+		glfwShowWindow( WINDOW );
 
-		glfwMakeContextCurrent( window );
+		glfwMakeContextCurrent( WINDOW );
 
 		// GLAD needs the created window's context made current BEFORE it is initialized.
 		InitializeGLAD();
@@ -62,12 +74,17 @@ namespace Framework::Platform
 
 	void RegisterOnResizeCallback()
 	{
-		glfwSetFramebufferSizeCallback( window, OnResize );
+		glfwSetFramebufferSizeCallback( WINDOW, OnResize );
+	}
+
+	void RegisterOnMouseCallback()
+	{
+		glfwSetCursorPosCallback( WINDOW, OnMouseCursorPositionChanged );
 	}
 
 	void SwapBuffers()
 	{
-		glfwSwapBuffers( window );
+		glfwSwapBuffers( WINDOW );
 	}
 
 	void PollEvents()
@@ -77,12 +94,27 @@ namespace Framework::Platform
 
 	bool IsKeyPressed( const KeyCode key_code )
 	{
-		return glfwGetKey( window, int( key_code ) ) == GLFW_PRESS;
+		return glfwGetKey( WINDOW, int( key_code ) ) == GLFW_PRESS;
 	}
 
 	bool IsKeyReleased( const KeyCode key_code )
 	{
-		return glfwGetKey( window, int( key_code ) ) == GLFW_RELEASE;
+		return glfwGetKey( WINDOW, int( key_code ) ) == GLFW_RELEASE;
+	}
+
+	void SetMouseSensitivity( const float new_sensitivity )
+	{
+		MOUSE_SENSITIVITY = new_sensitivity;
+	}
+
+	std::pair< float, float > GetMouseCursorDeltas()
+	{
+		return { MOUSE_CURSOR_X_DELTA, MOUSE_CURSOR_Y_DELTA };
+	}
+
+	std::pair< float, float > GetMouseCursorPositions()
+	{
+		return { MOUSE_CURSOR_X_POS, MOUSE_CURSOR_Y_POS };
 	}
 
 	float GetCurrentTime()
@@ -92,17 +124,17 @@ namespace Framework::Platform
 
 	void SetShouldClose( const bool value )
 	{
-		glfwSetWindowShouldClose( window, value );
+		glfwSetWindowShouldClose( WINDOW, value );
 	}
 
 	bool ShouldClose()
 	{
-		return glfwWindowShouldClose( window );
+		return glfwWindowShouldClose( WINDOW );
 	}
 
 	void ChangeTitle( const char* new_title )
 	{
-		glfwSetWindowTitle( window, new_title );
+		glfwSetWindowTitle( WINDOW, new_title );
 	}
 
 	void CleanUp()
@@ -112,6 +144,6 @@ namespace Framework::Platform
 
 	void* GetWindowHandle()
 	{
-		return reinterpret_cast< void* >( window );
+		return reinterpret_cast< void* >( WINDOW );
 	}
 }
