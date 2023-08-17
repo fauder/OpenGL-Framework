@@ -5,7 +5,6 @@
 
 // Project Includes.
 #include "../Color.hpp"
-#include "../Input.h"
 #include "../Platform.h"
 #include "../Renderer.h"
 #include "../ImGuiSetup.h"
@@ -55,6 +54,11 @@ namespace Framework::Test
 
 		void ProcessInput()
 		{
+			Platform::PollEvents();
+
+			if( Platform::IsKeyPressed( Platform::KeyCode::KEY_ESCAPE ) )
+				Platform::SetShouldClose( true );
+
 			Derived()->OnProcessInput();
 		}
 
@@ -114,7 +118,7 @@ namespace Framework::Test
 			}
 		}
 
-		void OnProcessInput()	{ Input::Process(); }
+		void OnProcessInput()	{}
 		void OnUpdate()			{}
 		void OnRender()			{}
 		void OnRenderImGui()	{}

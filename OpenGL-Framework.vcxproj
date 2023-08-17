@@ -156,7 +156,6 @@
     <ClCompile Include="glad.c" />
     <ClCompile Include="ImGuiUtility.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
-    <ClCompile Include="Input.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Matrix.cpp" />
@@ -212,7 +211,6 @@
     <ClInclude Include="Unit.h" />
     <ClInclude Include="Utility.hpp" />
     <ClInclude Include="IndexBuffer.h" />
-    <ClInclude Include="Input.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shader.h" />

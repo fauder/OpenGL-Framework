@@ -13,9 +13,6 @@
     <ClCompile Include="IndexBuffer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Input.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -109,9 +106,6 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="IndexBuffer.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Input.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
