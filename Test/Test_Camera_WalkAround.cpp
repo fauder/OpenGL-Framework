@@ -103,13 +103,13 @@ namespace Framework::Test
 		delta_position = Vector3::Zero();
 
 		if( Platform::IsKeyPressed( Platform::KeyCode::KEY_W ) )
-			delta_position += Vector3::Forward();
+			delta_position += camera.transform.Forward();
 		if( Platform::IsKeyPressed( Platform::KeyCode::KEY_S ) )
-			delta_position += Vector3::Backward();
+			delta_position -= camera.transform.Forward();
 		if( Platform::IsKeyPressed( Platform::KeyCode::KEY_A ) )
-			delta_position += Vector3::Left();
+			delta_position -= camera.transform.Right();
 		if( Platform::IsKeyPressed( Platform::KeyCode::KEY_D ) )
-			delta_position += Vector3::Right();
+			delta_position += camera.transform.Right();
 
 		if( !delta_position.IsZero() )
 			delta_position.Normalize() *= camera_move_speed * time_delta;
@@ -140,8 +140,15 @@ namespace Framework::Test
 	{
 		if( ImGui::Begin( "Test: Camera " ) )
 		{
-			auto camera_position = camera.transform.GetTranslation();
+			auto camera_position          = camera.transform.GetTranslation();
+			auto camera_right_direction   = camera.transform.Right();
+			auto camera_up_direction      = camera.transform.Up();
+			auto camera_forward_direction = camera.transform.Forward();
+
 			ImGui::DragFloat3( "Camera Position", reinterpret_cast< float* >( &camera_position ) ); ImGui::SameLine(); if( ImGui::Button( "Reset##camera_position" ) ) ResetCameraTranslation();
+			ImGui::InputFloat3( "Camera Right",   reinterpret_cast< float* >( &camera_right_direction	), "%.3f", ImGuiInputTextFlags_ReadOnly );
+			ImGui::InputFloat3( "Camera Up",	  reinterpret_cast< float* >( &camera_up_direction		), "%.3f", ImGuiInputTextFlags_ReadOnly );
+			ImGui::InputFloat3( "Camera Forward", reinterpret_cast< float* >( &camera_forward_direction ), "%.3f", ImGuiInputTextFlags_ReadOnly );
 			ImGui::SliderFloat( "Move Speed ", &camera_move_speed, 0.5f, 5.0f, "%.2f", ImGuiSliderFlags_Logarithmic ); ImGui::SameLine(); if( ImGui::Button( "Reset##camera_move_speed" ) ) ResetCameraMoveSpeed();
 			ImGui::InputFloat( "Delta Position", &displacement, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly );
 		}
