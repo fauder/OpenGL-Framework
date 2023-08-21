@@ -111,11 +111,17 @@ namespace Framework::Platform
 
 	bool IsKeyPressed( const KeyCode key_code )
 	{
+		if( ImGui::GetIO().WantCaptureKeyboard )
+			return false;
+
 		return glfwGetKey( WINDOW, int( key_code ) ) == GLFW_PRESS;
 	}
 
 	bool IsKeyReleased( const KeyCode key_code )
 	{
+		if( ImGui::GetIO().WantCaptureKeyboard )
+			return false;
+
 		return glfwGetKey( WINDOW, int( key_code ) ) == GLFW_RELEASE;
 	}
 
