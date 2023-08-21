@@ -13,6 +13,8 @@ namespace Framework::Test
 		:
 		Test( renderer ),
 		camera_move_speed( ResetCameraMoveSpeed() ),
+		camera_direction_spherical( 1.0f, 0.0_rad, 0.0_rad ),
+		camera_look_at_direction( Vector3::Forward() ),
 		delta_position( ZERO_INITIALIZATION )
 	{
 		using namespace Framework;
@@ -98,8 +100,6 @@ namespace Framework::Test
 
 	void Test_Camera_WalkAround::OnProcessInput()
 	{
-		Test::OnProcessInput();
-
 		delta_position = Vector3::Zero();
 
 		if( Platform::IsKeyPressed( Platform::KeyCode::KEY_W ) )
@@ -115,6 +115,13 @@ namespace Framework::Test
 			delta_position.Normalize() *= camera_move_speed * time_delta;
 
 		displacement = delta_position.Magnitude();
+
+		const auto [ mouse_delta_x, mouse_delta_y ] = Platform::GetMouseCursorDeltas();
+
+		camera_direction_spherical.Heading() += mouse_delta_x;
+		camera_direction_spherical.Pitch()   -= mouse_delta_y;
+
+		camera_look_at_direction = Math::ToVector3( camera_direction_spherical );
 	}
 
 	void Test_Camera_WalkAround::OnUpdate()
@@ -124,14 +131,7 @@ namespace Framework::Test
 
 	void Test_Camera_WalkAround::OnRender()
 	{
-		const Vector3 target( ZERO_INITIALIZATION ); // Look at the origin.
-
-		Vector3 camera_position = camera.transform.GetTranslation();
-
-		const auto lookAt_direction( ( target - camera_position ).Normalized() );
-
-		//if( !lookAt_direction.IsZero() ) // Or we can clamp the position instead, so the camera does not overlap with the target.
-		//	camera.transform.SetRotation( Quaternion::LookRotation( lookAt_direction ) );
+		camera.transform.SetRotation( Quaternion::LookRotation( camera_look_at_direction ) );
 
 		shader->SetMatrix( "transformation_view", camera.transform.GetInverseOfFinalMatrix() );
 	}
@@ -151,6 +151,19 @@ namespace Framework::Test
 			ImGui::InputFloat3( "Camera Forward", reinterpret_cast< float* >( &camera_forward_direction ), "%.3f", ImGuiInputTextFlags_ReadOnly );
 			ImGui::SliderFloat( "Move Speed ", &camera_move_speed, 0.5f, 5.0f, "%.2f", ImGuiSliderFlags_Logarithmic ); ImGui::SameLine(); if( ImGui::Button( "Reset##camera_move_speed" ) ) ResetCameraMoveSpeed();
 			ImGui::InputFloat( "Delta Position", &displacement, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly );
+
+			ImGui::SeparatorText( "Mouse Info." );
+			float heading = ( float )camera_direction_spherical.Heading();
+			float pitch   = ( float )camera_direction_spherical.Pitch();
+			auto [ mouse_delta_x, mouse_delta_y ] = Platform::GetMouseCursorDeltas();
+			auto sensitivity = Platform::GetMouseSensitivity();
+			if( ImGui::InputFloat( "Sensitivity", &sensitivity, 0.0f, 0.0f, "%.3f" ) )
+				Platform::SetMouseSensitivity( sensitivity );
+			ImGui::InputFloat( "Platform: Delta X", &mouse_delta_x, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly );
+			ImGui::InputFloat( "Platform: Delta Y",	&mouse_delta_y, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly );
+			ImGui::InputFloat( "Heading", &heading, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly );
+			ImGui::InputFloat( "Pitch",		&pitch, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly );
+			ImGui::InputFloat3( "Look-At Direction", const_cast< float* >( camera_look_at_direction.Data() ), "%.3f", ImGuiInputTextFlags_ReadOnly );
 		}
 
 		ImGui::End();

@@ -2,9 +2,10 @@
 
 // Project Includes.
 #include "Test.hpp"
-#include "../Drawable.h"
-#include "../Texture.h"
 #include "../Camera.h"
+#include "../Drawable.h"
+#include "../Polar.hpp"
+#include "../Texture.h"
 
 // std Includes.
 #include <memory>
@@ -39,6 +40,8 @@ namespace Framework::Test
 		float camera_move_speed;
 
 		Vector3 delta_position;
+		Math::Polar3_Spherical_Game_RightHanded camera_direction_spherical;
+		Vector3 camera_look_at_direction;
 		float displacement;
 
 		static constexpr Vector3 rotation_axis = Vector3( Constants< float >::Sqrt_Half(), Constants< float >::Sqrt_Half(), 0.0f );
