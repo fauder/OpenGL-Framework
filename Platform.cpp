@@ -7,13 +7,17 @@
 // GLFW Includes.
 #include <GLFW/glfw3.h>
 
+// ImGui Includes.
+#include "Vendor/imgui.h"
+
 // std Includes.
 #include <stdexcept>
 
 GLFWwindow* WINDOW = nullptr; // No need to expose this outside.
 float MOUSE_CURSOR_X_POS = 0.0f, MOUSE_CURSOR_Y_POS = 0.0f;
 float MOUSE_CURSOR_X_DELTA = 0.0f, MOUSE_CURSOR_Y_DELTA = 0.0f;
-float MOUSE_SENSITIVITY = 1.0f;
+float MOUSE_SENSITIVITY = 0.004f;
+bool MOUSE_CAPTURE_IS_FIRST_FRAME = true;
 
 namespace Framework::Platform
 {
@@ -24,11 +28,21 @@ namespace Framework::Platform
 
 	void OnMouseCursorPositionChanged( GLFWwindow* window, const double x_position, const double y_position )
 	{
-		MOUSE_CURSOR_X_DELTA = MOUSE_SENSITIVITY * ( x_position - MOUSE_CURSOR_X_POS );
-		MOUSE_CURSOR_Y_DELTA = MOUSE_SENSITIVITY * ( y_position - MOUSE_CURSOR_Y_POS );
+		if( ImGui::GetIO().WantCaptureMouse )
+			return;
 
-		MOUSE_CURSOR_X_POS = x_position;
-		MOUSE_CURSOR_Y_POS = y_position;
+		if( MOUSE_CAPTURE_IS_FIRST_FRAME )
+		{
+			MOUSE_CURSOR_X_POS = ( float )x_position;
+			MOUSE_CURSOR_Y_POS = ( float )y_position;
+			MOUSE_CAPTURE_IS_FIRST_FRAME = false;
+		}
+
+		MOUSE_CURSOR_X_DELTA = MOUSE_SENSITIVITY * ( ( float )x_position - MOUSE_CURSOR_X_POS );
+		MOUSE_CURSOR_Y_DELTA = MOUSE_SENSITIVITY * ( ( float )y_position - MOUSE_CURSOR_Y_POS );
+
+		MOUSE_CURSOR_X_POS = ( float )x_position;
+		MOUSE_CURSOR_Y_POS = ( float )y_position;
 	}
 
 	/* GLAD needs the created window's context made current BEFORE it is initialized. */
@@ -36,6 +50,16 @@ namespace Framework::Platform
 	{
 		if( !gladLoadGLLoader( ( GLADloadproc )glfwGetProcAddress ) )
 			throw std::logic_error( "ERROR::GRAPHICS::GLAD::FAILED_TO_INITIALIZE!" );
+	}
+
+	void RegisterOnResizeCallback()
+	{
+		glfwSetFramebufferSizeCallback( WINDOW, OnResize );
+	}
+
+	void RegisterOnMouseCallback()
+	{
+		glfwSetCursorPosCallback( WINDOW, OnMouseCursorPositionChanged );
 	}
 
 	void InitializeAndCreateWindow( const int width_pixels, const int height_pixels, const int pos_x_pixels, const int pos_y_pixels )
@@ -64,22 +88,14 @@ namespace Framework::Platform
 		InitializeGLAD();
 
 		Resize( width_pixels, height_pixels );
+
 		RegisterOnResizeCallback();
+		RegisterOnMouseCallback();
 	}
 
 	void Resize( const int width_new_pixels, const int height_new_pixels )
 	{
 		OnResize( nullptr, width_new_pixels, height_new_pixels );
-	}
-
-	void RegisterOnResizeCallback()
-	{
-		glfwSetFramebufferSizeCallback( WINDOW, OnResize );
-	}
-
-	void RegisterOnMouseCallback()
-	{
-		glfwSetCursorPosCallback( WINDOW, OnMouseCursorPositionChanged );
 	}
 
 	void SwapBuffers()
@@ -89,6 +105,7 @@ namespace Framework::Platform
 
 	void PollEvents()
 	{
+		MOUSE_CURSOR_X_DELTA = MOUSE_CURSOR_Y_DELTA = 0.0f;
 		glfwPollEvents();
 	}
 
@@ -100,6 +117,11 @@ namespace Framework::Platform
 	bool IsKeyReleased( const KeyCode key_code )
 	{
 		return glfwGetKey( WINDOW, int( key_code ) ) == GLFW_RELEASE;
+	}
+
+	float GetMouseSensitivity()
+	{
+		return MOUSE_SENSITIVITY;
 	}
 
 	void SetMouseSensitivity( const float new_sensitivity )
