@@ -83,7 +83,7 @@ namespace Framework::Math
 	Value Lerp( const Value value_a, const Value value_b, const PercentType t ) { return ( PercentType( 1 ) - t ) * value_a + t * value_b; }
 
 	template< std::totally_ordered Value >
-	Value Clamp( const Value value, const Value minimum, const Value maximum ) { return value < minimum ? minimum : value > maximum ? maximum : value; }
+	[[ nodiscard( "Clamped value is not assigned back to any variable." ) ]] Value Clamp(const Value value, const Value minimum, const Value maximum) { return value < minimum ? minimum : value > maximum ? maximum : value; }
 
 	template< Concepts::Arithmetic Value, std::size_t Size >
 	Radians< Value > Angle( const Vector< Value, Size >& a, const Vector< Value, Size >& b )
