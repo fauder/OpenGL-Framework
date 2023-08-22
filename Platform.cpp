@@ -8,7 +8,7 @@
 #include <GLFW/glfw3.h>
 
 // ImGui Includes.
-#include "Vendor/imgui.h"
+#include "Vendor/imgui_impl_glfw.h"
 
 // std Includes.
 #include <stdexcept>
@@ -21,6 +21,7 @@ namespace Framework::Platform
 	float MOUSE_SENSITIVITY = 0.004f;
 	bool MOUSE_CAPTURE_IS_RESET = true;
 	bool MOUSE_CAPTURE_ENABLED = false;
+	std::function< void( const KeyCode key_code, const KeyAction action, const KeyMods mods ) > KEYBOARD_CALLBACK;
 
 	void OnResize( GLFWwindow* window, const int width_new_pixels, const int height_new_pixels )
 	{
@@ -44,6 +45,15 @@ namespace Framework::Platform
 
 		MOUSE_CURSOR_X_POS = ( float )x_position;
 		MOUSE_CURSOR_Y_POS = ( float )y_position;
+	}
+
+	void OnKeyboardEvent( GLFWwindow* window, const int key_code, const int scan_code, const int action, const int mods )
+	{
+		if( ImGui::GetIO().WantCaptureKeyboard )
+			return;
+
+		if( KEYBOARD_CALLBACK )
+			KEYBOARD_CALLBACK( KeyCode( key_code ), KeyAction( action ), KeyMods( mods ) );
 	}
 
 	/* GLAD needs the created window's context made current BEFORE it is initialized. */
@@ -108,6 +118,15 @@ namespace Framework::Platform
 	{
 		MOUSE_CURSOR_X_DELTA = MOUSE_CURSOR_Y_DELTA = 0.0f;
 		glfwPollEvents();
+	}
+
+	void SetKeyboardEventCallback( std::function< void( const KeyCode key_code, const KeyAction action, const KeyMods mods ) > callback )
+	{
+		KEYBOARD_CALLBACK = callback;
+
+		ImGui_ImplGlfw_RestoreCallbacks( WINDOW );
+		glfwSetKeyCallback( WINDOW, OnKeyboardEvent );
+		ImGui_ImplGlfw_InstallCallbacks( WINDOW );
 	}
 
 	bool IsKeyPressed( const KeyCode key_code )

@@ -1,6 +1,7 @@
 #pragma once
 
 // std Includes.
+#include <functional>
 #include <utility>
 
 /* Contains & abstracts away platform-specific services. */
@@ -137,6 +138,21 @@ namespace Framework::Platform
 
 		KEY_LAST               = KEY_MENU
 	};
+	enum class KeyAction
+	{
+		RELEASE	= 0,
+		PRESS	= 1,
+		REPEAT	= 2
+	};
+	enum class KeyMods
+	{
+		SHIFT           = 0x0001,
+		CONTROL         = 0x0002,
+		ALT             = 0x0004,
+		SUPER           = 0x0008,
+		CAPS_LOCK       = 0x0010,
+		NUM_LOCK        = 0x0020
+	};
 
 	/* Initialization. */
 	void InitializeAndCreateWindow( const int width_pixels = 800, const int height_pixels = 600, const int pos_x_pixels = 0, const int pos_y_pixels = 0 );
@@ -147,6 +163,7 @@ namespace Framework::Platform
 	void SwapBuffers();
 	void PollEvents();
 
+	void SetKeyboardEventCallback( std::function< void( const KeyCode key_code, const KeyAction action, const KeyMods mods ) > callback = {} );
 	bool IsKeyPressed( const KeyCode key_code );
 	bool IsKeyReleased( const KeyCode key_code );
 
