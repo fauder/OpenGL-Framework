@@ -143,7 +143,7 @@ namespace Framework::Test
 		const auto [ mouse_delta_x, mouse_delta_y ] = Platform::GetMouseCursorDeltas();
 
 		camera_direction_spherical.Heading() += mouse_delta_x;
-		camera_direction_spherical.Pitch()   -= mouse_delta_y;
+		camera_direction_spherical.Pitch() = Math::Clamp( camera_direction_spherical.Pitch() - mouse_delta_y, -Constants< Radians >::Pi_Over_Six(), +Constants< Radians >::Pi_Over_Six() );
 
 		camera_look_at_direction = Math::ToVector3( camera_direction_spherical );
 	}
