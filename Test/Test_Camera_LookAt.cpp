@@ -100,17 +100,17 @@ namespace Framework::Test
 	{
 		const auto inverse_zoom = 1.0f / zoom;
 
-		Vector3 camera_position = camera.transform.GetTranslation();
+		Vector3 camera_position = camera_transform.GetTranslation();
 
 		switch( rotation_plane )
 		{
 			case Framework::Test::Test_Camera_LookAt::RotationPlane::ZX:
-				camera.transform.SetTranslation( camera_position = camera_position
+				camera_transform.SetTranslation( camera_position = camera_position
 												 .SetX( time_cos * inverse_zoom )
 												 .SetZ( time_sin * inverse_zoom ) );
 				break;
 			case Framework::Test::Test_Camera_LookAt::RotationPlane::YZ:
-				camera.transform.SetTranslation( camera_position = camera_position
+				camera_transform.SetTranslation( camera_position = camera_position
 												 .SetY( time_sin * inverse_zoom )
 												 .SetZ( time_cos * inverse_zoom ) );
 				break;
@@ -122,7 +122,7 @@ namespace Framework::Test
 	void Test_Camera_LookAt::OnRender()
 	{
 		const Vector3 target( ZERO_INITIALIZATION ); // Look at the origin.
-		Vector3 camera_position = camera.transform.GetTranslation();
+		Vector3 camera_position = camera_transform.GetTranslation();
 
 		const auto lookAt_direction( ( target - camera_position ).Normalized() );
 
@@ -135,21 +135,21 @@ namespace Framework::Test
 		}
 		else if( method_lookAt == LookAtMethod::QuaternionLookRotation ) // Alternatively, we can also take the inverse of the camera object's transform matrix, yielding the same result.
 		{
-			camera.transform.SetRotation( Quaternion::LookRotation( lookAt_direction,
+			camera_transform.SetRotation( Quaternion::LookRotation( lookAt_direction,
 																	rotation_plane == RotationPlane::ZX
 																		? Vector3::Up()
 																		: Math::Cross( Vector3::Right(), lookAt_direction ).Normalize() ) );
 
-			shader->SetMatrix( "transformation_view", camera.transform.GetInverseOfFinalMatrix() );
+			shader->SetMatrix( "transformation_view", camera_transform.GetInverseOfFinalMatrix() );
 		}
 		else if( method_lookAt == LookAtMethod::QuaternionLookRotation_Naive )
 		{
-			camera.transform.SetRotation( Quaternion::LookRotation_Naive( lookAt_direction,
+			camera_transform.SetRotation( Quaternion::LookRotation_Naive( lookAt_direction,
 																		  rotation_plane == RotationPlane::ZX
 																			? Vector3::Up()
 																			: Math::Cross( Vector3::Right(), lookAt_direction ).Normalize() ) );
 
-			shader->SetMatrix( "transformation_view", camera.transform.GetInverseOfFinalMatrix() );
+			shader->SetMatrix( "transformation_view", camera_transform.GetInverseOfFinalMatrix() );
 		}
 		else if( method_lookAt == LookAtMethod::ManualRotationViaQuaternionSlerp )
 		{
@@ -212,6 +212,6 @@ namespace Framework::Test
 
 	void Test_Camera_LookAt::ResetCameraTranslation()
 	{
-		camera.transform.SetTranslation( Vector3::Backward() / zoom );
+		camera_transform.SetTranslation( Vector3::Backward() / zoom );
 	}
 }

@@ -2,7 +2,7 @@
 
 // Project Includes.
 #include "Test.hpp"
-#include "../Camera.h"
+#include "../Camera_Flight.h"
 #include "../Drawable.h"
 #include "../Polar.hpp"
 #include "../Texture.h"
@@ -38,18 +38,11 @@ namespace Framework::Test
 		std::unique_ptr< Drawable > cube_1;
 		std::unique_ptr< Texture > texture_test_cube;
 
-		Camera camera;
-
-		// TODO: Abstract these into Camera_FirstPerson : Camera.
-
-		float camera_move_speed;
+		Transform camera_transform;
+		Camera_Flight camera;
 
 		Vector3 camera_delta_position;
-		Math::Polar3_Spherical_Game_RightHanded camera_direction_spherical;
-		Vector3 camera_look_at_direction;
 		float camera_displacement;
-
-		Degrees camera_field_of_view;
 
 		bool input_is_enabled;
 

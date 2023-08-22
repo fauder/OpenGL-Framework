@@ -94,6 +94,9 @@
     <ClCompile Include="Test\Test_Camera_WalkAround.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="Camera_Flight.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.hpp">
@@ -239,6 +242,9 @@
     </ClInclude>
     <ClInclude Include="Test\Test_Camera_WalkAround.h">
       <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera_Flight.h">
+      <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

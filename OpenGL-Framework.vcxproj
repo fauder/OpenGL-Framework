@@ -153,6 +153,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="Drawable_Indexed.cpp" />
+    <ClCompile Include="Camera_Flight.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="ImGuiUtility.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="Drawable_Indexed.h" />
+    <ClInclude Include="Camera_Flight.h" />
     <ClInclude Include="ImGuiUtility.h" />
     <ClInclude Include="Initialization.h" />
     <ClInclude Include="Log.h" />

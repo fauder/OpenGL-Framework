@@ -12,12 +12,9 @@ namespace Framework::Test
 	Test_Camera_WalkAround::Test_Camera_WalkAround( Renderer& renderer )
 		:
 		Test( renderer, false /* UI starts disabled, to allow for camera movement via mouse input. */ ),
-		camera_move_speed( ResetCameraMoveSpeed() ),
-		camera_direction_spherical( 1.0f, 0.0_rad, 0.0_rad ),
-		camera_look_at_direction( Vector3::Forward() ),
+		camera( &camera_transform, renderer.AspectRatio(), ResetCameraMoveSpeed() ),
 		camera_delta_position( ZERO_INITIALIZATION ),
-		input_is_enabled( true ),
-		camera_field_of_view( 45_deg )
+		input_is_enabled( true )
 	{
 		using namespace Framework;
 
@@ -91,8 +88,6 @@ namespace Framework::Test
 		shader->Bind();
 		shader->SetInt( "texture_sampler_1", 0 );
 
-		shader->SetMatrix( "transformation_projection", Matrix::PerspectiveProjection( 0.1f, 100.0f, renderer.AspectRatio(), 45_deg ) );
-
 		// Initial camera position and rotation:
 		ResetCameraTranslation();
 	}
@@ -136,53 +131,57 @@ namespace Framework::Test
 		}
 
 		if( Platform::IsKeyPressed( Platform::KeyCode::KEY_W ) )
-			camera_delta_position += camera.transform.Forward();
+			camera_delta_position += camera.Forward();
 		if( Platform::IsKeyPressed( Platform::KeyCode::KEY_S ) )
-			camera_delta_position -= camera.transform.Forward();
+			camera_delta_position -= camera.Forward();
 		if( Platform::IsKeyPressed( Platform::KeyCode::KEY_A ) )
-			camera_delta_position -= camera.transform.Right();
+			camera_delta_position -= camera.Right();
 		if( Platform::IsKeyPressed( Platform::KeyCode::KEY_D ) )
-			camera_delta_position += camera.transform.Right();
+			camera_delta_position += camera.Right();
 
 		if( !camera_delta_position.IsZero() )
-			camera_delta_position.Normalize() *= camera_move_speed * time_delta;
+			camera_delta_position.Normalize() *= camera.GetMoveSpeed() * time_delta;
 
 		camera_displacement = camera_delta_position.Magnitude();
 
 		const auto [ mouse_delta_x, mouse_delta_y ] = Platform::GetMouseCursorDeltas();
 
-		camera_direction_spherical.Heading() += mouse_delta_x;
-		camera_direction_spherical.Pitch() = Math::Clamp( camera_direction_spherical.Pitch() - mouse_delta_y, -Constants< Radians >::Pi_Over_Six(), +Constants< Radians >::Pi_Over_Six() );
-
-		camera_look_at_direction = Math::ToVector3( camera_direction_spherical );
+		camera.SetHeading( camera.GetHeading() + mouse_delta_x );
+		camera.SetPitch( Math::Clamp( camera.GetPitch() - mouse_delta_y, -Constants< Radians >::Pi_Over_Six(), +Constants< Radians >::Pi_Over_Six() ) );
 
 		const Degrees fov_offset( -Platform::GetMouseScrollOffsets().second );
-		camera_field_of_view = Math::Clamp( camera_field_of_view - fov_offset, 1_deg, 45_deg );
+		camera.SetFieldOfView( Math::Clamp( camera.GetFieldOfView() - fov_offset, 1_deg, 45_deg ) );
 	}
 
 	void Test_Camera_WalkAround::OnUpdate()
 	{
-		camera.transform.OffsetTranslation( camera_delta_position );
+		camera_transform.ResetDirtyFlag();
+
+		camera_transform.OffsetTranslation( camera_delta_position );
 	}
 
 	void Test_Camera_WalkAround::OnRender()
 	{
-		camera.transform.SetRotation( Quaternion::LookRotation( camera_look_at_direction ) );
-
-		shader->SetMatrix( "transformation_view", camera.transform.GetInverseOfFinalMatrix() );
-		shader->SetMatrix( "transformation_projection", Matrix::PerspectiveProjection( 0.1f, 100.0f, renderer.AspectRatio(), camera_field_of_view ) );
+		shader->SetMatrix( "transformation_view",		camera.GetViewMatrix() );
+		shader->SetMatrix( "transformation_projection", camera.GetProjectionMatrix() );
 	}
 
 	void Test_Camera_WalkAround::OnRenderImGui()
 	{
 		if( ImGui::Begin( "Test: Camera ", nullptr, CurrentImGuiWindowFlags() ) )
 		{
-			auto camera_position          = camera.transform.GetTranslation();
-			auto camera_right_direction   = camera.transform.Right();
-			auto camera_up_direction      = camera.transform.Up();
-			auto camera_forward_direction = camera.transform.Forward();
-			float heading                 = ( float )Math::Degrees( camera_direction_spherical.Heading() );
-			float pitch                   = ( float )Math::Degrees( camera_direction_spherical.Pitch() );
+			Vector3 camera_position          = camera_transform.GetTranslation();
+			Vector3 camera_right_direction   = camera.Right();
+			Vector3 camera_up_direction      = camera.Up();
+			Vector3 camera_forward_direction = camera.Forward();
+			float heading                    = ( float )Math::Degrees( camera.GetHeading() );
+			float pitch                      = ( float )Math::Degrees( camera.GetPitch() );
+
+			Math::Polar3_Spherical camera_orientation_spherical( 1.0f, Degrees( heading ), Degrees( pitch ) );
+			Vector3 camera_look_at_direction( Math::ToVector3( camera_orientation_spherical ) );
+
+			float camera_move_speed = camera.GetMoveSpeed();
+			float fov               = ( float )camera.GetFieldOfView();
 
 			ImGui::DragFloat3( "Camera Position", reinterpret_cast< float* >( &camera_position ) ); ImGui::SameLine(); if( ImGui::Button( "Reset##camera_position" ) ) ResetCameraTranslation();
 			ImGui::InputFloat( "Delta Position", &camera_displacement, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly );
@@ -195,7 +194,7 @@ namespace Framework::Test
 			ImGui::InputFloat3( "Camera Right",   reinterpret_cast< float* >( &camera_right_direction	), "%.3f", ImGuiInputTextFlags_ReadOnly );
 			ImGui::InputFloat3( "Camera Up",	  reinterpret_cast< float* >( &camera_up_direction		), "%.3f", ImGuiInputTextFlags_ReadOnly );
 			ImGui::InputFloat3( "Camera Forward", reinterpret_cast< float* >( &camera_forward_direction ), "%.3f", ImGuiInputTextFlags_ReadOnly );
-			ImGui::InputFloat( "Field of View", reinterpret_cast< float* >( &camera_field_of_view ), 0.0f, 0.0f, "%.3f degrees", ImGuiInputTextFlags_ReadOnly );
+			ImGui::InputFloat( "Field of View", &fov, 0.0f, 0.0f, "%.3f degrees", ImGuiInputTextFlags_ReadOnly );
 
 			ImGui::SeparatorText( "Mouse Info." );
 		/* -----------------------------------*/
@@ -212,18 +211,17 @@ namespace Framework::Test
 
 	void Test_Camera_WalkAround::ResetCameraTranslation()
 	{
-		camera.transform.SetTranslation( Vector3::Backward() * 4.0f );
+		camera_transform.SetTranslation( Vector3::Backward() * 4.0f );
 	}
 
 	void Test_Camera_WalkAround::ResetCameraRotation()
 	{
-		camera_direction_spherical.Heading() = 0_deg;
-		camera_direction_spherical.Pitch()   = 0_deg;
-		camera_look_at_direction = Vector3::Forward();
+		camera.SetHeading( 0_rad );
+		camera.SetPitch( 0_rad );
 	}
 
 	float Test_Camera_WalkAround::ResetCameraMoveSpeed()
 	{
-		return camera_move_speed = 2.0f;
+		return camera.SetMoveSpeed( 2.0f );
 	}
 }
