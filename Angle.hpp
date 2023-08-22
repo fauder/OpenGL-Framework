@@ -136,4 +136,52 @@ namespace Framework
 
 	using DegreesD = Math::Degrees< double >;
 	using RadiansD = Math::Radians< double >;
+
+	template<> struct Constants< Degrees >
+	{
+		Constants() = delete;
+
+		static constexpr Degrees Pi()				{ return Degrees( Constants< float >::Pi() );	}
+		static constexpr Degrees Pi_Over_Two()		{ return Pi() / 2.0f;							}
+		static constexpr Degrees Pi_Over_Three()	{ return Pi() / 3.0f;							}
+		static constexpr Degrees Pi_Over_Four()		{ return Pi() / 4.0f;							}
+		static constexpr Degrees Pi_Over_Six()		{ return Pi() / 6.0f;							}
+		static constexpr Degrees Two_Pi()			{ return Pi() * 2.0f;							}
+	};
+
+	template<> struct Constants< Radians >
+	{
+		Constants() = delete;
+
+		static constexpr Radians Pi()				{ return Radians( Constants< float >::Pi() );	}
+		static constexpr Radians Pi_Over_Two()		{ return Pi() / 2.0f;							}
+		static constexpr Radians Pi_Over_Three()	{ return Pi() / 3.0f;							}
+		static constexpr Radians Pi_Over_Four()		{ return Pi() / 4.0f;							}
+		static constexpr Radians Pi_Over_Six()		{ return Pi() / 6.0f;							}
+		static constexpr Radians Two_Pi()			{ return Pi() * 2.0f;							}
+	};
+
+	template<> struct Constants< DegreesD >
+	{
+		Constants() = delete;
+
+		static constexpr DegreesD Pi()				{ return DegreesD( Constants< double >::Pi() );	}
+		static constexpr DegreesD Pi_Over_Two()		{ return Pi() / 2.0;							}
+		static constexpr DegreesD Pi_Over_Three()	{ return Pi() / 3.0;							}
+		static constexpr DegreesD Pi_Over_Four()	{ return Pi() / 4.0;							}
+		static constexpr DegreesD Pi_Over_Six()		{ return Pi() / 6.0;							}
+		static constexpr DegreesD Two_Pi()			{ return Pi() * 2.0;							}
+	};
+
+	template<> struct Constants< RadiansD >
+	{
+		Constants() = delete;
+
+		static constexpr RadiansD Pi()				{ return RadiansD( Constants< double >::Pi() );	}
+		static constexpr RadiansD Pi_Over_Two()		{ return Pi() / 2.0;							}
+		static constexpr RadiansD Pi_Over_Three()	{ return Pi() / 3.0;							}
+		static constexpr RadiansD Pi_Over_Four()	{ return Pi() / 4.0;							}
+		static constexpr RadiansD Pi_Over_Six()		{ return Pi() / 6.0;							}
+		static constexpr RadiansD Two_Pi()			{ return Pi() * 2.0;							}
+	};
 }
