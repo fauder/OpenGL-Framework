@@ -24,7 +24,7 @@ namespace Framework::Test
 	class Test : public TestInterface
 	{
 	public:
-		Test( Renderer& renderer )
+		Test( Renderer& renderer, bool ui_starts_enabled = true )
 			:
 			renderer( renderer ),
 			name( ExtractTestNameFromTypeName( typeid( *this ).name() ) ),
@@ -34,7 +34,8 @@ namespace Framework::Test
 			time_previous( 0.0f ),
 			time_previous_since_start( 0.0f ),
 			time_since_start( 0.0f ),
-			executing( true )
+			executing( true ),
+			ui_interaction_enabled( ui_starts_enabled )
 		{
 			renderer.SetClearColor( Color4::Clear_Default() );
 		}
@@ -123,6 +124,9 @@ namespace Framework::Test
 		void OnRender()			{}
 		void OnRenderImGui()	{}
 
+		ImGuiWindowFlags CurrentImGuiWindowFlags() const { return ImGuiWindowFlags_NoFocusOnAppearing | ( ui_interaction_enabled ? 0 : ImGuiWindowFlags_NoMouseInputs ); }
+		void SetUIInteraction( const bool enable ) { ui_interaction_enabled = enable; }
+
 	private:
 		ActualTest* Derived() { return static_cast< ActualTest* >( this ); }
 		ActualTest* Derived() const { return static_cast< ActualTest* >( this ); }
@@ -148,7 +152,7 @@ namespace Framework::Test
 
 		void RenderImGui_Menu_BackButton()
 		{
-			ImGui::Begin( "Test Menu" );
+			ImGui::Begin( "Test Menu", nullptr, CurrentImGuiWindowFlags() );
 
 			ImGui::Text( std::string( R"(Executing Test ")" + name + R"("...)" ).c_str() );
 			if( ImGui::Button( "<-" ) )
@@ -159,7 +163,7 @@ namespace Framework::Test
 
 		void RenderImGui_FrameStatistics()
 		{
-			if( ImGui::Begin( "Frame Statistics." ) )
+			if( ImGui::Begin( "Frame Statistics.", nullptr, CurrentImGuiWindowFlags() ) )
 			{
 				ImGui::Text( "FPS: %.1f fps", 1.0f / time_delta_real );
 				ImGui::Text( "Delta time (multiplied): %.3f ms | Delta time (real): %.3f", time_delta * 1000.0f, time_delta_real * 1000.0f );
@@ -205,5 +209,6 @@ namespace Framework::Test
 		float time_since_start;
 
 		bool executing;
+		bool ui_interaction_enabled;
 	};
 }

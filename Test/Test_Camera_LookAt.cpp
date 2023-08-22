@@ -178,7 +178,7 @@ namespace Framework::Test
 
 	void Test_Camera_LookAt::OnRenderImGui()
 	{
-		if( ImGui::Begin( "Test: Camera " ) )
+		if( ImGui::Begin( "Test: Camera ", nullptr, CurrentImGuiWindowFlags() ) )
 		{
 			ImGui::SliderFloat( "Zoom ", &zoom, 0.05f, 0.5f, "%.2f", ImGuiSliderFlags_Logarithmic ); ImGui::SameLine(); if( ImGui::Button( "Reset##zoom" ) ) zoom = 0.25f;
 
