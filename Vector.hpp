@@ -35,6 +35,11 @@ namespace Framework::Math
 			std::fill_n( data, Size, value );
 		}
 
+	#pragma warning(disable:26495) // Suppress "variable is uninitialized" warning, as not initializing it is the whole point of this constructor.
+		constexpr explicit Vector( Initialization::NoInitialization )
+		{}
+	#pragma warning(default:26495)
+
 		constexpr explicit Vector( const Coordinate x )
 			:
 			data{ x }

@@ -15,6 +15,7 @@ namespace Framework::Math
 	class Polar3_Cylindrical;
 	class Polar3_Spherical;
 	class Polar3_Spherical_Game;
+	class Polar3_Spherical_Game_RightHanded;
 	template< Concepts::Arithmetic Coordinate, std::size_t Size > requires Concepts::NonZero< Size >
 	class Vector;
 	template< Concepts::Arithmetic Type, std::size_t RowSize, std::size_t ColumnSize >
@@ -82,7 +83,7 @@ namespace Framework::Math
 	Value Lerp( const Value value_a, const Value value_b, const PercentType t ) { return ( PercentType( 1 ) - t ) * value_a + t * value_b; }
 
 	template< std::totally_ordered Value >
-	Value Clamp( const Value value, const Value minimum, const Value maximum ) { return value < minimum ? minimum : value > maximum ? maximum : value; }
+	[[ nodiscard( "Clamped value is not assigned back to any variable." ) ]] Value Clamp(const Value value, const Value minimum, const Value maximum) { return value < minimum ? minimum : value > maximum ? maximum : value; }
 
 	template< Concepts::Arithmetic Value, std::size_t Size >
 	Radians< Value > Angle( const Vector< Value, Size >& a, const Vector< Value, Size >& b )
@@ -142,9 +143,9 @@ namespace Framework::Math
 		const auto sin_pitch = -matrix[ 2 ][ 1 ];
 
 		if( sin_pitch <= -1.0f )
-			pitch_around_x = Radians( -Constants< float >::Half_Pi() );
+			pitch_around_x = Radians( -Constants< float >::Pi_Over_Two() );
 		else if( sin_pitch >= +1.0f )
-			pitch_around_x = Radians( Constants< float >::Half_Pi() );
+			pitch_around_x = Radians( Constants< float >::Pi_Over_Two() );
 		else
 			pitch_around_x = Math::Asin( sin_pitch );
 
@@ -192,4 +193,6 @@ namespace Framework::Math
 	Vector3 ToVector3( const Polar3_Spherical& polar3 );
 	Polar3_Spherical_Game ToPolar3_Spherical_Game( const Vector3& cartesian );
 	Vector3 ToVector3( const Polar3_Spherical_Game& polar3 );
+	Polar3_Spherical_Game_RightHanded ToPolar3_Spherical_Game_RightHanded( const Vector3& cartesian );
+	Vector3 ToVector3( const Polar3_Spherical_Game_RightHanded& polar3 );
 }

@@ -154,4 +154,32 @@ namespace Framework::Math
 						r * -std::sin( float( polar3.Pitch() ) ),
 						xz_projection_of_r * std::cos( float( polar3.Heading() ) ) );
 	}
+
+	Polar3_Spherical_Game_RightHanded ToPolar3_Spherical_Game_RightHanded( const Vector3& cartesian )
+	{
+		// NOTE: Forward is <0,0-1>, not <0,0+1>!
+
+		const auto x = cartesian.X(), y = cartesian.Y(), z = cartesian.Z();
+
+		if( cartesian.IsZero() )
+			return Polar3_Spherical_Game_RightHanded( ZERO_INITIALIZATION );
+
+		const auto xz_projection_of_r = Math::Hypothenuse( x, z );
+
+		return Polar3_Spherical_Game_RightHanded( cartesian.Magnitude(), Radians( std::atan2( x, -z ) ), Radians( std::atan2( y, xz_projection_of_r ) ) );
+	}
+
+	Vector3 ToVector3( const Polar3_Spherical_Game_RightHanded& polar3 )
+	{
+		const auto r = polar3.R();
+
+		if( IsZero( r ) )
+			return Vector3( ZERO_INITIALIZATION );
+
+		const auto xz_projection_of_r = r * std::cos( float( polar3.Pitch() ) );
+
+		return Vector3( xz_projection_of_r * std::sin( float( polar3.Heading() ) ),
+						r * std::sin( float( polar3.Pitch() ) ),
+						xz_projection_of_r * -std::cos( float( polar3.Heading() ) ) );
+	}
 }

@@ -238,12 +238,12 @@ namespace Framework::Math
 		}
 
 		template< std::size_t VectorSize >
-		constexpr Vector< Type, VectorSize > GetRow( const unsigned int row_index = 0, const unsigned int start_index_inRow = 0 ) const requires( VectorSize <= RowSize )
+		constexpr const Vector< Type, VectorSize >& GetRow( const unsigned int row_index = 0, const unsigned int start_index_inRow = 0 ) const requires( VectorSize <= RowSize )
 		{
 			ASSERT( row_index < RowSize && "Row index out of bounds." );
 			ASSERT( start_index_inRow + VectorSize <= ColumnSize && "Given vector does not fit inside the row when starting from start_index_inRow." );
 
-			return Vector< Type, VectorSize >( *( reinterpret_cast< const Vector< Type, VectorSize >* >( data[ row_index ] + start_index_inRow ) ) );
+			return reinterpret_cast< const Vector< Type, VectorSize >& >( *( data[ row_index ] + start_index_inRow ) );
 		}
 
 		template< std::size_t VectorSize >

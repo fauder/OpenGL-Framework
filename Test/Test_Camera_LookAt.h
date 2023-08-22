@@ -32,7 +32,7 @@ namespace Framework::Test
 		std::unique_ptr< Drawable > cube_1;
 		std::unique_ptr< Texture > texture_test_cube;
 
-		Camera camera;
+		Transform camera_transform;
 
 		enum class LookAtMethod : int
 		{

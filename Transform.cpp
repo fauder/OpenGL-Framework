@@ -8,48 +8,52 @@ namespace Framework
 	Transform::Transform()
 		:
 		scale( Vector3( 1.0f, 1.0f, 1.0f ) ),
-		rotation(),
 		translation( ZERO_INITIALIZATION ),
+		rotation(),
 		scaling_needsUpdate( true ),
 		rotation_needsUpdate( true ),
 		translation_needsUpdate( true ),
-		final_matrix_needsUpdate( true )
+		final_matrix_needsUpdate( true ),
+		is_dirty( false )
 	{
 	}
 
 	Transform::Transform( const Vector3& scale )
 		:
 		scale( scale ),
-		rotation(),
 		translation( ZERO_INITIALIZATION ),
+		rotation(),
 		scaling_needsUpdate( true ),
 		rotation_needsUpdate( true ),
 		translation_needsUpdate( true ),
-		final_matrix_needsUpdate( true )
+		final_matrix_needsUpdate( true ),
+		is_dirty( false )
 	{
 	}
 
 	Transform::Transform( const Vector3& scale, const Vector3& translation )
 		:
 		scale( scale ),
-		rotation(),
 		translation( translation ),
+		rotation(),
 		scaling_needsUpdate( true ),
 		rotation_needsUpdate( true ),
 		translation_needsUpdate( true ),
-		final_matrix_needsUpdate( true )
+		final_matrix_needsUpdate( true ),
+		is_dirty( false )
 	{
 	}
 
 	Transform::Transform( const Vector3& scale, const Quaternion& rotation, const Vector3& translation )
 		:
 		scale( scale ),
-		rotation( rotation ),
 		translation( translation ),
+		rotation( rotation ),
 		scaling_needsUpdate( true ),
 		rotation_needsUpdate( true ),
 		translation_needsUpdate( true ),
-		final_matrix_needsUpdate( true )
+		final_matrix_needsUpdate( true ),
+		is_dirty( false )
 	{
 	}
 
@@ -60,7 +64,7 @@ namespace Framework
 	Transform& Transform::SetScaling( const Vector3& scale )
 	{
 		this->scale = scale;
-		scaling_needsUpdate = final_matrix_needsUpdate = true;
+		scaling_needsUpdate = final_matrix_needsUpdate = is_dirty = true;
 
 		return *this;
 	}
@@ -72,7 +76,7 @@ namespace Framework
 	#endif // _DEBUG
 
 		this->rotation = rotation;
-		rotation_needsUpdate = final_matrix_needsUpdate = true;
+		rotation_needsUpdate = final_matrix_needsUpdate = is_dirty = true;
 
 		return *this;
 	}
@@ -80,7 +84,7 @@ namespace Framework
 	Transform& Transform::SetTranslation( const Vector3& translation )
 	{
 		this->translation = translation;
-		translation_needsUpdate = final_matrix_needsUpdate = true;
+		translation_needsUpdate = final_matrix_needsUpdate = is_dirty = true;
 
 		return *this;
 	}
@@ -131,41 +135,60 @@ namespace Framework
 		return translation;
 	}
 
-	const Matrix4x4& Transform::GetScalingMatrix()
+	void Transform::UpdateScalingMatrixIfDirty()
 	{
 		if( scaling_needsUpdate )
 		{
 			scaling_matrix.SetDiagonals( scale );
 			scaling_needsUpdate = false;
 		}
-
-		return scaling_matrix;
 	}
 
-	const Matrix4x4& Transform::GetRotationAndTranslationMatrix()
+	void Transform::UpdateRotationPartOfMatrixIfDirty()
 	{
 		if( rotation_needsUpdate )
 		{
 			rotation_and_translation_matrix = Matrix4x4( Math::QuaternionToMatrix3x3( rotation ), rotation_and_translation_matrix.GetRow< 3 >( 3 ) );
 			rotation_needsUpdate = false;
 		}
+	}
 
+	void Transform::UpdateTranslationPartOfMatrixIfDirty()
+	{
 		if( translation_needsUpdate )
 		{
 			rotation_and_translation_matrix.SetTranslation( translation );
 			translation_needsUpdate = false;
 		}
-
-		return rotation_and_translation_matrix;
 	}
 
-	const Matrix4x4& Transform::GetFinalMatrix()
+	void Transform::UpdateFinalMatrixIfDirty()
 	{
 		if( final_matrix_needsUpdate )
 		{
 			final_matrix = GetScalingMatrix() * GetRotationAndTranslationMatrix();
 			final_matrix_needsUpdate = false;
 		}
+	}
+
+	const Matrix4x4& Transform::GetScalingMatrix()
+	{
+		UpdateScalingMatrixIfDirty();
+
+		return scaling_matrix;
+	}
+
+	const Matrix4x4& Transform::GetRotationAndTranslationMatrix()
+	{
+		UpdateRotationPartOfMatrixIfDirty();
+		UpdateTranslationPartOfMatrixIfDirty();
+
+		return rotation_and_translation_matrix;
+	}
+
+	const Matrix4x4& Transform::GetFinalMatrix()
+	{
+		UpdateFinalMatrixIfDirty();
 
 		return final_matrix;
 	}
@@ -190,5 +213,23 @@ namespace Framework
 		const Matrix4x4 inverse_translation_matrix( Matrix4x4{}.SetTranslation( -rotation_and_translation_matrix.GetRow< 3 >( 3 /* Last Row. */ ) ) );
 
 		return inverse_translation_matrix * inverse_rotation_matrix * inverse_scaling_matrix;
+	}
+
+	const Vector3& Transform::Right()
+	{
+		UpdateRotationPartOfMatrixIfDirty();
+		return rotation_and_translation_matrix.GetRow< 3 >( 0 );
+	}
+
+	const Vector3& Transform::Up()
+	{
+		UpdateRotationPartOfMatrixIfDirty();
+		return rotation_and_translation_matrix.GetRow< 3 >( 1 );
+	}
+
+	Vector3 Transform::Forward()
+	{
+		UpdateRotationPartOfMatrixIfDirty();
+		return -rotation_and_translation_matrix.GetRow< 3 >( 2 ); // Negates the vector, so can not return reference.
 	}
 }

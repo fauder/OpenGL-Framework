@@ -2,9 +2,10 @@
 
 // Project Includes.
 #include "Test.hpp"
+#include "../Camera_Flight.h"
 #include "../Drawable.h"
+#include "../Polar.hpp"
 #include "../Texture.h"
-#include "../Camera.h"
 
 // std Includes.
 #include <memory>
@@ -19,13 +20,16 @@ namespace Framework::Test
 		Test_Camera_WalkAround( Renderer& renderer );
 		~Test_Camera_WalkAround() override;
 
-	protected:
+	private:
+		/* Test "overrides". */
+		void OnKeyboardEvent( const Platform::KeyCode key_code, const Platform::KeyAction action, const Platform::KeyMods mods );
 		void OnProcessInput();
 		void OnUpdate();
 		void OnRender();
 		void OnRenderImGui();
 
 		void ResetCameraTranslation();
+		void ResetCameraRotation();
 		float ResetCameraMoveSpeed();
 
 	private:
@@ -34,12 +38,13 @@ namespace Framework::Test
 		std::unique_ptr< Drawable > cube_1;
 		std::unique_ptr< Texture > texture_test_cube;
 
-		Camera camera;
+		Transform camera_transform;
+		Camera_Flight camera;
 
-		float camera_move_speed;
+		Vector3 camera_delta_position;
+		float camera_displacement;
 
-		Vector3 delta_position;
-		float displacement;
+		bool input_is_enabled;
 
 		static constexpr Vector3 rotation_axis = Vector3( Constants< float >::Sqrt_Half(), Constants< float >::Sqrt_Half(), 0.0f );
 	};

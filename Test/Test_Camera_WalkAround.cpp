@@ -11,11 +11,14 @@ namespace Framework::Test
 {
 	Test_Camera_WalkAround::Test_Camera_WalkAround( Renderer& renderer )
 		:
-		Test( renderer ),
-		camera_move_speed( ResetCameraMoveSpeed() ),
-		delta_position( ZERO_INITIALIZATION )
+		Test( renderer, false /* UI starts disabled, to allow for camera movement via mouse input. */ ),
+		camera( &camera_transform, renderer.AspectRatio(), ResetCameraMoveSpeed() ),
+		camera_delta_position( ZERO_INITIALIZATION ),
+		input_is_enabled( true )
 	{
 		using namespace Framework;
+
+		Platform::CaptureMouse( input_is_enabled );
 
 		shader = std::make_unique< Shader >( "Asset/Shader/Vertex.shader", "Asset/Shader/Fragment.shader" );
 
@@ -85,8 +88,6 @@ namespace Framework::Test
 		shader->Bind();
 		shader->SetInt( "texture_sampler_1", 0 );
 
-		shader->SetMatrix( "transformation_projection", Matrix::PerspectiveProjection( 0.1f, 100.0f, renderer.AspectRatio(), 45_deg ) );
-
 		// Initial camera position and rotation:
 		ResetCameraTranslation();
 	}
@@ -94,56 +95,115 @@ namespace Framework::Test
 	Test_Camera_WalkAround::~Test_Camera_WalkAround()
 	{
 		renderer.RemoveDrawable( cube_1.get() );
+
+		Platform::SetKeyboardEventCallback();
+		Platform::CaptureMouse( false );
+	}
+
+	void Test_Camera_WalkAround::OnKeyboardEvent( const Platform::KeyCode key_code, const Platform::KeyAction action, const Platform::KeyMods mods )
+	{
+		switch( key_code )
+		{
+			case Platform::KeyCode::KEY_GRAVE_ACCENT:
+				if( action == Platform::KeyAction::PRESS )
+				{
+					input_is_enabled = !input_is_enabled;
+					Platform::CaptureMouse( input_is_enabled );
+				}
+				break;
+			default:
+				break;
+		}
 	}
 
 	void Test_Camera_WalkAround::OnProcessInput()
 	{
-		Test::OnProcessInput();
+		camera_delta_position = Vector3::Zero();
 
-		delta_position = Vector3::Zero();
+		if( input_is_enabled == false )
+			return;
+
+		if( Platform::IsKeyPressed( Platform::KeyCode::KEY_R ) )
+		{
+			ResetCameraRotation();
+			ResetCameraTranslation();
+			return;
+		}
 
 		if( Platform::IsKeyPressed( Platform::KeyCode::KEY_W ) )
-			delta_position += Vector3::Forward();
+			camera_delta_position += camera.Forward();
 		if( Platform::IsKeyPressed( Platform::KeyCode::KEY_S ) )
-			delta_position += Vector3::Backward();
+			camera_delta_position -= camera.Forward();
 		if( Platform::IsKeyPressed( Platform::KeyCode::KEY_A ) )
-			delta_position += Vector3::Left();
+			camera_delta_position -= camera.Right();
 		if( Platform::IsKeyPressed( Platform::KeyCode::KEY_D ) )
-			delta_position += Vector3::Right();
+			camera_delta_position += camera.Right();
 
-		if( !delta_position.IsZero() )
-			delta_position.Normalize() *= camera_move_speed * time_delta;
+		if( !camera_delta_position.IsZero() )
+			camera_delta_position.Normalize() *= camera.GetMoveSpeed() * time_delta;
 
-		displacement = delta_position.Magnitude();
+		camera_displacement = camera_delta_position.Magnitude();
+
+		const auto [ mouse_delta_x, mouse_delta_y ] = Platform::GetMouseCursorDeltas();
+
+		camera.SetHeading( camera.GetHeading() + mouse_delta_x );
+		camera.SetPitch( Math::Clamp( camera.GetPitch() - mouse_delta_y, -Constants< Radians >::Pi_Over_Six(), +Constants< Radians >::Pi_Over_Six() ) );
+
+		const Degrees fov_offset( -Platform::GetMouseScrollOffsets().second );
+		camera.SetFieldOfView( Math::Clamp( camera.GetFieldOfView() - fov_offset, 1_deg, 45_deg ) );
 	}
 
 	void Test_Camera_WalkAround::OnUpdate()
 	{
-		camera.transform.OffsetTranslation( delta_position );
+		camera_transform.ResetDirtyFlag();
+
+		camera_transform.OffsetTranslation( camera_delta_position );
 	}
 
 	void Test_Camera_WalkAround::OnRender()
 	{
-		const Vector3 target( ZERO_INITIALIZATION ); // Look at the origin.
-
-		Vector3 camera_position = camera.transform.GetTranslation();
-
-		const auto lookAt_direction( ( target - camera_position ).Normalized() );
-
-		//if( !lookAt_direction.IsZero() ) // Or we can clamp the position instead, so the camera does not overlap with the target.
-		//	camera.transform.SetRotation( Quaternion::LookRotation( lookAt_direction ) );
-
-		shader->SetMatrix( "transformation_view", camera.transform.GetInverseOfFinalMatrix() );
+		shader->SetMatrix( "transformation_view",		camera.GetViewMatrix() );
+		shader->SetMatrix( "transformation_projection", camera.GetProjectionMatrix() );
 	}
 
 	void Test_Camera_WalkAround::OnRenderImGui()
 	{
-		if( ImGui::Begin( "Test: Camera " ) )
+		if( ImGui::Begin( "Test: Camera ", nullptr, CurrentImGuiWindowFlags() ) )
 		{
-			auto camera_position = camera.transform.GetTranslation();
+			Vector3 camera_position          = camera_transform.GetTranslation();
+			Vector3 camera_right_direction   = camera.Right();
+			Vector3 camera_up_direction      = camera.Up();
+			Vector3 camera_forward_direction = camera.Forward();
+			float heading                    = ( float )Math::Degrees( camera.GetHeading() );
+			float pitch                      = ( float )Math::Degrees( camera.GetPitch() );
+
+			Math::Polar3_Spherical camera_orientation_spherical( 1.0f, Degrees( heading ), Degrees( pitch ) );
+			Vector3 camera_look_at_direction( Math::ToVector3( camera_orientation_spherical ) );
+
+			float camera_move_speed = camera.GetMoveSpeed();
+			float fov               = ( float )camera.GetFieldOfView();
+
 			ImGui::DragFloat3( "Camera Position", reinterpret_cast< float* >( &camera_position ) ); ImGui::SameLine(); if( ImGui::Button( "Reset##camera_position" ) ) ResetCameraTranslation();
+			ImGui::InputFloat( "Delta Position", &camera_displacement, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly );
 			ImGui::SliderFloat( "Move Speed ", &camera_move_speed, 0.5f, 5.0f, "%.2f", ImGuiSliderFlags_Logarithmic ); ImGui::SameLine(); if( ImGui::Button( "Reset##camera_move_speed" ) ) ResetCameraMoveSpeed();
-			ImGui::InputFloat( "Delta Position", &displacement, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly );
+
+			ImGui::InputFloat( "Heading", &heading, 0.0f, 0.0f, "%.3f degrees", ImGuiInputTextFlags_ReadOnly );
+			ImGui::InputFloat( "Pitch", &pitch, 0.0f, 0.0f, "%.3f degrees", ImGuiInputTextFlags_ReadOnly );
+			ImGui::InputFloat3( "Look-At Direction", const_cast< float* >( camera_look_at_direction.Data() ), "%.3f", ImGuiInputTextFlags_ReadOnly );
+				ImGui::SameLine(); if( ImGui::Button( "Reset##camera_rotation" ) ) ResetCameraRotation();
+			ImGui::InputFloat3( "Camera Right",   reinterpret_cast< float* >( &camera_right_direction	), "%.3f", ImGuiInputTextFlags_ReadOnly );
+			ImGui::InputFloat3( "Camera Up",	  reinterpret_cast< float* >( &camera_up_direction		), "%.3f", ImGuiInputTextFlags_ReadOnly );
+			ImGui::InputFloat3( "Camera Forward", reinterpret_cast< float* >( &camera_forward_direction ), "%.3f", ImGuiInputTextFlags_ReadOnly );
+			ImGui::InputFloat( "Field of View", &fov, 0.0f, 0.0f, "%.3f degrees", ImGuiInputTextFlags_ReadOnly );
+
+			ImGui::SeparatorText( "Mouse Info." );
+		/* -----------------------------------*/
+			auto [ mouse_delta_x, mouse_delta_y ] = Platform::GetMouseCursorDeltas();
+			auto sensitivity = Platform::GetMouseSensitivity();
+			if( ImGui::InputFloat( "Sensitivity", &sensitivity, 0.0f, 0.0f, "%.3f" ) )
+				Platform::SetMouseSensitivity( sensitivity );
+			ImGui::InputFloat( "Platform: Delta X", &mouse_delta_x, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly );
+			ImGui::InputFloat( "Platform: Delta Y",	&mouse_delta_y, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly );
 		}
 
 		ImGui::End();
@@ -151,11 +211,17 @@ namespace Framework::Test
 
 	void Test_Camera_WalkAround::ResetCameraTranslation()
 	{
-		camera.transform.SetTranslation( Vector3::Backward() * 4.0f );
+		camera_transform.SetTranslation( Vector3::Backward() * 4.0f );
+	}
+
+	void Test_Camera_WalkAround::ResetCameraRotation()
+	{
+		camera.SetHeading( 0_rad );
+		camera.SetPitch( 0_rad );
 	}
 
 	float Test_Camera_WalkAround::ResetCameraMoveSpeed()
 	{
-		return camera_move_speed = 2.0f;
+		return camera.SetMoveSpeed( 2.0f );
 	}
 }

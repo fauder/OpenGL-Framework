@@ -24,7 +24,7 @@ namespace Framework::Test
 	class Test : public TestInterface
 	{
 	public:
-		Test( Renderer& renderer )
+		Test( Renderer& renderer, bool ui_starts_enabled = true )
 			:
 			renderer( renderer ),
 			name( ExtractTestNameFromTypeName( typeid( *this ).name() ) ),
@@ -34,7 +34,8 @@ namespace Framework::Test
 			time_previous( 0.0f ),
 			time_previous_since_start( 0.0f ),
 			time_since_start( 0.0f ),
-			executing( true )
+			executing( true ),
+			ui_interaction_enabled( ui_starts_enabled )
 		{
 			renderer.SetClearColor( Color4::Clear_Default() );
 		}
@@ -55,9 +56,6 @@ namespace Framework::Test
 		void ProcessInput()
 		{
 			Platform::PollEvents();
-
-			if( Platform::IsKeyPressed( Platform::KeyCode::KEY_ESCAPE ) )
-				Platform::SetShouldClose( true );
 
 			Derived()->OnProcessInput();
 		}
@@ -98,6 +96,13 @@ namespace Framework::Test
 		void OnExecute()
 		{
 			executing = true;
+
+			Platform::SetKeyboardEventCallback(
+				[ = ]( const Platform::KeyCode key_code, const Platform::KeyAction key_action, const Platform::KeyMods key_mods )
+				{
+					this->OnKeyboardEvent_Internal( key_code, key_action, key_mods );
+				} );
+
 			while( executing && !Platform::ShouldClose() )
 			{
 				CalculateTimeInformation();
@@ -118,14 +123,41 @@ namespace Framework::Test
 			}
 		}
 
+		void OnKeyboardEvent( const Platform::KeyCode key_code, const Platform::KeyAction key_action, const Platform::KeyMods key_mods ) {}
 		void OnProcessInput()	{}
 		void OnUpdate()			{}
 		void OnRender()			{}
 		void OnRenderImGui()	{}
 
+		ImGuiWindowFlags CurrentImGuiWindowFlags() const { return ImGuiWindowFlags_NoFocusOnAppearing | ( ui_interaction_enabled ? 0 : ImGuiWindowFlags_NoMouseInputs ); }
+		void SetUIInteraction( const bool enable ) { ui_interaction_enabled = enable; }
+
 	private:
 		ActualTest* Derived() { return static_cast< ActualTest* >( this ); }
 		ActualTest* Derived() const { return static_cast< ActualTest* >( this ); }
+
+		void OnKeyboardEvent_Internal( const Platform::KeyCode key_code, const Platform::KeyAction key_action, const Platform::KeyMods key_mods )
+		{
+			if( ImGui::GetIO().WantCaptureKeyboard )
+				return;
+
+			switch( key_code )
+			{
+				case Platform::KeyCode::KEY_ESCAPE:
+					if( key_action == Platform::KeyAction::PRESS )
+						executing = false;
+					break;
+				/* Use the key below ESC to toggle between game & menu/UI. */
+				case Platform::KeyCode::KEY_GRAVE_ACCENT: 
+					if( key_action == Platform::KeyAction::PRESS )
+						ui_interaction_enabled = !ui_interaction_enabled;
+					break;
+				default:
+					break;
+			}
+
+			Derived()->OnKeyboardEvent( key_code, key_action, key_mods );
+		}
 
 		void CalculateTimeInformation()
 		{
@@ -148,7 +180,7 @@ namespace Framework::Test
 
 		void RenderImGui_Menu_BackButton()
 		{
-			ImGui::Begin( "Test Menu" );
+			ImGui::Begin( "Test Menu", nullptr, CurrentImGuiWindowFlags() );
 
 			ImGui::Text( std::string( R"(Executing Test ")" + name + R"("...)" ).c_str() );
 			if( ImGui::Button( "<-" ) )
@@ -159,7 +191,7 @@ namespace Framework::Test
 
 		void RenderImGui_FrameStatistics()
 		{
-			if( ImGui::Begin( "Frame Statistics." ) )
+			if( ImGui::Begin( "Frame Statistics.", nullptr, CurrentImGuiWindowFlags() ) )
 			{
 				ImGui::Text( "FPS: %.1f fps", 1.0f / time_delta_real );
 				ImGui::Text( "Delta time (multiplied): %.3f ms | Delta time (real): %.3f", time_delta * 1000.0f, time_delta_real * 1000.0f );
@@ -205,5 +237,6 @@ namespace Framework::Test
 		float time_since_start;
 
 		bool executing;
+		bool ui_interaction_enabled;
 	};
 }
