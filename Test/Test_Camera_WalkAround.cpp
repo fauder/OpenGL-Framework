@@ -168,30 +168,28 @@ namespace Framework::Test
 			auto camera_right_direction   = camera.transform.Right();
 			auto camera_up_direction      = camera.transform.Up();
 			auto camera_forward_direction = camera.transform.Forward();
+			float heading                 = ( float )Math::Degrees( camera_direction_spherical.Heading() );
+			float pitch                   = ( float )Math::Degrees( camera_direction_spherical.Pitch() );
 
 			ImGui::DragFloat3( "Camera Position", reinterpret_cast< float* >( &camera_position ) ); ImGui::SameLine(); if( ImGui::Button( "Reset##camera_position" ) ) ResetCameraTranslation();
+			ImGui::InputFloat( "Delta Position", &displacement, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly );
+			ImGui::SliderFloat( "Move Speed ", &camera_move_speed, 0.5f, 5.0f, "%.2f", ImGuiSliderFlags_Logarithmic ); ImGui::SameLine(); if( ImGui::Button( "Reset##camera_move_speed" ) ) ResetCameraMoveSpeed();
+
+			ImGui::InputFloat( "Heading", &heading, 0.0f, 0.0f, "%.3f degrees", ImGuiInputTextFlags_ReadOnly );
+			ImGui::InputFloat( "Pitch", &pitch, 0.0f, 0.0f, "%.3f degrees", ImGuiInputTextFlags_ReadOnly );
+			ImGui::InputFloat3( "Look-At Direction", const_cast< float* >( camera_look_at_direction.Data() ), "%.3f", ImGuiInputTextFlags_ReadOnly );
 			ImGui::InputFloat3( "Camera Right",   reinterpret_cast< float* >( &camera_right_direction	), "%.3f", ImGuiInputTextFlags_ReadOnly );
 			ImGui::InputFloat3( "Camera Up",	  reinterpret_cast< float* >( &camera_up_direction		), "%.3f", ImGuiInputTextFlags_ReadOnly );
 			ImGui::InputFloat3( "Camera Forward", reinterpret_cast< float* >( &camera_forward_direction ), "%.3f", ImGuiInputTextFlags_ReadOnly );
-			ImGui::SliderFloat( "Move Speed ", &camera_move_speed, 0.5f, 5.0f, "%.2f", ImGuiSliderFlags_Logarithmic ); ImGui::SameLine(); if( ImGui::Button( "Reset##camera_move_speed" ) ) ResetCameraMoveSpeed();
-			ImGui::InputFloat( "Delta Position", &displacement, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly );
 
 			ImGui::SeparatorText( "Mouse Info." );
-			float heading = ( float )camera_direction_spherical.Heading();
-			float pitch   = ( float )camera_direction_spherical.Pitch();
+		/* -----------------------------------*/
 			auto [ mouse_delta_x, mouse_delta_y ] = Platform::GetMouseCursorDeltas();
 			auto sensitivity = Platform::GetMouseSensitivity();
 			if( ImGui::InputFloat( "Sensitivity", &sensitivity, 0.0f, 0.0f, "%.3f" ) )
 				Platform::SetMouseSensitivity( sensitivity );
 			ImGui::InputFloat( "Platform: Delta X", &mouse_delta_x, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly );
 			ImGui::InputFloat( "Platform: Delta Y",	&mouse_delta_y, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly );
-			ImGui::InputFloat( "Heading", &heading, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly );
-			ImGui::InputFloat( "Pitch",		&pitch, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly );
-			ImGui::InputFloat3( "Look-At Direction", const_cast< float* >( camera_look_at_direction.Data() ), "%.3f", ImGuiInputTextFlags_ReadOnly );
-
-			ImGui::SeparatorText( "Input" );
-			ImGui::TextUnformatted( input_is_enabled ? "Mouse input: enabled" : "Mouse input: disabled" );
-			ImGui::TextUnformatted( ImGui::GetIO().WantCaptureMouse ? "ImGui wants mouse capture?: enabled" : "ImGui wants mouse capture?: disabled" );
 		}
 
 		ImGui::End();
