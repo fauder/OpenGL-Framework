@@ -20,7 +20,9 @@ namespace Framework::Test
 		Test_Camera_WalkAround( Renderer& renderer );
 		~Test_Camera_WalkAround() override;
 
-	protected:
+	private:
+		/* Test "overrides". */
+		void OnKeyboardEvent( const Platform::KeyCode key_code, const Platform::KeyAction action, const Platform::KeyMods mods );
 		void OnProcessInput();
 		void OnUpdate();
 		void OnRender();
@@ -43,6 +45,8 @@ namespace Framework::Test
 		Math::Polar3_Spherical_Game_RightHanded camera_direction_spherical;
 		Vector3 camera_look_at_direction;
 		float displacement;
+
+		bool input_is_enabled;
 
 		static constexpr Vector3 rotation_axis = Vector3( Constants< float >::Sqrt_Half(), Constants< float >::Sqrt_Half(), 0.0f );
 	};

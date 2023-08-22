@@ -11,13 +11,16 @@ namespace Framework::Test
 {
 	Test_Camera_WalkAround::Test_Camera_WalkAround( Renderer& renderer )
 		:
-		Test( renderer ),
+		Test( renderer, false /* UI starts disabled, to allow for camera movement via mouse input. */ ),
 		camera_move_speed( ResetCameraMoveSpeed() ),
 		camera_direction_spherical( 1.0f, 0.0_rad, 0.0_rad ),
 		camera_look_at_direction( Vector3::Forward() ),
-		delta_position( ZERO_INITIALIZATION )
+		delta_position( ZERO_INITIALIZATION ),
+		input_is_enabled( true )
 	{
 		using namespace Framework;
+
+		Platform::CaptureMouse( input_is_enabled );
 
 		shader = std::make_unique< Shader >( "Asset/Shader/Vertex.shader", "Asset/Shader/Fragment.shader" );
 
@@ -96,11 +99,32 @@ namespace Framework::Test
 	Test_Camera_WalkAround::~Test_Camera_WalkAround()
 	{
 		renderer.RemoveDrawable( cube_1.get() );
+
+		Platform::SetKeyboardEventCallback();
+	}
+
+	void Test_Camera_WalkAround::OnKeyboardEvent( const Platform::KeyCode key_code, const Platform::KeyAction action, const Platform::KeyMods mods )
+	{
+		switch( key_code )
+		{
+			case Platform::KeyCode::KEY_GRAVE_ACCENT:
+				if( action == Platform::KeyAction::PRESS )
+				{
+					input_is_enabled = !input_is_enabled;
+					Platform::CaptureMouse( input_is_enabled );
+				}
+				break;
+			default:
+				break;
+		}
 	}
 
 	void Test_Camera_WalkAround::OnProcessInput()
 	{
 		delta_position = Vector3::Zero();
+
+		if( input_is_enabled == false )
+			return;
 
 		if( Platform::IsKeyPressed( Platform::KeyCode::KEY_W ) )
 			delta_position += camera.transform.Forward();
@@ -164,6 +188,10 @@ namespace Framework::Test
 			ImGui::InputFloat( "Heading", &heading, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly );
 			ImGui::InputFloat( "Pitch",		&pitch, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly );
 			ImGui::InputFloat3( "Look-At Direction", const_cast< float* >( camera_look_at_direction.Data() ), "%.3f", ImGuiInputTextFlags_ReadOnly );
+
+			ImGui::SeparatorText( "Input" );
+			ImGui::TextUnformatted( input_is_enabled ? "Mouse input: enabled" : "Mouse input: disabled" );
+			ImGui::TextUnformatted( ImGui::GetIO().WantCaptureMouse ? "ImGui wants mouse capture?: enabled" : "ImGui wants mouse capture?: disabled" );
 		}
 
 		ImGui::End();
