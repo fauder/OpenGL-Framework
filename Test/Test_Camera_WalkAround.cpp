@@ -127,6 +127,13 @@ namespace Framework::Test
 		if( input_is_enabled == false )
 			return;
 
+		if( Platform::IsKeyPressed( Platform::KeyCode::KEY_R ) )
+		{
+			ResetCameraRotation();
+			ResetCameraTranslation();
+			return;
+		}
+
 		if( Platform::IsKeyPressed( Platform::KeyCode::KEY_W ) )
 			camera_delta_position += camera.transform.Forward();
 		if( Platform::IsKeyPressed( Platform::KeyCode::KEY_S ) )
