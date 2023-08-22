@@ -38,7 +38,7 @@ namespace Framework
 
 		const Vector3& Right();
 		const Vector3& Up();
-		const Vector3& Forward();
+		Vector3 Forward(); // Negates the vector, so can not return reference.
 
 		inline bool NeedsUpdate() const { return final_matrix_needsUpdate; }
 

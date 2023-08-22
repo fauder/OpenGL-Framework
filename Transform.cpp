@@ -223,9 +223,9 @@ namespace Framework
 		return rotation_and_translation_matrix.GetRow< 3 >( 1 );
 	}
 
-	const Vector3& Transform::Forward()
+	Vector3 Transform::Forward()
 	{
 		UpdateRotationPartOfMatrixIfDirty();
-		return -rotation_and_translation_matrix.GetRow< 3 >( 2 );
+		return -rotation_and_translation_matrix.GetRow< 3 >( 2 ); // Negates the vector, so can not return reference.
 	}
 }
