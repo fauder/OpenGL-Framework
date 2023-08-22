@@ -29,6 +29,7 @@ namespace Framework::Test
 		void OnRenderImGui();
 
 		void ResetCameraTranslation();
+		void ResetCameraRotation();
 		float ResetCameraMoveSpeed();
 
 	private:

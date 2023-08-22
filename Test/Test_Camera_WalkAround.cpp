@@ -178,6 +178,7 @@ namespace Framework::Test
 			ImGui::InputFloat( "Heading", &heading, 0.0f, 0.0f, "%.3f degrees", ImGuiInputTextFlags_ReadOnly );
 			ImGui::InputFloat( "Pitch", &pitch, 0.0f, 0.0f, "%.3f degrees", ImGuiInputTextFlags_ReadOnly );
 			ImGui::InputFloat3( "Look-At Direction", const_cast< float* >( camera_look_at_direction.Data() ), "%.3f", ImGuiInputTextFlags_ReadOnly );
+				ImGui::SameLine(); if( ImGui::Button( "Reset##camera_rotation" ) ) ResetCameraRotation();
 			ImGui::InputFloat3( "Camera Right",   reinterpret_cast< float* >( &camera_right_direction	), "%.3f", ImGuiInputTextFlags_ReadOnly );
 			ImGui::InputFloat3( "Camera Up",	  reinterpret_cast< float* >( &camera_up_direction		), "%.3f", ImGuiInputTextFlags_ReadOnly );
 			ImGui::InputFloat3( "Camera Forward", reinterpret_cast< float* >( &camera_forward_direction ), "%.3f", ImGuiInputTextFlags_ReadOnly );
@@ -198,6 +199,13 @@ namespace Framework::Test
 	void Test_Camera_WalkAround::ResetCameraTranslation()
 	{
 		camera.transform.SetTranslation( Vector3::Backward() * 4.0f );
+	}
+
+	void Test_Camera_WalkAround::ResetCameraRotation()
+	{
+		camera_direction_spherical.Heading() = 0_deg;
+		camera_direction_spherical.Pitch()   = 0_deg;
+		camera_look_at_direction = Vector3::Forward();
 	}
 
 	float Test_Camera_WalkAround::ResetCameraMoveSpeed()
