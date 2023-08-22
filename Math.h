@@ -143,9 +143,9 @@ namespace Framework::Math
 		const auto sin_pitch = -matrix[ 2 ][ 1 ];
 
 		if( sin_pitch <= -1.0f )
-			pitch_around_x = Radians( -Constants< float >::Half_Pi() );
+			pitch_around_x = Radians( -Constants< float >::Pi_Over_Two() );
 		else if( sin_pitch >= +1.0f )
-			pitch_around_x = Radians( Constants< float >::Half_Pi() );
+			pitch_around_x = Radians( Constants< float >::Pi_Over_Two() );
 		else
 			pitch_around_x = Math::Asin( sin_pitch );
 
