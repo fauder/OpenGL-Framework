@@ -40,12 +40,16 @@ namespace Framework::Test
 
 		Camera camera;
 
+		// TODO: Abstract these into Camera_FirstPerson : Camera.
+
 		float camera_move_speed;
 
-		Vector3 delta_position;
+		Vector3 camera_delta_position;
 		Math::Polar3_Spherical_Game_RightHanded camera_direction_spherical;
 		Vector3 camera_look_at_direction;
-		float displacement;
+		float camera_displacement;
+
+		Degrees camera_field_of_view;
 
 		bool input_is_enabled;
 
