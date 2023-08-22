@@ -13,14 +13,15 @@
 // std Includes.
 #include <stdexcept>
 
-GLFWwindow* WINDOW = nullptr; // No need to expose this outside.
-float MOUSE_CURSOR_X_POS = 0.0f, MOUSE_CURSOR_Y_POS = 0.0f;
-float MOUSE_CURSOR_X_DELTA = 0.0f, MOUSE_CURSOR_Y_DELTA = 0.0f;
-float MOUSE_SENSITIVITY = 0.004f;
-bool MOUSE_CAPTURE_IS_FIRST_FRAME = true;
-
 namespace Framework::Platform
 {
+	GLFWwindow* WINDOW = nullptr; // No need to expose this outside.
+	float MOUSE_CURSOR_X_POS = 0.0f, MOUSE_CURSOR_Y_POS = 0.0f;
+	float MOUSE_CURSOR_X_DELTA = 0.0f, MOUSE_CURSOR_Y_DELTA = 0.0f;
+	float MOUSE_SENSITIVITY = 0.004f;
+	bool MOUSE_CAPTURE_IS_RESET = true;
+	bool MOUSE_CAPTURE_ENABLED = false;
+
 	void OnResize( GLFWwindow* window, const int width_new_pixels, const int height_new_pixels )
 	{
 		glViewport( 0, 0, width_new_pixels, height_new_pixels );
