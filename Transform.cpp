@@ -13,7 +13,8 @@ namespace Framework
 		scaling_needsUpdate( true ),
 		rotation_needsUpdate( true ),
 		translation_needsUpdate( true ),
-		final_matrix_needsUpdate( true )
+		final_matrix_needsUpdate( true ),
+		is_dirty( false )
 	{
 	}
 
@@ -25,7 +26,8 @@ namespace Framework
 		scaling_needsUpdate( true ),
 		rotation_needsUpdate( true ),
 		translation_needsUpdate( true ),
-		final_matrix_needsUpdate( true )
+		final_matrix_needsUpdate( true ),
+		is_dirty( false )
 	{
 	}
 
@@ -37,7 +39,8 @@ namespace Framework
 		scaling_needsUpdate( true ),
 		rotation_needsUpdate( true ),
 		translation_needsUpdate( true ),
-		final_matrix_needsUpdate( true )
+		final_matrix_needsUpdate( true ),
+		is_dirty( false )
 	{
 	}
 
@@ -49,7 +52,8 @@ namespace Framework
 		scaling_needsUpdate( true ),
 		rotation_needsUpdate( true ),
 		translation_needsUpdate( true ),
-		final_matrix_needsUpdate( true )
+		final_matrix_needsUpdate( true ),
+		is_dirty( false )
 	{
 	}
 
@@ -60,7 +64,7 @@ namespace Framework
 	Transform& Transform::SetScaling( const Vector3& scale )
 	{
 		this->scale = scale;
-		scaling_needsUpdate = final_matrix_needsUpdate = true;
+		scaling_needsUpdate = final_matrix_needsUpdate = is_dirty = true;
 
 		return *this;
 	}
@@ -72,7 +76,7 @@ namespace Framework
 	#endif // _DEBUG
 
 		this->rotation = rotation;
-		rotation_needsUpdate = final_matrix_needsUpdate = true;
+		rotation_needsUpdate = final_matrix_needsUpdate = is_dirty = true;
 
 		return *this;
 	}
@@ -80,7 +84,7 @@ namespace Framework
 	Transform& Transform::SetTranslation( const Vector3& translation )
 	{
 		this->translation = translation;
-		translation_needsUpdate = final_matrix_needsUpdate = true;
+		translation_needsUpdate = final_matrix_needsUpdate = is_dirty = true;
 
 		return *this;
 	}

@@ -40,7 +40,9 @@ namespace Framework
 		const Vector3& Up();
 		Vector3 Forward(); // Negates the vector, so can not return reference.
 
-		inline bool NeedsUpdate() const { return final_matrix_needsUpdate; }
+		/* This must be reset (via ResetDirtyFlag()) at the beginning of every frame. */
+		inline bool IsDirty() const { return is_dirty; }
+		inline bool ResetDirtyFlag() { return is_dirty = false; }
 
 	private:
 		void UpdateScalingMatrixIfDirty();
@@ -61,10 +63,16 @@ namespace Framework
 
 		Matrix4x4 final_matrix;
 
+		/* 4 flags below are for internal (Transform) use. */
 		bool scaling_needsUpdate;
 		bool rotation_needsUpdate;
 		bool translation_needsUpdate;
 
 		bool final_matrix_needsUpdate;
+
+		/* This flag is for external (clients) use. Calls to GetXXXMatrix() APIs may clear the above flags but is_dirty may still be set.
+		 * Once set, it remains set until the beginning of the next frame. Therefore, it reliably tells whether this Transform was modified this frame.
+		 * It is only reset by the ResetDirtyFlag(), which is ideally called at the beginning of every frame. */
+		bool is_dirty;
 	};
 }
