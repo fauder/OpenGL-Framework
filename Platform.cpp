@@ -18,6 +18,7 @@ namespace Framework::Platform
 	GLFWwindow* WINDOW = nullptr; // No need to expose this outside.
 	float MOUSE_CURSOR_X_POS = 0.0f, MOUSE_CURSOR_Y_POS = 0.0f;
 	float MOUSE_CURSOR_X_DELTA = 0.0f, MOUSE_CURSOR_Y_DELTA = 0.0f;
+	float MOUSE_SCROLL_X_OFFSET = 0.0f, MOUSE_SCROLL_Y_OFFSET = 0.0f;
 	float MOUSE_SENSITIVITY = 0.004f;
 	bool MOUSE_CAPTURE_IS_RESET = true;
 	bool MOUSE_CAPTURE_ENABLED = false;
@@ -47,6 +48,15 @@ namespace Framework::Platform
 		MOUSE_CURSOR_Y_POS = ( float )y_position;
 	}
 
+	void OnMouseScrolled( GLFWwindow* window, const double x_offset, const double y_offset )
+	{
+		if( ImGui::GetIO().WantCaptureMouse )
+			return;
+
+		MOUSE_SCROLL_X_OFFSET = ( float )x_offset;
+		MOUSE_SCROLL_Y_OFFSET = ( float )y_offset;
+	}
+
 	void OnKeyboardEvent( GLFWwindow* window, const int key_code, const int scan_code, const int action, const int mods )
 	{
 		if( ImGui::GetIO().WantCaptureKeyboard )
@@ -63,14 +73,19 @@ namespace Framework::Platform
 			throw std::logic_error( "ERROR::GRAPHICS::GLAD::FAILED_TO_INITIALIZE!" );
 	}
 
-	void RegisterOnResizeCallback()
+	void RegisterFrameBufferResizeCallback()
 	{
 		glfwSetFramebufferSizeCallback( WINDOW, OnResize );
 	}
 
-	void RegisterOnMouseCallback()
+	void RegisterMousePositionChangeCallback()
 	{
 		glfwSetCursorPosCallback( WINDOW, OnMouseCursorPositionChanged );
+	}
+
+	void RegisterMouseScrollCallback()
+	{
+		glfwSetScrollCallback( WINDOW, OnMouseScrolled );
 	}
 
 	void InitializeAndCreateWindow( const int width_pixels, const int height_pixels, const int pos_x_pixels, const int pos_y_pixels )
@@ -100,8 +115,9 @@ namespace Framework::Platform
 
 		Resize( width_pixels, height_pixels );
 
-		RegisterOnResizeCallback();
-		RegisterOnMouseCallback();
+		RegisterFrameBufferResizeCallback();
+		RegisterMousePositionChangeCallback();
+		RegisterMouseScrollCallback();
 	}
 
 	void Resize( const int width_new_pixels, const int height_new_pixels )
@@ -117,6 +133,7 @@ namespace Framework::Platform
 	void PollEvents()
 	{
 		MOUSE_CURSOR_X_DELTA = MOUSE_CURSOR_Y_DELTA = 0.0f;
+		MOUSE_SCROLL_X_OFFSET = MOUSE_SCROLL_Y_OFFSET = 0.0f;
 		glfwPollEvents();
 	}
 
@@ -176,6 +193,11 @@ namespace Framework::Platform
 	std::pair< float, float > GetMouseCursorPositions()
 	{
 		return { MOUSE_CURSOR_X_POS, MOUSE_CURSOR_Y_POS };
+	}
+
+	std::pair< float, float > GetMouseScrollOffsets()
+	{
+		return { MOUSE_SCROLL_X_OFFSET, MOUSE_SCROLL_Y_OFFSET };
 	}
 
 	float GetCurrentTime()

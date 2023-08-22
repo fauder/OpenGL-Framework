@@ -172,6 +172,7 @@ namespace Framework::Platform
 	void SetMouseSensitivity( const float new_sensitivity );
 	std::pair< float, float > GetMouseCursorDeltas();
 	std::pair< float, float > GetMouseCursorPositions();
+	std::pair< float, float > GetMouseScrollOffsets();
 
 	/* Time-Keeping Facilities. */
 	float GetCurrentTime();
