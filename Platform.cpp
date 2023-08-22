@@ -32,11 +32,11 @@ namespace Framework::Platform
 		if( ImGui::GetIO().WantCaptureMouse )
 			return;
 
-		if( MOUSE_CAPTURE_IS_FIRST_FRAME )
+		if( MOUSE_CAPTURE_IS_RESET )
 		{
 			MOUSE_CURSOR_X_POS = ( float )x_position;
 			MOUSE_CURSOR_Y_POS = ( float )y_position;
-			MOUSE_CAPTURE_IS_FIRST_FRAME = false;
+			MOUSE_CAPTURE_IS_RESET = false;
 		}
 
 		MOUSE_CURSOR_X_DELTA = MOUSE_SENSITIVITY * ( ( float )x_position - MOUSE_CURSOR_X_POS );
@@ -124,6 +124,19 @@ namespace Framework::Platform
 			return false;
 
 		return glfwGetKey( WINDOW, int( key_code ) ) == GLFW_RELEASE;
+	}
+
+	void CaptureMouse( const bool should_capture )
+	{
+		if( !MOUSE_CAPTURE_ENABLED && should_capture )
+			glfwSetInputMode( WINDOW, GLFW_CURSOR, GLFW_CURSOR_DISABLED );
+		else if( MOUSE_CAPTURE_ENABLED && !should_capture )
+		{
+			MOUSE_CAPTURE_IS_RESET = true;
+			glfwSetInputMode( WINDOW, GLFW_CURSOR, GLFW_CURSOR_NORMAL );
+		}
+
+		MOUSE_CAPTURE_ENABLED = should_capture;
 	}
 
 	float GetMouseSensitivity()

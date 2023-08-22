@@ -149,7 +149,8 @@ namespace Framework::Platform
 
 	bool IsKeyPressed( const KeyCode key_code );
 	bool IsKeyReleased( const KeyCode key_code );
-	
+
+	void CaptureMouse( const bool should_capture );
 	float GetMouseSensitivity();
 	void SetMouseSensitivity( const float new_sensitivity );
 	std::pair< float, float > GetMouseCursorDeltas();
