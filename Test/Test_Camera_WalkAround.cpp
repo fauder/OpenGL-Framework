@@ -102,6 +102,7 @@ namespace Framework::Test
 		renderer.RemoveDrawable( cube_1.get() );
 
 		Platform::SetKeyboardEventCallback();
+		Platform::CaptureMouse( false );
 	}
 
 	void Test_Camera_WalkAround::OnKeyboardEvent( const Platform::KeyCode key_code, const Platform::KeyAction action, const Platform::KeyMods mods )
