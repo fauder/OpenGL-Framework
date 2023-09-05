@@ -2,7 +2,7 @@
 
 // Project Includes.
 #include "Test.hpp"
-#include "../Camera_Flight.h"
+#include "../CameraController_Flight.h"
 #include "../Drawable.h"
 #include "../Polar.hpp"
 #include "../Texture.h"
@@ -39,7 +39,8 @@ namespace Framework::Test
 		std::unique_ptr< Texture > texture_test_cube;
 
 		Transform camera_transform;
-		Camera_Flight camera;
+		Camera camera;
+		CameraController_Flight camera_controller_flight;
 
 		Vector3 camera_delta_position;
 		float camera_displacement;

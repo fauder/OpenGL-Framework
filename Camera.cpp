@@ -1,16 +1,38 @@
 // Project Include.
 #include "Camera.h"
+#include "Matrix.h"
 
 namespace Framework
 {
-	Camera::Camera( Transform* const transform, const float near_plane, const float far_plane )
+	Camera::Camera( Transform* const transform, float aspect_ratio, const float near_plane, const float far_plane, Degrees field_of_view )
 		:
 		transform( transform ),
 		plane_near( near_plane ),
 		plane_far( far_plane ),
+		aspect_ratio( aspect_ratio ),
+		field_of_view( field_of_view ),
 		projection_matrix_needs_update( true ),
 		view_projection_matrix_needs_update( true )
 	{}
+
+	const Matrix4x4& Camera::GetViewMatrix()
+	{
+		if( transform->IsDirty() )
+			view_matrix = transform->GetInverseOfFinalMatrix();
+
+		return view_matrix;
+	}
+
+	const Matrix4x4& Camera::GetProjectionMatrix()
+	{
+		if( projection_matrix_needs_update )
+		{
+			projection_matrix = Matrix::PerspectiveProjection( plane_near, plane_far, aspect_ratio, field_of_view );
+			projection_matrix_needs_update = false;
+		}
+
+		return projection_matrix;
+	}
 	
 	const Matrix4x4& Camera::GetViewProjectionMatrix()
 	{
@@ -53,6 +75,26 @@ namespace Framework
 	{
 		GetViewMatrix();
 		return -view_matrix.GetColumn< 3 >( 2 ); 
+	}
+
+	Camera& Camera::SetAspectRatio( const float new_aspect_ratio )
+	{
+		SetProjectionMatrixDirty();
+		aspect_ratio = new_aspect_ratio;
+		return *this;
+	}
+
+	Camera& Camera::SetFieldOfView( const Degrees new_fov )
+	{
+		SetProjectionMatrixDirty();
+		field_of_view = new_fov;
+		return *this;
+	}
+
+	Camera& Camera::SetLookRotation( const Vector3& look_at )
+	{
+		transform->SetRotation( Quaternion::LookRotation( look_at ) );
+		return *this;
 	}
 
 	void Camera::SetProjectionMatrixDirty()

@@ -16,7 +16,8 @@ namespace Framework::Math
 		requires Concepts::NonZero< Size >
 	class Vector
 	{
-		template< Concepts::Arithmetic, std::size_t RowSize, std::size_t ColumnSize > requires Concepts::NonZero< RowSize >&& Concepts::NonZero< ColumnSize >
+		template< Concepts::Arithmetic, std::size_t RowSize, std::size_t ColumnSize >
+			requires Concepts::NonZero< RowSize >&& Concepts::NonZero< ColumnSize >
 		friend class Matrix;
 
 	public:

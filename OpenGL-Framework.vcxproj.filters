@@ -94,7 +94,7 @@
     <ClCompile Include="Test\Test_Camera_WalkAround.cpp">
       <Filter>Test</Filter>
     </ClCompile>
-    <ClCompile Include="Camera_Flight.cpp">
+    <ClCompile Include="CameraController_Flight.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -243,7 +243,7 @@
     <ClInclude Include="Test\Test_Camera_WalkAround.h">
       <Filter>Test</Filter>
     </ClInclude>
-    <ClInclude Include="Camera_Flight.h">
+    <ClInclude Include="CameraController_Flight.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

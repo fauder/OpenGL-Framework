@@ -70,7 +70,7 @@ namespace Framework::Platform
 	void InitializeGLAD()
 	{
 		if( !gladLoadGLLoader( ( GLADloadproc )glfwGetProcAddress ) )
-			throw std::logic_error( "ERROR::GRAPHICS::GLAD::FAILED_TO_INITIALIZE!" );
+			throw std::runtime_error( "ERROR::GRAPHICS::GLAD::FAILED_TO_INITIALIZE!" );
 	}
 
 	void RegisterFrameBufferResizeCallback()
@@ -102,7 +102,7 @@ namespace Framework::Platform
 		if( WINDOW == nullptr )
 		{
 			glfwTerminate();
-			throw std::logic_error( "ERROR::PLATFORM::GLFW::FAILED TO CREATE GLFW WINDOW!" );
+			throw std::runtime_error( "ERROR::PLATFORM::GLFW::FAILED TO CREATE GLFW WINDOW!" );
 		}
 
 		glfwSetWindowPos( WINDOW, pos_x_pixels, pos_y_pixels );

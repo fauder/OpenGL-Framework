@@ -12,7 +12,8 @@ namespace Framework::Test
 	Test_Camera_WalkAround::Test_Camera_WalkAround( Renderer& renderer )
 		:
 		Test( renderer, false /* UI starts disabled, to allow for camera movement via mouse input. */ ),
-		camera( &camera_transform, renderer.AspectRatio(), ResetCameraMoveSpeed() ),
+		camera( &camera_transform, renderer.AspectRatio() ),
+		camera_controller_flight( &camera, ResetCameraMoveSpeed() ),
 		camera_delta_position( ZERO_INITIALIZATION ),
 		input_is_enabled( true )
 	{
@@ -140,14 +141,14 @@ namespace Framework::Test
 			camera_delta_position += camera.Right();
 
 		if( !camera_delta_position.IsZero() )
-			camera_delta_position.Normalize() *= camera.GetMoveSpeed() * time_delta;
+			camera_delta_position.Normalize() *= camera_controller_flight.GetMoveSpeed() * time_delta;
 
 		camera_displacement = camera_delta_position.Magnitude();
 
 		const auto [ mouse_delta_x, mouse_delta_y ] = Platform::GetMouseCursorDeltas();
 
-		camera.SetHeading( camera.GetHeading() + mouse_delta_x );
-		camera.SetPitch( Math::Clamp( camera.GetPitch() - mouse_delta_y, -Constants< Radians >::Pi_Over_Six(), +Constants< Radians >::Pi_Over_Six() ) );
+		camera_controller_flight.SetHeading( camera_controller_flight.GetHeading() + mouse_delta_x );
+		camera_controller_flight.SetPitch( Math::Clamp( camera_controller_flight.GetPitch() - mouse_delta_y, -Constants< Radians >::Pi_Over_Six(), +Constants< Radians >::Pi_Over_Six() ) );
 
 		const Degrees fov_offset( -Platform::GetMouseScrollOffsets().second );
 		camera.SetFieldOfView( Math::Clamp( camera.GetFieldOfView() - fov_offset, 1_deg, 45_deg ) );
@@ -174,13 +175,13 @@ namespace Framework::Test
 			Vector3 camera_right_direction   = camera.Right();
 			Vector3 camera_up_direction      = camera.Up();
 			Vector3 camera_forward_direction = camera.Forward();
-			float heading                    = ( float )Math::Degrees( camera.GetHeading() );
-			float pitch                      = ( float )Math::Degrees( camera.GetPitch() );
+			float heading                    = ( float )Math::Degrees( camera_controller_flight.GetHeading() );
+			float pitch                      = ( float )Math::Degrees( camera_controller_flight.GetPitch() );
 
 			Math::Polar3_Spherical camera_orientation_spherical( 1.0f, Degrees( heading ), Degrees( pitch ) );
 			Vector3 camera_look_at_direction( Math::ToVector3( camera_orientation_spherical ) );
 
-			float camera_move_speed = camera.GetMoveSpeed();
+			float camera_move_speed = camera_controller_flight.GetMoveSpeed();
 			float fov               = ( float )camera.GetFieldOfView();
 
 			ImGui::DragFloat3( "Camera Position", reinterpret_cast< float* >( &camera_position ) ); ImGui::SameLine(); if( ImGui::Button( "Reset##camera_position" ) ) ResetCameraTranslation();
@@ -216,12 +217,12 @@ namespace Framework::Test
 
 	void Test_Camera_WalkAround::ResetCameraRotation()
 	{
-		camera.SetHeading( 0_rad );
-		camera.SetPitch( 0_rad );
+		camera_controller_flight.SetHeading( 0_rad );
+		camera_controller_flight.SetPitch( 0_rad );
 	}
 
 	float Test_Camera_WalkAround::ResetCameraMoveSpeed()
 	{
-		return camera.SetMoveSpeed( 2.0f );
+		return camera_controller_flight.SetMoveSpeed( 2.0f );
 	}
 }

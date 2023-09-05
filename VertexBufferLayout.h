@@ -24,7 +24,8 @@ namespace Framework
 				case GL_INT:	return 4;
 				case GL_BYTE:	return 1;
 
-				default: throw std::logic_error( "VertexAttribute::GetSizeOfType: Unknown type encountered." );
+				default: 
+					throw std::logic_error( "VertexAttribute::GetSizeOfType: Unknown type encountered." );
 					return 0;
 			}
 		}
