@@ -215,6 +215,24 @@ namespace Framework
 		return inverse_translation_matrix * inverse_rotation_matrix * inverse_scaling_matrix;
 	}
 
+	/* If the caller knows there's no scaling involved (for example; Transform of a Camera), calling this function is more preferrable. */
+	const Matrix4x4 Transform::GetInverseOfFinalMatrix_NoScale()
+	{
+		/* Instead of actually calculating the inverse of the matrix, we'll leverage the information we have on our matrix:
+		 * Rotation And Translation Matrix:
+		 *		We can simply transpose the rotation part (upper 3x3 portion of the 4x4 matrix) since rotation matrices are orthogonal.
+		 *		We can simply use the inverses (with respect to addition) of translation elements (first 3 elements of the last row of the 4x4 matrix) to reverse the translation operation.
+		*/
+
+		// Force-update the matrices to get up-to-date values.
+		GetRotationAndTranslationMatrix();
+
+		const Matrix4x4 inverse_rotation_matrix( rotation_and_translation_matrix.SubMatrix< 3 >().Transposed() );
+		const Matrix4x4 inverse_translation_matrix( Matrix4x4{}.SetTranslation( -rotation_and_translation_matrix.GetRow< 3 >( 3 /* Last Row. */ ) ) );
+
+		return inverse_translation_matrix * inverse_rotation_matrix;
+	}
+
 	const Vector3& Transform::Right()
 	{
 		UpdateRotationPartOfMatrixIfDirty();

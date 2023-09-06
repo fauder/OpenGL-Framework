@@ -18,7 +18,7 @@ namespace Framework
 	const Matrix4x4& Camera::GetViewMatrix()
 	{
 		if( transform->IsDirty() )
-			view_matrix = transform->GetInverseOfFinalMatrix();
+			view_matrix = transform->GetInverseOfFinalMatrix_NoScale();
 
 		return view_matrix;
 	}

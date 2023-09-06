@@ -35,6 +35,8 @@ namespace Framework
 
 		const Matrix4x4& GetFinalMatrix();
 		const Matrix4x4 GetInverseOfFinalMatrix();
+		/* If the caller knows there's no scaling involved (for example; Transform of a Camera), calling this function is more preferrable. */
+		const Matrix4x4 GetInverseOfFinalMatrix_NoScale();
 
 		const Vector3& Right();
 		const Vector3& Up();
