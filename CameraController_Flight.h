@@ -16,15 +16,14 @@ namespace Framework
 		CameraController_Flight& SetHeading( const Radians new_heading );
 		CameraController_Flight& SetPitch( const Radians new_pitch );
 
-		inline const float GetMoveSpeed() const { return move_speed; }
-		inline		 float SetMoveSpeed( const float speed ) { return move_speed = speed; }
-
 	private:
 		void RecalculateRotationFromSphericalCoordinates();
 
+	public:
+		float move_speed;
+
 	private:
 		Math::Polar3_Spherical_Game_RightHanded orientation_spherical; // Spherical coordinates are more natural & convenient to work with for this camera type.
-		float move_speed;
 		Camera* camera;
 	};
 }

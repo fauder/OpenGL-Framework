@@ -24,7 +24,7 @@ namespace Framework::Test
 	class Test : public TestInterface
 	{
 	public:
-		Test( Renderer& renderer, bool ui_starts_enabled = true )
+		Test( Renderer& renderer, bool ui_starts_enabled = true, bool display_flags = true )
 			:
 			renderer( renderer ),
 			name( ExtractTestNameFromTypeName( typeid( *this ).name() ) ),
@@ -35,7 +35,8 @@ namespace Framework::Test
 			time_previous_since_start( 0.0f ),
 			time_since_start( 0.0f ),
 			executing( true ),
-			ui_interaction_enabled( ui_starts_enabled )
+			ui_interaction_enabled( ui_starts_enabled ),
+			display_flags( display_flags )
 		{
 			renderer.SetClearColor( Color4::Clear_Default() );
 		}
@@ -75,6 +76,8 @@ namespace Framework::Test
 			RenderImGui_Menu_BackButton();
 			if( display_frame_statistics )
 				RenderImGui_FrameStatistics();
+			if( display_flags )
+				RenderImGui_Flags();
 			Derived()->OnRenderImGui();
 		}
 
@@ -152,6 +155,10 @@ namespace Framework::Test
 					if( key_action == Platform::KeyAction::PRESS )
 						ui_interaction_enabled = !ui_interaction_enabled;
 					break;
+				case Platform::KeyCode::KEY_I:
+					if( key_action == Platform::KeyAction::PRESS )
+						display_flags = !display_flags;
+					break;
 				default:
 					break;
 			}
@@ -189,9 +196,19 @@ namespace Framework::Test
 			ImGui::End();
 		}
 
+		void RenderImGui_Flags()
+		{
+			if( ImGui::Begin( "Application Flags", nullptr, CurrentImGuiWindowFlags() ) )
+			{
+				ImGui::Checkbox( "UI Interaction", &ui_interaction_enabled );
+			}
+
+			ImGui::End();
+		}
+
 		void RenderImGui_FrameStatistics()
 		{
-			if( ImGui::Begin( "Frame Statistics.", nullptr, CurrentImGuiWindowFlags() ) )
+			if( ImGui::Begin( "Frame Statistics", nullptr, CurrentImGuiWindowFlags() ) )
 			{
 				ImGui::Text( "FPS: %.1f fps", 1.0f / time_delta_real );
 				ImGui::Text( "Delta time (multiplied): %.3f ms | Delta time (real): %.3f", time_delta * 1000.0f, time_delta_real * 1000.0f );
@@ -238,5 +255,6 @@ namespace Framework::Test
 
 		bool executing;
 		bool ui_interaction_enabled;
+		bool display_flags;
 	};
 }
