@@ -19,7 +19,7 @@ namespace Framework
 	class Shader
 	{
 	public:
-		Shader( const char* vertex_shader_file_name, const char* fragment_shader_file_name );
+		Shader( const char* vertex_shader_file_path, const char* fragment_shader_file_path );
 		~Shader();
 
 		void Bind() const;
@@ -64,9 +64,9 @@ namespace Framework
 
 	private:
 		int GetUniformLocation( const char* name );
-		std::string ReadShaderFromFile( const char* fileName, const char* shader_type_string ) const;
-		unsigned int CompileShader( const char* shader_code, const char* shader_type_string, const GLenum shader_type ) const;
-		unsigned int CreateProgramAndLinkShaders( const unsigned int vertex_shader_id, const unsigned int fragment_shader_id ) const;
+		static std::string ReadShaderFromFile( const char* file_path, const char* shader_type_string );
+		static unsigned int CompileShader( const char* shader_source, const char* shader_type_string, const GLenum shader_type );
+		static unsigned int CreateProgramAndLinkShaders( const unsigned int vertex_shader_id, const unsigned int fragment_shader_id );
 
 	private:
 		GLuint program_id;

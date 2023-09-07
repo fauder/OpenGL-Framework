@@ -7,13 +7,13 @@
 
 namespace Framework
 {
-	Shader::Shader( const char* vertex_shader_file_name, const char* fragment_shader_file_name )
+	Shader::Shader( const char* vertex_shader_file_path, const char* fragment_shader_file_path )
 	{
-		std::string vertex_shader_code = ReadShaderFromFile( vertex_shader_file_name, "VERTEX" );
-		const auto vertex_shader_id = CompileShader( vertex_shader_code.c_str(), "VERTEX", GL_VERTEX_SHADER );
+		std::string vertex_shader_source = ReadShaderFromFile( vertex_shader_file_path, "VERTEX" );
+		const auto  vertex_shader_id     = CompileShader( vertex_shader_source.c_str(), "VERTEX", GL_VERTEX_SHADER );
 
-		std::string fragment_shader_code = ReadShaderFromFile( fragment_shader_file_name, "FRAGMENT" );
-		const auto fragment_shader_id = CompileShader( fragment_shader_code.c_str(), "FRAGMENT", GL_FRAGMENT_SHADER );
+		std::string fragment_shader_source = ReadShaderFromFile( fragment_shader_file_path, "FRAGMENT" );
+		const auto  fragment_shader_id     = CompileShader( fragment_shader_source.c_str(), "FRAGMENT", GL_FRAGMENT_SHADER );
 
 		program_id = CreateProgramAndLinkShaders( vertex_shader_id, fragment_shader_id );
 
@@ -65,13 +65,13 @@ namespace Framework
 		}
 	}
 
-	std::string Shader::ReadShaderFromFile( const char* fileName, const char* shader_type_string ) const
+	std::string Shader::ReadShaderFromFile( const char* file_path, const char* shader_type_string )
 	{
 		std::ifstream file;
 		file.exceptions( std::ifstream::failbit | std::ifstream::badbit );
 		try
 		{
-			file.open( fileName );
+			file.open( file_path );
 			return std::string( ( std::istreambuf_iterator< char >( file ) ),
 								( std::istreambuf_iterator< char >() ) );
 
@@ -83,13 +83,13 @@ namespace Framework
 		}
 	}
 
-	unsigned int Shader::CompileShader( const char* shader_code, const char* shader_type_string, const GLenum shader_type ) const
+	unsigned int Shader::CompileShader( const char* shader_source, const char* shader_type_string, const GLenum shader_type )
 	{
 		GLClearError();
 		const auto shader_id = glCreateShader( shader_type );
 		ASSERT( GLLogCall( "glCreateShader", __FILE__, __LINE__ ) );
 
-		GLCALL( glShaderSource( shader_id, 1, &shader_code, NULL ) );
+		GLCALL( glShaderSource( shader_id, 1, &shader_source, NULL ) );
 		GLCALL( glCompileShader( shader_id ) );
 
 		int success;
@@ -107,7 +107,7 @@ namespace Framework
 		return shader_id;
 	}
 
-	unsigned int Shader::CreateProgramAndLinkShaders( const unsigned int vertex_shader_id, const unsigned int fragment_shader_id ) const
+	unsigned int Shader::CreateProgramAndLinkShaders( const unsigned int vertex_shader_id, const unsigned int fragment_shader_id )
 	{
 		GLClearError();
 		const auto program_id = glCreateProgram();
