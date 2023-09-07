@@ -97,6 +97,9 @@
     <ClCompile Include="CameraController_Flight.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Log_ImGui.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.hpp">
@@ -244,6 +247,9 @@
       <Filter>Test</Filter>
     </ClInclude>
     <ClInclude Include="CameraController_Flight.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Log_ImGui.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

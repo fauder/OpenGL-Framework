@@ -158,6 +158,7 @@
     <ClCompile Include="ImGuiUtility.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Log_ImGui.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="ImGuiUtility.h" />
     <ClInclude Include="Initialization.h" />
     <ClInclude Include="Log.h" />
+    <ClInclude Include="Log_ImGui.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Matrix.hpp" />
