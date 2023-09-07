@@ -181,12 +181,11 @@ namespace Framework::Test
 			Math::Polar3_Spherical camera_orientation_spherical( 1.0f, Degrees( heading ), Degrees( pitch ) );
 			Vector3 camera_look_at_direction( Math::ToVector3( camera_orientation_spherical ) );
 
-			float camera_move_speed = camera_controller_flight.move_speed;
 			float fov = ( float )camera.GetFieldOfView();
 
 			ImGui::DragFloat3( "Camera Position", reinterpret_cast< float* >( &camera_position ) ); ImGui::SameLine(); if( ImGui::Button( "Reset##camera_position" ) ) ResetCameraTranslation();
 			ImGui::InputFloat( "Delta Position", &camera_displacement, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly );
-			ImGui::SliderFloat( "Move Speed ", &camera_move_speed, 0.5f, 5.0f, "%.2f", ImGuiSliderFlags_Logarithmic ); ImGui::SameLine(); if( ImGui::Button( "Reset##camera_move_speed" ) ) ResetCameraMoveSpeed();
+			ImGui::SliderFloat( "Move Speed ", &camera_controller_flight.move_speed, 0.5f, 5.0f, "%.2f", ImGuiSliderFlags_Logarithmic ); ImGui::SameLine(); if( ImGui::Button( "Reset##camera_move_speed" ) ) ResetCameraMoveSpeed();
 
 			ImGui::InputFloat( "Heading", &heading, 0.0f, 0.0f, "%.3f degrees", ImGuiInputTextFlags_ReadOnly );
 			ImGui::InputFloat( "Pitch", &pitch, 0.0f, 0.0f, "%.3f degrees", ImGuiInputTextFlags_ReadOnly );
