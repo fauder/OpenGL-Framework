@@ -208,6 +208,16 @@ namespace Framework::Test
 		}
 
 		ImGui::End();
+
+		if( ImGui::Begin( "Shader Info", nullptr, CurrentImGuiWindowFlags() ) )
+		{
+			const auto uniform_map = shader->GetUniformInformation();
+
+			for( auto& [name, location] : uniform_map )
+				ImGui::InputInt( name.c_str(), const_cast< int* >( &location ), 0, 0, ImGuiInputTextFlags_ReadOnly );
+		}
+
+		ImGui::End();
 	}
 
 	void Test_Camera_WalkAround::ResetCameraTranslation()

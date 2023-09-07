@@ -62,14 +62,20 @@ namespace Framework
 		}
 		void SetColor( const char* name, const Color4& value );
 
+		inline const std::unordered_map< std::string, int >& GetUniformInformation() const
+		{
+			return uniform_location_map;
+		}
+
 	private:
 		int GetUniformLocation( const char* name );
 		static std::string ReadShaderFromFile( const char* file_path, const char* shader_type_string );
 		static unsigned int CompileShader( const char* shader_source, const char* shader_type_string, const GLenum shader_type );
 		static unsigned int CreateProgramAndLinkShaders( const unsigned int vertex_shader_id, const unsigned int fragment_shader_id );
+		void ParseUniformData( std::unordered_map< std::string, int >& uniform_location_map );
 
 	private:
 		GLuint program_id;
-		std::unordered_map< std::string, int > layout_location_map;
+		std::unordered_map< std::string, int > uniform_location_map;
 	};
 }

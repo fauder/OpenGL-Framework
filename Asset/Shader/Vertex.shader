@@ -3,7 +3,6 @@ layout( location = 0 ) in vec3 position_clip;
 layout( location = 1 ) in vec2 tex_coords;
 layout( location = 2 ) in vec4 color_vertex;
 
-uniform float offset_horizontal;
 uniform mat4 transformation_world;
 uniform mat4 transformation_view;
 uniform mat4 transformation_projection;

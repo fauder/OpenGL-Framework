@@ -16,6 +16,8 @@ namespace Framework
 		const auto  fragment_shader_id     = CompileShader( fragment_shader_source.c_str(), "FRAGMENT", GL_FRAGMENT_SHADER );
 
 		program_id = CreateProgramAndLinkShaders( vertex_shader_id, fragment_shader_id );
+		
+		ParseUniformData( uniform_location_map );
 
 		GLCALL( glDeleteShader( vertex_shader_id ) );
 		GLCALL( glDeleteShader( fragment_shader_id ) );
@@ -53,16 +55,10 @@ namespace Framework
 
 	int Shader::GetUniformLocation( const char* name )
 	{
-		if( layout_location_map.contains( name ) )
-			return layout_location_map[ name ];
-		else
-		{
-			GLClearError();
-			const int value = glGetUniformLocation( program_id, name );
-			GLLogCall( "glGetUniformLocation", __FILE__, __LINE__ );
-			layout_location_map[ name ] = value;
-			return value;
-		}
+		if( uniform_location_map.contains( name ) )
+			return uniform_location_map[ name ];
+
+		throw std::runtime_error( R"(ERROR::SHADER::UNIFORM::")" + std::string( name ) + R"("::DOES_NOT_EXIST)" );
 	}
 
 	std::string Shader::ReadShaderFromFile( const char* file_path, const char* shader_type_string )
@@ -128,5 +124,29 @@ namespace Framework
 		}
 
 		return program_id;
+	}
+
+	void Shader::ParseUniformData( std::unordered_map< std::string, int >& uniform_location_map )
+	{
+		int active_uniform_count = 0;
+		GLCALL( glGetProgramiv( program_id, GL_ACTIVE_UNIFORMS, &active_uniform_count ) );
+
+		if( active_uniform_count == 0 )
+			return;
+
+		int uniform_name_max_length = 0;
+		GLCALL( glGetProgramiv( program_id, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniform_name_max_length ) );
+		std::string name( uniform_name_max_length, '?' );
+
+		for( int uniform_index = 0; uniform_index < active_uniform_count; uniform_index++ )
+		{
+			int size = 0, length = 0;
+			GLenum type;
+			GLCALL( glGetActiveUniform( program_id, uniform_index, uniform_name_max_length, &length, &size, &type, name.data() ) );
+
+			GLClearError();
+			uniform_location_map[ name.data() ] = glGetUniformLocation( program_id, name.data() );
+			ASSERT( GLLogCall( "glGetUniformLocation", __FILE__, __LINE__ ) );
+		}
 	}
 }
