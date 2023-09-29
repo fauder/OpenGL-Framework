@@ -203,6 +203,7 @@
     <ClInclude Include="Matrix.hpp" />
     <ClInclude Include="Polar.hpp" />
     <ClInclude Include="Quaternion.hpp" />
+    <ClInclude Include="ShaderTypeInformation.h" />
     <ClInclude Include="Test\Test.hpp" />
     <ClInclude Include="Test\Test_Menu.h" />
     <ClInclude Include="Test\Test_ClearColor.h" />
@@ -212,6 +213,7 @@
     <ClInclude Include="Test\Test_Camera_WalkAround.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="TypeTraits.h" />
+    <ClInclude Include="ShaderUniformInformation.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="Utility.hpp" />
     <ClInclude Include="IndexBuffer.h" />
@@ -237,8 +239,8 @@
     <ClInclude Include="Platform.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Asset\Shader\Fragment.shader" />
-    <None Include="Asset\Shader\Vertex.shader" />
+    <None Include="Asset\Shader\textured_mix.fragment" />
+    <None Include="Asset\Shader\textured_mix.vertex" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Asset\Texture\awesomeface.png" />

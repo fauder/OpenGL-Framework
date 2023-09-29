@@ -1,6 +1,7 @@
 #pragma once
 
 // Project Includes.
+#include "Material.h"
 #include "Shader.h"
 
 // ImGui Includes.

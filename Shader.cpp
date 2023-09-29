@@ -1,5 +1,6 @@
 // Project Includes.
 #include "Shader.h"
+#include "ShaderTypeInformation.h"
 
 // std Includes.
 #include <fstream>
@@ -7,7 +8,9 @@
 
 namespace Framework
 {
-	Shader::Shader( const char* vertex_shader_file_path, const char* fragment_shader_file_path )
+	Shader::Shader( const char* vertex_shader_file_path, const char* fragment_shader_file_path, const char* name )
+		:
+		name( name )
 	{
 		std::string vertex_shader_source = ReadShaderFromFile( vertex_shader_file_path, "VERTEX" );
 		const auto  vertex_shader_id     = CompileShader( vertex_shader_source.c_str(), "VERTEX", GL_VERTEX_SHADER );
@@ -17,7 +20,7 @@ namespace Framework
 
 		program_id = CreateProgramAndLinkShaders( vertex_shader_id, fragment_shader_id );
 		
-		ParseUniformData( uniform_location_map );
+		ParseUniformData( uniform_info_map );
 
 		GLCALL( glDeleteShader( vertex_shader_id ) );
 		GLCALL( glDeleteShader( fragment_shader_id ) );
@@ -33,32 +36,50 @@ namespace Framework
 		GLCALL( glUseProgram( program_id ) );
 	}
 
-	void Shader::SetFloat( const char* name, const float value )
+	void Shader::SetFloat( const std::string& uniform_name, const float value )
 	{
-		GLCALL( glUniform1f( GetUniformLocation( name ), value ) );
+		const auto& uniform_info = GetUniformInformation( uniform_name );
+		ASSERT( uniform_info.type == GL_FLOAT );
+
+		GLCALL( glUniform1f( uniform_info.location, value ) );
 	}
 
-	void Shader::SetInt( const char* name, const int value )
+	void Shader::SetInt( const std::string& uniform_name, const int value )
 	{
-		GLCALL( glUniform1i( GetUniformLocation( name ), value ) );
+		const auto& uniform_info = GetUniformInformation( uniform_name );
+		ASSERT( uniform_info.type == GL_INT );
+
+		GLCALL( glUniform1i( uniform_info.location, value ) );
 	}
 
-	void Shader::SetBool( const char* name, const bool value )
+	void Shader::SetBool( const std::string& uniform_name, const bool value )
 	{
-		GLCALL( glUniform1i( GetUniformLocation( name ), ( int )value ) );
+		const auto& uniform_info = GetUniformInformation( uniform_name );
+		ASSERT( uniform_info.type == GL_BOOL );
+
+		GLCALL( glUniform1i( uniform_info.location, ( int )value ) );
 	}
 
-	void Shader::SetColor( const char* name, const Color4& value )
+	void Shader::SetColor( const std::string& uniform_name, const Color3& value )
 	{
-		GLCALL( glUniform4fv( GetUniformLocation( name ), 1, value.Data() ) );
+		SetVector< 3 >( uniform_name, static_cast< const Vector3& >( value ) );
 	}
 
-	int Shader::GetUniformLocation( const char* name )
+	void Shader::SetColor( const std::string& uniform_name, const Color4& value )
 	{
-		if( uniform_location_map.contains( name ) )
-			return uniform_location_map[ name ];
+		SetVector< 4 >( uniform_name, static_cast< const Vector4& >( value ) );
+	}
 
-		throw std::runtime_error( R"(ERROR::SHADER::UNIFORM::")" + std::string( name ) + R"("::DOES_NOT_EXIST)" );
+	const ShaderUniformInformation& Shader::GetUniformInformation( const std::string& uniform_name )
+	{
+		try
+		{
+			return uniform_info_map[ uniform_name ];
+		}
+		catch( const std::exception& )
+		{
+			throw std::runtime_error( R"(ERROR::SHADER::UNIFORM::")" + std::string( uniform_name ) + R"("::DOES_NOT_EXIST)" );
+		}
 	}
 
 	std::string Shader::ReadShaderFromFile( const char* file_path, const char* shader_type_string )
@@ -126,7 +147,7 @@ namespace Framework
 		return program_id;
 	}
 
-	void Shader::ParseUniformData( std::unordered_map< std::string, int >& uniform_location_map )
+	void Shader::ParseUniformData( std::unordered_map< std::string, ShaderUniformInformation >& uniform_information_map )
 	{
 		int active_uniform_count = 0;
 		GLCALL( glGetProgramiv( program_id, GL_ACTIVE_UNIFORMS, &active_uniform_count ) );
@@ -138,15 +159,24 @@ namespace Framework
 		GLCALL( glGetProgramiv( program_id, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniform_name_max_length ) );
 		std::string name( uniform_name_max_length, '?' );
 
+		int offset = 0;
 		for( int uniform_index = 0; uniform_index < active_uniform_count; uniform_index++ )
 		{
-			int size = 0, length = 0;
+			/*
+			 * glGetActiveUniform has a parameter named "size", but its actually the size of the array. So for singular types like int, float, vec2, vec3 etc. the value returned is 1.
+			 */
+			int array_size_dontCare = 0, length = 0;
 			GLenum type;
-			GLCALL( glGetActiveUniform( program_id, uniform_index, uniform_name_max_length, &length, &size, &type, name.data() ) );
+			glGetActiveUniform( program_id, uniform_index, uniform_name_max_length, &length, &array_size_dontCare, &type, name.data() );
+			GLCALL( glGetActiveUniform( program_id, uniform_index, uniform_name_max_length, &length, &array_size_dontCare, &type, name.data() ) );
+
+			const int size = GetSizeOfType( type );
 
 			GLClearError();
-			uniform_location_map[ name.data() ] = glGetUniformLocation( program_id, name.data() );
+			uniform_information_map[ name.data() ] = { glGetUniformLocation( program_id, name.data() ), size, offset, type };
 			ASSERT( GLLogCall( "glGetUniformLocation", __FILE__, __LINE__ ) );
+
+			offset += size;
 		}
 	}
 }

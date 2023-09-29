@@ -22,7 +22,7 @@ namespace Framework::Test
 
 		Platform::CaptureMouse( input_is_enabled );
 
-		shader = std::make_unique< Shader >( "Asset/Shader/Vertex.shader", "Asset/Shader/Fragment.shader" );
+		shader   = std::make_unique< Shader >( "Asset/Shader/textured_mix.vertex", "Asset/Shader/textured_mix.fragment", "Textured Mix" );
 
 		const std::vector< Math::Vector< float, 3 + 2 /*+ 4*/ > > vertices
 		{
