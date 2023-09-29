@@ -12,7 +12,7 @@ namespace Framework
 	{
 		stbi_set_flip_vertically_on_load( 1 );
 
-		local_buffer = stbi_load( file_path, &width, &height, &channels_in_file, 0 );
+		const auto local_buffer = stbi_load( file_path, &width, &height, &channels_in_file, 0 );
 		if( local_buffer )
 		{
 			GLCALL( glGenTextures( 1, &id ) );
