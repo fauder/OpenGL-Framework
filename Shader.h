@@ -29,28 +29,98 @@ namespace Framework
 		void SetInt( const std::string& uniform_name, const int value );
 		void SetBool( const std::string& uniform_name, const bool value );
 
-		template< unsigned int Size > requires Concepts::NonZero< Size >
-		void SetVector( const std::string& uniform_name, const Math::Vector< float, Size >& value )
+		template< Concepts::Arithmetic Coordinate, std::size_t Size >
+			requires Concepts::NonZero< Size >
+		void SetVector( const std::string& uniform_name, const Math::Vector< Coordinate, Size >& value )
 		{
 			const auto& uniform_info = GetUniformInformation( uniform_name );
 
-			if constexpr( Size == 2 )
+			if constexpr( std::is_same_v< Coordinate, float > )
 			{
-				ASSERT( uniform_info.type == GL_FLOAT_VEC2 );
+				if constexpr( Size == 2 )
+				{
+					ASSERT( uniform_info.type == GL_FLOAT_VEC2 );
 
-				GLCALL( glUniform2fv( uniform_info.location, 1, value.Data() ) );
+					GLCALL( glUniform2fv( uniform_info.location, 1, value.Data() ) );
+				}
+				if constexpr( Size == 3 )
+				{
+					ASSERT( uniform_info.type == GL_FLOAT_VEC3 );
+
+					GLCALL( glUniform3fv( uniform_info.location, 1, value.Data() ) );
+				}
+				if constexpr( Size == 4 )
+				{
+					ASSERT( uniform_info.type == GL_FLOAT_VEC4 );
+
+					GLCALL( glUniform4fv( uniform_info.location, 1, value.Data() ) );
+				}
 			}
-			if constexpr( Size == 3 )
-			{
-				ASSERT( uniform_info.type == GL_FLOAT_VEC3 );
 
-				GLCALL( glUniform3fv( uniform_info.location, 1, value.Data() ) );
+			if constexpr( std::is_same_v< Coordinate, int > )
+			{
+				if constexpr( Size == 2 )
+				{
+					ASSERT( uniform_info.type == GL_INT_VEC2 );
+
+					GLCALL( glUniform2iv( uniform_info.location, 1, value.Data() ) );
+				}
+				if constexpr( Size == 3 )
+				{
+					ASSERT( uniform_info.type == GL_INT_VEC3 );
+
+					GLCALL( glUniform3iv( uniform_info.location, 1, value.Data() ) );
+				}
+				if constexpr( Size == 4 )
+				{
+					ASSERT( uniform_info.type == GL_INT_VEC4 );
+
+					GLCALL( glUniform4iv( uniform_info.location, 1, value.Data() ) );
+				}
 			}
-			if constexpr( Size == 4 )
-			{
-				ASSERT( uniform_info.type == GL_FLOAT_VEC4 );
 
-				GLCALL( glUniform4fv( uniform_info.location, 1, value.Data() ) );
+			if constexpr( std::is_same_v< Coordinate, unsigned int > )
+			{
+				if constexpr( Size == 2 )
+				{
+					ASSERT( uniform_info.type == GL_UNSIGNED_INT_VEC2 );
+
+					GLCALL( glUniform2uiv( uniform_info.location, 1, value.Data() ) );
+				}
+				if constexpr( Size == 3 )
+				{
+					ASSERT( uniform_info.type == GL_UNSIGNED_INT_VEC3 );
+
+					GLCALL( glUniform3uiv( uniform_info.location, 1, value.Data() ) );
+				}
+				if constexpr( Size == 4 )
+				{
+					ASSERT( uniform_info.type == GL_UNSIGNED_INT_VEC4 );
+
+					GLCALL( glUniform4uiv( uniform_info.location, 1, value.Data() ) );
+				}
+			}
+
+			if constexpr( std::is_same_v< Coordinate, bool > )
+			{
+				if constexpr( Size == 2 )
+				{
+					ASSERT( uniform_info.type == GL_BOOL_VEC2 );
+
+					GLCALL( glUniform2i( uniform_info.location, value.X(), value.Y() ) );
+				}
+				if constexpr( Size == 3 )
+				{
+					ASSERT( uniform_info.type == GL_BOOL_VEC3 );
+
+					GLCALL( glUniform3i( uniform_info.location, value.X(), value.Y(), value.Z() ) );
+				}
+				if constexpr( Size == 4 )
+				{
+					ASSERT( uniform_info.type == GL_BOOL_VEC4 );
+
+					GLCALL( glUniform4i( uniform_info.location, value.X(), value.Y(), value.Z(), value.W() ) );
+				}
 			}
 		}
 

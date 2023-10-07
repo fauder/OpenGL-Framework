@@ -62,12 +62,12 @@ namespace Framework
 
 	void Shader::SetColor( const std::string& uniform_name, const Color3& value )
 	{
-		SetVector< 3 >( uniform_name, static_cast< const Vector3& >( value ) );
+		SetVector< float, 3 >( uniform_name, static_cast< const Vector3& >( value ) );
 	}
 
 	void Shader::SetColor( const std::string& uniform_name, const Color4& value )
 	{
-		SetVector< 4 >( uniform_name, static_cast< const Vector4& >( value ) );
+		SetVector< float, 4 >( uniform_name, static_cast< const Vector4& >( value ) );
 	}
 
 	void Shader::SetTextureSampler1D( const std::string& uniform_name, const int value )
