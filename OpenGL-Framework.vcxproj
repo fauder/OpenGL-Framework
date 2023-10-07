@@ -123,6 +123,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Framework;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -140,6 +141,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Framework;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -150,99 +152,99 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Drawable.cpp" />
-    <ClCompile Include="Drawable_Indexed.cpp" />
-    <ClCompile Include="CameraController_Flight.cpp" />
-    <ClCompile Include="glad.c" />
-    <ClCompile Include="ImGuiUtility.cpp" />
-    <ClCompile Include="IndexBuffer.cpp" />
-    <ClCompile Include="Application.cpp" />
-    <ClCompile Include="Log_ImGui.cpp" />
-    <ClCompile Include="Material.cpp" />
-    <ClCompile Include="Math.cpp" />
-    <ClCompile Include="Matrix.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="Test\Test_Camera_LookAt.cpp" />
-    <ClCompile Include="Test\Test_Menu.cpp" />
-    <ClCompile Include="Test\Test_ClearColor.cpp" />
-    <ClCompile Include="Test\Test_ImGui.cpp" />
-    <ClCompile Include="Test\Test_Transform_2Cubes.cpp" />
-    <ClCompile Include="Test\Test_Camera_WalkAround.cpp" />
-    <ClCompile Include="Transform.cpp" />
-    <ClCompile Include="Vendor\imgui.cpp" />
-    <ClCompile Include="ImGuiSetup.cpp" />
-    <ClCompile Include="Vendor\imgui_demo.cpp" />
-    <ClCompile Include="Vendor\imgui_draw.cpp" />
-    <ClCompile Include="Vendor\imgui_impl_glfw.cpp" />
-    <ClCompile Include="Vendor\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="Vendor\imgui_tables.cpp" />
-    <ClCompile Include="Vendor\imgui_widgets.cpp" />
-    <ClCompile Include="Vendor\stb_image.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="VertexArray.cpp" />
-    <ClCompile Include="VertexBuffer.cpp" />
-    <ClCompile Include="Platform.cpp" />
+    <ClCompile Include="Source\Framework\Core\Application.cpp" />
+    <ClCompile Include="Source\Framework\Renderer\Camera.cpp" />
+    <ClCompile Include="Source\Framework\Renderer\Drawable.cpp" />
+    <ClCompile Include="Source\Framework\Renderer\Drawable_Indexed.cpp" />
+    <ClCompile Include="Source\Framework\Renderer\CameraController_Flight.cpp" />
+    <ClCompile Include="Source\Framework\Renderer\glad.c" />
+    <ClCompile Include="Source\Framework\Utility\ImGuiUtility.cpp" />
+    <ClCompile Include="Source\Framework\Renderer\IndexBuffer.cpp" />
+    <ClCompile Include="Source\Framework\Core\Log_ImGui.cpp" />
+    <ClCompile Include="Source\Framework\Renderer\Material.cpp" />
+    <ClCompile Include="Source\Framework\Math\Math.cpp" />
+    <ClCompile Include="Source\Framework\Math\Matrix.cpp" />
+    <ClCompile Include="Source\Framework\Renderer\Renderer.cpp" />
+    <ClCompile Include="Source\Framework\Renderer\Shader.cpp" />
+    <ClCompile Include="Source\Framework\Test\Test_Camera_LookAt.cpp" />
+    <ClCompile Include="Source\Framework\Test\Test_Menu.cpp" />
+    <ClCompile Include="Source\Framework\Test\Test_ClearColor.cpp" />
+    <ClCompile Include="Source\Framework\Test\Test_ImGui.cpp" />
+    <ClCompile Include="Source\Framework\Test\Test_Transform_2Cubes.cpp" />
+    <ClCompile Include="Source\Framework\Test\Test_Camera_WalkAround.cpp" />
+    <ClCompile Include="Source\Framework\Scene\Transform.cpp" />
+    <ClCompile Include="Source\Vendor\imgui.cpp" />
+    <ClCompile Include="Source\Framework\Core\ImGuiSetup.cpp" />
+    <ClCompile Include="Source\Vendor\imgui_demo.cpp" />
+    <ClCompile Include="Source\Vendor\imgui_draw.cpp" />
+    <ClCompile Include="Source\Vendor\imgui_impl_glfw.cpp" />
+    <ClCompile Include="Source\Vendor\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="Source\Vendor\imgui_tables.cpp" />
+    <ClCompile Include="Source\Vendor\imgui_widgets.cpp" />
+    <ClCompile Include="Source\Vendor\stb_image.cpp" />
+    <ClCompile Include="Source\Framework\Renderer\Texture.cpp" />
+    <ClCompile Include="Source\Framework\Renderer\VertexArray.cpp" />
+    <ClCompile Include="Source\Framework\Renderer\VertexBuffer.cpp" />
+    <ClCompile Include="Source\Framework\Core\Platform.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Angle.hpp" />
-    <ClInclude Include="Assert.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Color.hpp" />
-    <ClInclude Include="Concepts.h" />
-    <ClInclude Include="Constants.h" />
-    <ClInclude Include="Drawable.h" />
-    <ClInclude Include="Drawable_Indexed.h" />
-    <ClInclude Include="CameraController_Flight.h" />
-    <ClInclude Include="ImGuiUtility.h" />
-    <ClInclude Include="Initialization.h" />
-    <ClInclude Include="Log.h" />
-    <ClInclude Include="Log_ImGui.h" />
-    <ClInclude Include="Material.h" />
-    <ClInclude Include="Math.h" />
-    <ClInclude Include="Matrix.h" />
-    <ClInclude Include="Matrix.hpp" />
-    <ClInclude Include="Polar.hpp" />
-    <ClInclude Include="Quaternion.hpp" />
-    <ClInclude Include="ShaderTypeInformation.h" />
-    <ClInclude Include="Test\Test.hpp" />
-    <ClInclude Include="Test\Test_Menu.h" />
-    <ClInclude Include="Test\Test_ClearColor.h" />
-    <ClInclude Include="Test\Test_ImGui.h" />
-    <ClInclude Include="Test\Test_Transform_2Cubes.h" />
-    <ClInclude Include="Test\Test_Camera_LookAt.h" />
-    <ClInclude Include="Test\Test_Camera_WalkAround.h" />
-    <ClInclude Include="Transform.h" />
-    <ClInclude Include="TypeTraits.h" />
-    <ClInclude Include="ShaderUniformInformation.h" />
-    <ClInclude Include="Unit.h" />
-    <ClInclude Include="Utility.hpp" />
-    <ClInclude Include="IndexBuffer.h" />
-    <ClInclude Include="Graphics.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="Vector.hpp" />
-    <ClInclude Include="Vendor\imconfig.h" />
-    <ClInclude Include="Vendor\imgui.h" />
-    <ClInclude Include="ImGuiSetup.h" />
-    <ClInclude Include="Vendor\imgui_impl_glfw.h" />
-    <ClInclude Include="Vendor\imgui_impl_opengl3.h" />
-    <ClInclude Include="Vendor\imgui_impl_opengl3_loader.h" />
-    <ClInclude Include="Vendor\imgui_internal.h" />
-    <ClInclude Include="Vendor\imstb_rectpack.h" />
-    <ClInclude Include="Vendor\imstb_textedit.h" />
-    <ClInclude Include="Vendor\imstb_truetype.h" />
-    <ClInclude Include="Vendor\stb_image.h" />
-    <ClInclude Include="VertexArray.h" />
-    <ClInclude Include="VertexBuffer.h" />
-    <ClInclude Include="VertexBufferLayout.h" />
-    <ClInclude Include="Platform.h" />
+    <ClInclude Include="Source\Framework\Core\Assert.h" />
+    <ClInclude Include="Source\Framework\Math\Angle.hpp" />
+    <ClInclude Include="Source\Framework\Renderer\Camera.h" />
+    <ClInclude Include="Source\Framework\Math\Color.hpp" />
+    <ClInclude Include="Source\Framework\Math\Concepts.h" />
+    <ClInclude Include="Source\Framework\Math\Constants.h" />
+    <ClInclude Include="Source\Framework\Renderer\Drawable.h" />
+    <ClInclude Include="Source\Framework\Renderer\Drawable_Indexed.h" />
+    <ClInclude Include="Source\Framework\Renderer\CameraController_Flight.h" />
+    <ClInclude Include="Source\Framework\Utility\ImGuiUtility.h" />
+    <ClInclude Include="Source\Framework\Core\Initialization.h" />
+    <ClInclude Include="Source\Framework\Core\Log.h" />
+    <ClInclude Include="Source\Framework\Core\Log_ImGui.h" />
+    <ClInclude Include="Source\Framework\Renderer\Material.h" />
+    <ClInclude Include="Source\Framework\Math\Math.h" />
+    <ClInclude Include="Source\Framework\Math\Matrix.h" />
+    <ClInclude Include="Source\Framework\Math\Matrix.hpp" />
+    <ClInclude Include="Source\Framework\Math\Polar.hpp" />
+    <ClInclude Include="Source\Framework\Math\Quaternion.hpp" />
+    <ClInclude Include="Source\Framework\Renderer\ShaderTypeInformation.h" />
+    <ClInclude Include="Source\Framework\Test\Test.hpp" />
+    <ClInclude Include="Source\Framework\Test\Test_Menu.h" />
+    <ClInclude Include="Source\Framework\Test\Test_ClearColor.h" />
+    <ClInclude Include="Source\Framework\Test\Test_ImGui.h" />
+    <ClInclude Include="Source\Framework\Test\Test_Transform_2Cubes.h" />
+    <ClInclude Include="Source\Framework\Test\Test_Camera_LookAt.h" />
+    <ClInclude Include="Source\Framework\Test\Test_Camera_WalkAround.h" />
+    <ClInclude Include="Source\Framework\Scene\Transform.h" />
+    <ClInclude Include="Source\Framework\Math\TypeTraits.h" />
+    <ClInclude Include="Source\Framework\Renderer\ShaderUniformInformation.h" />
+    <ClInclude Include="Source\Framework\Math\Unit.h" />
+    <ClInclude Include="Source\Framework\Utility\Utility.hpp" />
+    <ClInclude Include="Source\Framework\Renderer\IndexBuffer.h" />
+    <ClInclude Include="Source\Framework\Renderer\Graphics.h" />
+    <ClInclude Include="Source\Framework\Renderer\Renderer.h" />
+    <ClInclude Include="Source\Framework\Renderer\Shader.h" />
+    <ClInclude Include="Source\Framework\Renderer\Texture.h" />
+    <ClInclude Include="Source\Framework\Math\Vector.hpp" />
+    <ClInclude Include="Source\Vendor\imconfig.h" />
+    <ClInclude Include="Source\Vendor\imgui.h" />
+    <ClInclude Include="Source\Framework\Core\ImGuiSetup.h" />
+    <ClInclude Include="Source\Vendor\imgui_impl_glfw.h" />
+    <ClInclude Include="Source\Vendor\imgui_impl_opengl3.h" />
+    <ClInclude Include="Source\Vendor\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="Source\Vendor\imgui_internal.h" />
+    <ClInclude Include="Source\Vendor\imstb_rectpack.h" />
+    <ClInclude Include="Source\Vendor\imstb_textedit.h" />
+    <ClInclude Include="Source\Vendor\imstb_truetype.h" />
+    <ClInclude Include="Source\Vendor\stb_image.h" />
+    <ClInclude Include="Source\Framework\Renderer\VertexArray.h" />
+    <ClInclude Include="Source\Framework\Renderer\VertexBuffer.h" />
+    <ClInclude Include="Source\Framework\Renderer\VertexBufferLayout.h" />
+    <ClInclude Include="Source\Framework\Core\Platform.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Asset\Shader\textured_mix.fragment" />
-    <None Include="Asset\Shader\textured_mix.vertex" />
+    <None Include="Source\Asset\Shader\textured_mix.fragment" />
+    <None Include="Source\Asset\Shader\textured_mix.vertex" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Asset\Texture\awesomeface.png" />
@@ -250,7 +252,7 @@
     <Image Include="Asset\Texture\test_tex_cube.png" />
   </ItemGroup>
   <ItemGroup>
-    <Natvis Include="NatVis\Framework.natvis" />
+    <Natvis Include="Source\NatVis\Framework.natvis" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
