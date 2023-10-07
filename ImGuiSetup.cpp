@@ -14,7 +14,7 @@ namespace Framework::ImGuiSetup
         ImGui::StyleColorsDark();
 
         // Setup Platform/Renderer backends.
-        ImGui_ImplGlfw_InitForOpenGL( reinterpret_cast< GLFWwindow* >( Platform::GetWindowHandle() ), true );
+        ImGui_ImplGlfw_InitForOpenGL( static_cast< GLFWwindow* >( Platform::GetWindowHandle() ), true );
         ImGui_ImplOpenGL3_Init();
 
         // Load Fonts
