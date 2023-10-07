@@ -69,18 +69,42 @@ namespace Framework::Log
 		}
 	}
 
-	/*template< Concepts::Arithmetic Type, std::size_t RowSize, std::size_t ColumnSize >
+	template< Concepts::Arithmetic Type, std::size_t RowSize, std::size_t ColumnSize >
 		requires Concepts::NonZero< RowSize > && Concepts::NonZero< ColumnSize >
 	void Dump( const Math::Matrix< Type, RowSize, ColumnSize >& matrix )
 	{
-		Utility::constexpr_for< 0, RowSize, +1 >( [ & ]( const auto row_index )
+		if( ImGui::TreeNode( &matrix, "(Show/Hide)" ) == false )
+			return;
+
+		if( ImGui::BeginTable( "matrix-dump-table", ColumnSize, ImGuiTableFlags_Borders | ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_PreciseWidths ) )
 		{
-			Utility::constexpr_for< 0, ColumnSize, +1 >( [ & ]( const auto column_index )
+			Utility::constexpr_for< 0, RowSize, +1 >( [ & ]( const auto row_index )
 			{
-				sub_matrix[ row_index ][ column_index ] = data[ row_index ][ column_index ];
+				Utility::constexpr_for< 0, ColumnSize, +1 >( [ & ]( const auto column_index )
+				{
+					ImGui::TableNextColumn();
+					
+					if constexpr( std::is_same_v< Type, float > )
+						ImGui::Text( "%.3f", matrix[ row_index ][ column_index ] );
+					if constexpr( std::is_same_v< Type, double > )
+						ImGui::Text( "%.3lf", matrix[ row_index ][ column_index ] );
+					if constexpr( std::is_same_v< Type, int > )
+						ImGui::Text( "%d", matrix[ row_index ][ column_index ] );
+					if constexpr( std::is_same_v< Type, unsigned int > )
+						ImGui::Text( "%u", matrix[ row_index ][ column_index ] );
+					if constexpr( std::is_same_v< Type, bool > )
+					{
+						bool value = matrix[ row_index ][ column_index ];
+						ImGui::Checkbox( "", &value );
+					}
+				} );
 			} );
-		} );
-	}*/
+
+			ImGui::EndTable();
+		}
+
+		ImGui::TreePop();
+	}
 
 	void DumpUniform( const Material& material, const ShaderUniformInformation& uniform_info )
 	{
@@ -116,16 +140,16 @@ namespace Framework::Log
 			case GL_BOOL_VEC4							: Dump( material.GetUniformValue< Vector4B >( uniform_info ) ); break;
 			
 			/* Float matrices: */
-			// TODO: case GL_FLOAT_MAT2 						: break;
-			// TODO: case GL_FLOAT_MAT3 						: break;
-			// TODO: case GL_FLOAT_MAT4 						: break;
-			
-			// TODO: case GL_FLOAT_MAT2x3 						: break;
-			// TODO: case GL_FLOAT_MAT2x4 						: break;
-			// TODO: case GL_FLOAT_MAT3x2 						: break;
-			// TODO: case GL_FLOAT_MAT3x4 						: break;
-			// TODO: case GL_FLOAT_MAT4x2 						: break;
-			// TODO: case GL_FLOAT_MAT4x3 						: break;
+			case GL_FLOAT_MAT2 							: Dump( material.GetUniformValue< Matrix2x2 >( uniform_info ) ); break;
+			case GL_FLOAT_MAT3 							: Dump( material.GetUniformValue< Matrix3x3 >( uniform_info ) ); break;
+			case GL_FLOAT_MAT4 							: Dump( material.GetUniformValue< Matrix4x4 >( uniform_info ) ); break;
+
+			case GL_FLOAT_MAT2x3 						: Dump( material.GetUniformValue< Matrix2x3 >( uniform_info ) ); break;
+			case GL_FLOAT_MAT2x4 						: Dump( material.GetUniformValue< Matrix2x4 >( uniform_info ) ); break;
+			case GL_FLOAT_MAT3x2 						: Dump( material.GetUniformValue< Matrix3x2 >( uniform_info ) ); break;
+			case GL_FLOAT_MAT3x4 						: Dump( material.GetUniformValue< Matrix3x4 >( uniform_info ) ); break;
+			case GL_FLOAT_MAT4x2 						: Dump( material.GetUniformValue< Matrix4x2 >( uniform_info ) ); break;
+			case GL_FLOAT_MAT4x3 						: Dump( material.GetUniformValue< Matrix4x3 >( uniform_info ) ); break;
 
 			// OpenGL 3.3 does not have matrices of double type.
 
@@ -167,7 +191,7 @@ namespace Framework::Log
 
 				ImGui::TableHeadersRow();
 
-				for( auto& [name, uniform_info] : uniform_map )
+				for( auto& [ name, uniform_info ] : uniform_map )
 				{
 					ImGui::TableNextColumn(); ImGui::TextUnformatted( name.c_str() );
 					ImGui::TableNextColumn(); DumpUniform( material, uniform_info );
