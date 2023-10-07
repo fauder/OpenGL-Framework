@@ -25,26 +25,10 @@ namespace Framework
 
 		void Bind() const;
 
-		/* Only accept square matrices for now. If there a use-case for non-square matrices come up, I'll refactor. */
-		template< unsigned int Size > requires Concepts::NonZero< Size >
-		void SetMatrix( const std::string& uniform_name, const Math::Matrix< float, Size, Size >& value )
-		{
-			if constexpr( Size == 2U )
-			{
-				GLCALL( glUniformMatrix2fv( GetUniformInformation( uniform_name ).location, 1, GL_TRUE, value.Data() ) );
-			}
-			if constexpr( Size == 3U )
-			{
-				GLCALL( glUniformMatrix3fv( GetUniformInformation( uniform_name ).location, 1, GL_TRUE, value.Data() ) );
-			}
-			if constexpr( Size == 4U )
-			{
-				GLCALL( glUniformMatrix4fv( GetUniformInformation( uniform_name ).location, 1, GL_TRUE, value.Data() ) );
-			}
-		}
 		void SetFloat( const std::string& uniform_name, const float value );
 		void SetInt( const std::string& uniform_name, const int value );
 		void SetBool( const std::string& uniform_name, const bool value );
+
 		template< unsigned int Size > requires Concepts::NonZero< Size >
 		void SetVector( const std::string& uniform_name, const Math::Vector< float, Size >& value )
 		{
@@ -69,8 +53,31 @@ namespace Framework
 				GLCALL( glUniform4fv( uniform_info.location, 1, value.Data() ) );
 			}
 		}
+
 		void SetColor( const std::string& uniform_name, const Color3& value );
 		void SetColor( const std::string& uniform_name, const Color4& value );
+
+		/* Only accept square matrices for now. If there a use-case for non-square matrices come up, I'll refactor. */
+		template< unsigned int Size > requires Concepts::NonZero< Size >
+		void SetMatrix( const std::string& uniform_name, const Math::Matrix< float, Size, Size >& value )
+		{
+			if constexpr( Size == 2U )
+			{
+				GLCALL( glUniformMatrix2fv( GetUniformInformation( uniform_name ).location, 1, GL_TRUE, value.Data() ) );
+			}
+			if constexpr( Size == 3U )
+			{
+				GLCALL( glUniformMatrix3fv( GetUniformInformation( uniform_name ).location, 1, GL_TRUE, value.Data() ) );
+			}
+			if constexpr( Size == 4U )
+			{
+				GLCALL( glUniformMatrix4fv( GetUniformInformation( uniform_name ).location, 1, GL_TRUE, value.Data() ) );
+			}
+		}
+
+		void SetTextureSampler1D( const std::string& uniform_name, const int value );
+		void SetTextureSampler2D( const std::string& uniform_name, const int value );
+		void SetTextureSampler3D( const std::string& uniform_name, const int value );
 
 		inline const ShaderUniformInformation& GetUniformInformation( const std::string& uniform_name );
 		inline const std::unordered_map< std::string, ShaderUniformInformation >& GetUniformInformations() const { return uniform_info_map; }

@@ -23,6 +23,7 @@ namespace Framework::Test
 		Platform::CaptureMouse( input_is_enabled );
 
 		shader   = std::make_unique< Shader >( "Asset/Shader/textured_mix.vertex", "Asset/Shader/textured_mix.fragment", "Textured Mix" );
+		material = std::make_unique< Material >( shader.get() );
 
 		const std::vector< Math::Vector< float, 3 + 2 /*+ 4*/ > > vertices
 		{
@@ -84,11 +85,11 @@ namespace Framework::Test
 		renderer.SetPolygonMode( PolygonMode::FILL );
 
 		texture_test_cube = std::make_unique< Texture >( "Asset/Texture/test_tex_cube.png", GL_RGBA );
-
-		texture_test_cube->ActivateAndBind( GL_TEXTURE0 );
+		texture_test_cube->ActivateAndBind( GL_TEXTURE0 ); // Above line may bind the texture to whatever texture slot was active before, so more than 1 slots may be bound to this texture.
 
 		shader->Bind();
-		shader->SetInt( "texture_sampler_1", 0 );
+
+		material->SetTextureSampler2D( "texture_sampler_1", 0 );
 
 		// Initial camera position and rotation:
 		ResetCameraTranslation();
@@ -111,6 +112,12 @@ namespace Framework::Test
 				{
 					input_is_enabled = !input_is_enabled;
 					Platform::CaptureMouse( input_is_enabled );
+				}
+				break;
+			case Platform::KeyCode::KEY_SPACE:
+				if( action == Platform::KeyAction::PRESS )
+				{
+					material->SetBool( "use_vertex_color", !material->GetUniformValue< bool >( shader->GetUniformInformation( "use_vertex_color" ) ) );
 				}
 				break;
 			default:
@@ -209,7 +216,8 @@ namespace Framework::Test
 
 		ImGui::End();
 
-		Log::Dump( *shader, CurrentImGuiWindowFlags() );
+		Log::Dump( *shader,		CurrentImGuiWindowFlags() );
+		Log::Dump( *material,	CurrentImGuiWindowFlags() );
 	}
 
 	void Test_Camera_WalkAround::ResetCameraTranslation()

@@ -70,6 +70,30 @@ namespace Framework
 		SetVector< 4 >( uniform_name, static_cast< const Vector4& >( value ) );
 	}
 
+	void Shader::SetTextureSampler1D( const std::string& uniform_name, const int value )
+	{
+		const auto& uniform_info = GetUniformInformation( uniform_name );
+		ASSERT( uniform_info.type == GL_SAMPLER_1D );
+
+		GLCALL( glUniform1i( uniform_info.location, value ) );
+	}
+
+	void Shader::SetTextureSampler2D( const std::string& uniform_name, const int value )
+	{
+		const auto& uniform_info = GetUniformInformation( uniform_name );
+		ASSERT( uniform_info.type == GL_SAMPLER_2D );
+
+		GLCALL( glUniform1i( uniform_info.location, value ) );
+	}
+
+	void Shader::SetTextureSampler3D( const std::string& uniform_name, const int value )
+	{
+		const auto& uniform_info = GetUniformInformation( uniform_name );
+		ASSERT( uniform_info.type == GL_SAMPLER_3D );
+
+		GLCALL( glUniform1i( uniform_info.location, value ) );
+	}
+
 	const ShaderUniformInformation& Shader::GetUniformInformation( const std::string& uniform_name )
 	{
 	#ifdef _DEBUG

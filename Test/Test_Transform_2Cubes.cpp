@@ -83,10 +83,10 @@ namespace Framework::Test
 		texture_awesome_face->ActivateAndBind( GL_TEXTURE1 );
 
 		shader->Bind();
-		shader->SetInt( "texture_sampler_1", 0 );
-		shader->SetInt( "texture_sampler_2", 1 );
+		shader->SetTextureSampler2D( "texture_sampler_1", 0 );
+		shader->SetTextureSampler2D( "texture_sampler_2", 1 );
 
-		//shader->SetInt( "use_vertex_color", 1 );
+		//shader->SetBool( "use_vertex_color", 1 );
 
 		/* Putting the "camera" on z +3 means moving the world to z -3.*/
 		const auto view = Matrix::Translation( 0.0f, 0.0f, -3.0f );

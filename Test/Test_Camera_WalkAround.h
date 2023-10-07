@@ -4,6 +4,7 @@
 #include "Test.hpp"
 #include "../CameraController_Flight.h"
 #include "../Drawable.h"
+#include "../Material.h"
 #include "../Polar.hpp"
 #include "../Texture.h"
 
@@ -35,6 +36,7 @@ namespace Framework::Test
 	private:
 		std::unique_ptr< VertexArray > cube_vertex_array;
 		std::unique_ptr< Shader > shader;
+		std::unique_ptr< Material > material;
 		std::unique_ptr< Drawable > cube_1;
 		std::unique_ptr< Texture > texture_test_cube;
 

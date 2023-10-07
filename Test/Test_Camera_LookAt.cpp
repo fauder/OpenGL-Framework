@@ -83,7 +83,7 @@ namespace Framework::Test
 		texture_test_cube->ActivateAndBind( GL_TEXTURE0 );
 
 		shader->Bind();
-		shader->SetInt( "texture_sampler_1", 0 );
+		shader->SetTextureSampler2D( "texture_sampler_1", 0 );
 
 		shader->SetMatrix( "transformation_projection", Matrix::PerspectiveProjection( 0.1f, 100.0f, renderer.AspectRatio(), 45_deg ) );
 
