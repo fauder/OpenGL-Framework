@@ -50,12 +50,22 @@ namespace Framework::Log
 
 		if constexpr( std::is_same_v< Coordinate, bool > )
 		{
-			if constexpr( Size == 2 )
-				ImGui::Text( "[bool]< %d, %d >", vector.X(), vector.Y() );
-			if constexpr( Size == 3 )
-				ImGui::Text( "[bool]< %d, %d, %d >", vector.X(), vector.Y(), vector.Z() );
-			if constexpr( Size == 4 )
-				ImGui::Text( "[bool]< %d, %d, %d, %d >", vector.X(), vector.Y(), vector.Z(), vector.W() );
+			if constexpr( Size >= 2 )
+			{
+				bool x = vector.X(), y = vector.Y();
+				ImGui::Checkbox( "", &x ); ImGui::SameLine(); ImGui::Checkbox( "", &y );
+
+			}
+			if constexpr( Size >= 3 )
+			{
+				bool value = vector.Z();
+				ImGui::SameLine(); ImGui::Checkbox( "", &value );
+			}
+			if constexpr( Size >= 4 )
+			{
+				bool value = vector.W();
+				ImGui::SameLine(); ImGui::Checkbox( "", &value );
+			}
 		}
 	}
 
@@ -95,7 +105,12 @@ namespace Framework::Log
 			case GL_UNSIGNED_INT_VEC3					: Dump( material.GetUniformValue< Vector3U >( uniform_info ) ); break;
 			case GL_UNSIGNED_INT_VEC4					: Dump( material.GetUniformValue< Vector4U >( uniform_info ) ); break;
 			
-			case GL_BOOL								: ImGui::Text( "[bool]< %d >", material.GetUniformValue< bool >( uniform_info ) ); break;
+			case GL_BOOL:
+			{
+				bool value = material.GetUniformValue< bool >( uniform_info );
+				ImGui::Checkbox( "", &value );
+				break;
+			}
 			case GL_BOOL_VEC2							: Dump( material.GetUniformValue< Vector2B >( uniform_info ) ); break;
 			case GL_BOOL_VEC3							: Dump( material.GetUniformValue< Vector3B >( uniform_info ) ); break;
 			case GL_BOOL_VEC4							: Dump( material.GetUniformValue< Vector4B >( uniform_info ) ); break;
