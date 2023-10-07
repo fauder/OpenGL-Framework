@@ -27,7 +27,11 @@ namespace Framework
 			ASSERT( uniform_information.size == sizeof( Math::Vector< Coordinate, Size > ) );
 			ASSERT( uniform_information.size + uniform_information.offset - 1 <= ( int )uniform_blob.size() );
 
-			return CopyUniformToBlob( value.Data(), uniform_information );
+			CopyUniformToBlob( value.Data(), uniform_information );
+
+			shader->SetVector( name, value );
+
+			return *this;
 		}
 
 		Material& SetColor( const std::string& name, const Color3& color );
