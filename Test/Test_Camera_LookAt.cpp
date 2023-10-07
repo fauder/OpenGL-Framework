@@ -17,7 +17,7 @@ namespace Framework::Test
 	{
 		using namespace Framework;
 
-		shader = std::make_unique< Shader >( "Asset/Shader/Vertex.shader", "Asset/Shader/Fragment.shader" );
+		shader = std::make_unique< Shader >( "Asset/Shader/textured_mix.vertex", "Asset/Shader/textured_mix.fragment", "Textured Mix" );
 
 		const std::vector< Math::Vector< float, 3 + 2 /*+ 4*/ > > vertices
 		{
@@ -83,7 +83,7 @@ namespace Framework::Test
 		texture_test_cube->ActivateAndBind( GL_TEXTURE0 );
 
 		shader->Bind();
-		shader->SetInt( "texture_sampler_1", 0 );
+		shader->SetTextureSampler2D( "texture_sampler_1", 0 );
 
 		shader->SetMatrix( "transformation_projection", Matrix::PerspectiveProjection( 0.1f, 100.0f, renderer.AspectRatio(), 45_deg ) );
 

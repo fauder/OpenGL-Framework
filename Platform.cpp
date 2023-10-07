@@ -227,6 +227,6 @@ namespace Framework::Platform
 
 	void* GetWindowHandle()
 	{
-		return reinterpret_cast< void* >( WINDOW );
+		return static_cast< void* >( WINDOW );
 	}
 }

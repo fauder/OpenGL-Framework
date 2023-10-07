@@ -28,6 +28,5 @@ namespace Framework
 		int width;
 		int height;
 		int channels_in_file;
-		unsigned char* local_buffer;
 	};
 }

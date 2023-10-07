@@ -371,4 +371,23 @@ namespace Framework
 	using Matrix2x2I = Math::Matrix< int,		2, 2 >;
 	using Matrix3x3I = Math::Matrix< int,		3, 3 >;
 	using Matrix4x4I = Math::Matrix< int,		4, 4 >;
+
+	using Matrix2x3   = Math::Matrix< float,	2, 3 >;
+	using Matrix2x4   = Math::Matrix< float,	2, 4 >;
+	using Matrix3x2   = Math::Matrix< float,	3, 2 >;
+	using Matrix3x4   = Math::Matrix< float,	3, 4 >;
+	using Matrix4x2   = Math::Matrix< float,	4, 2 >;
+	using Matrix4x3   = Math::Matrix< float,	4, 3 >;
+	using Matrix2x3D  = Math::Matrix< double,	2, 3 >;
+	using Matrix2x4D  = Math::Matrix< double,	2, 4 >;
+	using Matrix3x2D  = Math::Matrix< double,	3, 2 >;
+	using Matrix3x4D  = Math::Matrix< double,	3, 4 >;
+	using Matrix4x2D  = Math::Matrix< double,	4, 2 >;
+	using Matrix4x3D  = Math::Matrix< double,	4, 3 >;
+	using Matrix2x3I  = Math::Matrix< int,		2, 3 >;
+	using Matrix2x4I  = Math::Matrix< int,		2, 4 >;
+	using Matrix3x2I  = Math::Matrix< int,		3, 2 >;
+	using Matrix3x4I  = Math::Matrix< int,		3, 4 >;
+	using Matrix4x2I  = Math::Matrix< int,		4, 2 >;
+	using Matrix4x3I  = Math::Matrix< int,		4, 3 >;
 }

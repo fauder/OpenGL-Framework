@@ -97,6 +97,12 @@
     <ClCompile Include="CameraController_Flight.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Log_ImGui.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.hpp">
@@ -246,6 +252,18 @@
     <ClInclude Include="CameraController_Flight.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="Log_ImGui.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderTypeInformation.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderUniformInformation.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -274,10 +292,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Asset\Shader\Fragment.shader">
+    <None Include="Asset\Shader\textured_mix.fragment">
       <Filter>Asset\Shader</Filter>
     </None>
-    <None Include="Asset\Shader\Vertex.shader">
+    <None Include="Asset\Shader\textured_mix.vertex">
       <Filter>Asset\Shader</Filter>
     </None>
   </ItemGroup>
