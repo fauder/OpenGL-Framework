@@ -171,8 +171,8 @@ namespace Framework::Test
 
 	void Test_Camera_WalkAround::OnRender()
 	{
-		shader->SetMatrix( "transformation_view",		camera.GetViewMatrix() );
-		shader->SetMatrix( "transformation_projection", camera.GetProjectionMatrix() );
+		material->SetMatrix( "transformation_view",		  camera.GetViewMatrix() );
+		material->SetMatrix( "transformation_projection", camera.GetProjectionMatrix() );
 	}
 
 	void Test_Camera_WalkAround::OnRenderImGui()
