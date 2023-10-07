@@ -72,14 +72,18 @@ namespace Framework
 
 	const ShaderUniformInformation& Shader::GetUniformInformation( const std::string& uniform_name )
 	{
+	#ifdef _DEBUG
 		try
 		{
-			return uniform_info_map[ uniform_name ];
+			return uniform_info_map.at( uniform_name );
 		}
 		catch( const std::exception& )
 		{
 			throw std::runtime_error( R"(ERROR::SHADER::UNIFORM::")" + std::string( uniform_name ) + R"("::DOES_NOT_EXIST)" );
 		}
+	#else
+		return uniform_info_map[ uniform_name ];
+	#endif // DEBUG
 	}
 
 	std::string Shader::ReadShaderFromFile( const char* file_path, const char* shader_type_string )
