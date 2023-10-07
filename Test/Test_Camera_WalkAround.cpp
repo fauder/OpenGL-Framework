@@ -117,7 +117,7 @@ namespace Framework::Test
 			case Platform::KeyCode::KEY_SPACE:
 				if( action == Platform::KeyAction::PRESS )
 				{
-					material->SetBool( "use_vertex_color", !material->GetUniformValue< bool >( shader->GetUniformInformation( "use_vertex_color" ) ) );
+					material->SetBool( "use_vertex_color", !material->GetBool( "use_vertex_color" ) );
 				}
 				break;
 			default:

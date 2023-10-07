@@ -15,6 +15,7 @@ namespace Framework
 	public:
 		Material( Shader* const shader );
 
+	/* Uniform Setters. */
 		Material& SetFloat( const std::string& name, const float value );
 		Material& SetInt( const std::string& name, const int value );
 		Material& SetBool( const std::string& name, const bool value );
@@ -34,8 +35,8 @@ namespace Framework
 			return *this;
 		}
 
-		Material& SetColor( const std::string& name, const Color3& color );
-		Material& SetColor( const std::string& name, const Color4& color );
+		Material& SetColor3( const std::string& name, const Color3& color );
+		Material& SetColor4( const std::string& name, const Color4& color );
 
 		// TODO: Material& SetMatrix( const std::string& name, const Color4& color );
 
@@ -43,8 +44,7 @@ namespace Framework
 		Material& SetTextureSampler2D( const std::string& name, const int value );
 		Material& SetTextureSampler3D( const std::string& name, const int value );
 
-		// TODO: Implement GetFloat() etc.
-
+	/* Uniform Getters. */
 		template< typename Type >
 		const Type& GetUniformValue( const int offset ) const
 		{
@@ -58,6 +58,26 @@ namespace Framework
 		{
 			return GetUniformValue< Type >( uniform_info.offset );
 		}
+
+		float GetFloat( const std::string& name );
+		int GetInt( const std::string& name );
+		bool GetBool( const std::string& name );
+
+		template< Concepts::Arithmetic Coordinate, std::size_t Size >
+			requires Concepts::NonZero< Size >
+		const Math::Vector< Coordinate, Size >& GetVector( const std::string& name )
+		{
+			return GetUniformValue< Math::Vector< Coordinate, Size > >( shader->GetUniformInformation( name ) );
+		}
+
+		const Color3& GetColor3( const std::string& name );
+		const Color4& GetColor4( const std::string& name );
+
+		// TODO: const Matrix<...>& GetMatrix( const std::string& name );
+
+		int GetTextureSampler1D( const std::string& name );
+		int GetTextureSampler2D( const std::string& name );
+		int GetTextureSampler3D( const std::string& name );
 
 	public:
 		Shader* const shader;

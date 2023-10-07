@@ -55,7 +55,7 @@ namespace Framework
 		return *this;
 	}
 
-	Material& Material::SetColor( const std::string& name, const Color3& value )
+	Material& Material::SetColor3( const std::string& name, const Color3& value )
 	{
 		const auto& uniform_information = shader->GetUniformInformation( name );
 		ASSERT( uniform_information.size == sizeof( Color3 ) );
@@ -68,7 +68,7 @@ namespace Framework
 		return *this;
 	}
 
-	Material& Material::SetColor( const std::string& name, const Color4& value )
+	Material& Material::SetColor4( const std::string& name, const Color4& value )
 	{
 		const auto& uniform_information = shader->GetUniformInformation( name );
 		ASSERT( uniform_information.size == sizeof( Color4 ) );
@@ -118,6 +118,46 @@ namespace Framework
 		shader->SetTextureSampler3D( name, value );
 
 		return *this;
+	}
+
+	float Material::GetFloat( const std::string& name )
+	{
+		return GetUniformValue< float >( shader->GetUniformInformation( name ) );
+	}
+
+	int Material::GetInt( const std::string& name )
+	{
+		return GetUniformValue< int >( shader->GetUniformInformation( name ) );
+	}
+
+	bool Material::GetBool( const std::string& name )
+	{
+		return GetUniformValue< bool >( shader->GetUniformInformation( name ) );
+	}
+
+	const Color3& Material::GetColor3( const std::string& name )
+	{
+		return GetUniformValue< Color3 >( shader->GetUniformInformation( name ) );
+	}
+
+	const Color4& Material::GetColor4( const std::string& name )
+	{
+		return GetUniformValue< Color4 >( shader->GetUniformInformation( name ) );
+	}
+
+	int Material::GetTextureSampler1D( const std::string& name )
+	{
+		return GetInt( name );
+	}
+
+	int Material::GetTextureSampler2D( const std::string& name )
+	{
+		return GetInt( name );
+	}
+
+	int Material::GetTextureSampler3D( const std::string& name )
+	{
+		return GetInt( name );
 	}
 
 	Material& Material::CopyUniformToBlob( const void* value, const ShaderUniformInformation& uniform_info )
