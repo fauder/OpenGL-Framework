@@ -79,11 +79,11 @@ namespace Framework
 		int GetTextureSampler2D( const std::string& name );
 		int GetTextureSampler3D( const std::string& name );
 
-	public:
-		Shader* const shader;
-
 	private:
 		Material& CopyUniformToBlob( const void* value, const ShaderUniformInformation& uniform_info );
+
+	public:
+		Shader* const shader;
 
 	private:
 		std::vector< char > uniform_blob;
