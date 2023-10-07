@@ -79,13 +79,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>C:\Sys\Lib\Deb;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\Sys\Include\OpenGL;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)Lib\Deb;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <LibraryPath>C:\Sys\Lib\Rel;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\Sys\Include\OpenGL;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)Lib\Rel;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -123,7 +121,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Framework;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Framework;$(ProjectDir)Source\Vendor\OpenGL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -141,7 +139,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Framework;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Framework;$(ProjectDir)Source\Vendor\OpenGL</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -157,7 +155,14 @@
     <ClCompile Include="Source\Framework\Renderer\Drawable.cpp" />
     <ClCompile Include="Source\Framework\Renderer\Drawable_Indexed.cpp" />
     <ClCompile Include="Source\Framework\Renderer\CameraController_Flight.cpp" />
-    <ClCompile Include="Source\Framework\Renderer\glad.c" />
+    <ClCompile Include="Source\Vendor\imgui\imgui.cpp" />
+    <ClCompile Include="Source\Vendor\imgui\imgui_demo.cpp" />
+    <ClCompile Include="Source\Vendor\imgui\imgui_draw.cpp" />
+    <ClCompile Include="Source\Vendor\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="Source\Vendor\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="Source\Vendor\imgui\imgui_tables.cpp" />
+    <ClCompile Include="Source\Vendor\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Source\Vendor\OpenGL\glad.c" />
     <ClCompile Include="Source\Framework\Utility\ImGuiUtility.cpp" />
     <ClCompile Include="Source\Framework\Renderer\IndexBuffer.cpp" />
     <ClCompile Include="Source\Framework\Core\Log_ImGui.cpp" />
@@ -173,19 +178,12 @@
     <ClCompile Include="Source\Framework\Test\Test_Transform_2Cubes.cpp" />
     <ClCompile Include="Source\Framework\Test\Test_Camera_WalkAround.cpp" />
     <ClCompile Include="Source\Framework\Scene\Transform.cpp" />
-    <ClCompile Include="Source\Vendor\imgui.cpp" />
     <ClCompile Include="Source\Framework\Core\ImGuiSetup.cpp" />
-    <ClCompile Include="Source\Vendor\imgui_demo.cpp" />
-    <ClCompile Include="Source\Vendor\imgui_draw.cpp" />
-    <ClCompile Include="Source\Vendor\imgui_impl_glfw.cpp" />
-    <ClCompile Include="Source\Vendor\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="Source\Vendor\imgui_tables.cpp" />
-    <ClCompile Include="Source\Vendor\imgui_widgets.cpp" />
-    <ClCompile Include="Source\Vendor\stb_image.cpp" />
     <ClCompile Include="Source\Framework\Renderer\Texture.cpp" />
     <ClCompile Include="Source\Framework\Renderer\VertexArray.cpp" />
     <ClCompile Include="Source\Framework\Renderer\VertexBuffer.cpp" />
     <ClCompile Include="Source\Framework\Core\Platform.cpp" />
+    <ClCompile Include="Source\Vendor\stb\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Framework\Core\Assert.h" />
@@ -226,21 +224,25 @@
     <ClInclude Include="Source\Framework\Renderer\Shader.h" />
     <ClInclude Include="Source\Framework\Renderer\Texture.h" />
     <ClInclude Include="Source\Framework\Math\Vector.hpp" />
-    <ClInclude Include="Source\Vendor\imconfig.h" />
-    <ClInclude Include="Source\Vendor\imgui.h" />
     <ClInclude Include="Source\Framework\Core\ImGuiSetup.h" />
-    <ClInclude Include="Source\Vendor\imgui_impl_glfw.h" />
-    <ClInclude Include="Source\Vendor\imgui_impl_opengl3.h" />
-    <ClInclude Include="Source\Vendor\imgui_impl_opengl3_loader.h" />
-    <ClInclude Include="Source\Vendor\imgui_internal.h" />
-    <ClInclude Include="Source\Vendor\imstb_rectpack.h" />
-    <ClInclude Include="Source\Vendor\imstb_textedit.h" />
-    <ClInclude Include="Source\Vendor\imstb_truetype.h" />
-    <ClInclude Include="Source\Vendor\stb_image.h" />
+    <ClInclude Include="Source\Vendor\imgui\imconfig.h" />
+    <ClInclude Include="Source\Vendor\imgui\imgui.h" />
+    <ClInclude Include="Source\Vendor\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="Source\Vendor\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="Source\Vendor\imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="Source\Vendor\imgui\imgui_internal.h" />
+    <ClInclude Include="Source\Vendor\imgui\imstb_rectpack.h" />
+    <ClInclude Include="Source\Vendor\imgui\imstb_textedit.h" />
+    <ClInclude Include="Source\Vendor\imgui\imstb_truetype.h" />
+    <ClInclude Include="Source\Vendor\OpenGL\glad\glad.h" />
+    <ClInclude Include="Source\Vendor\OpenGL\GLFW\glfw3.h" />
+    <ClInclude Include="Source\Vendor\OpenGL\GLFW\glfw3native.h" />
+    <ClInclude Include="Source\Vendor\OpenGL\KHR\khrplatform.h" />
     <ClInclude Include="Source\Framework\Renderer\VertexArray.h" />
     <ClInclude Include="Source\Framework\Renderer\VertexBuffer.h" />
     <ClInclude Include="Source\Framework\Renderer\VertexBufferLayout.h" />
     <ClInclude Include="Source\Framework\Core\Platform.h" />
+    <ClInclude Include="Source\Vendor\stb\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\Asset\Shader\textured_mix.fragment" />

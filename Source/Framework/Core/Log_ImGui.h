@@ -5,7 +5,7 @@
 #include "Renderer/Shader.h"
 
 // Vendor Includes.
-#include "Vendor/imgui.h"
+#include "Vendor/imgui/imgui.h"
 
 namespace Framework::Log
 {

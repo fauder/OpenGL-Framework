@@ -1,5 +1,5 @@
-// GLAD Includes.
-#include <glad/glad.h> // TODO: Move this from under C:\Sys or whatever it is in, into the project and get rid of the reference to this external directory.
+// Vendor GLAD Includes (Has to be included before GLFW!).
+#include <Vendor/OpenGL/glad/glad.h>
 
 // Framework Includes.
 #include "Renderer/Graphics.h"

@@ -1,14 +1,13 @@
-// GLAD Includes.
-#include <glad/glad.h> // TODO: Move this from under C:\Sys or whatever it is in, into the project and get rid of the reference to this external directory.
+// Vendor GLAD Includes (Has to be included before GLFW!).
+#include "Vendor/OpenGL/glad/glad.h"
 
 // Framework Includes.
 #include "Core/Platform.h"
 
-// GLFW Includes.
-#include <GLFW/glfw3.h> // TODO: Move this from under C:\Sys or whatever it is in, into the project and get rid of the reference to this external directory.
-
 // Vendor Includes.
-#include "Vendor/imgui_impl_glfw.h"
+#include "Vendor/imgui/imgui_impl_glfw.h"
+
+#include <Vendor/OpenGL/GLFW/glfw3.h> 
 
 // std Includes.
 #include <stdexcept>

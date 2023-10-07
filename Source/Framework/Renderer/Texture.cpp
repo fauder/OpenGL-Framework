@@ -2,7 +2,7 @@
 #include "Renderer/Texture.h"
 
 // Vendor Includes.
-#include "Vendor/stb_image.h"
+#include "Vendor/stb/stb_image.h"
 
 namespace Framework
 {
