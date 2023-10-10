@@ -24,7 +24,9 @@ namespace Framework::Math
 
 	public:
 	/* Constructors. */
-		constexpr Vector( Initialization::ZeroInitialization ) : data{} {}
+		constexpr Vector() : data{} {} // Same as the one with Initialization::ZeroInitialization parameter.
+
+		constexpr Vector( Initialization::ZeroInitialization ) : data{} {} // Same as the default constructor.
 
 		constexpr Vector( const Vector& other )					  = default;
 		constexpr Vector( Vector && donor )	noexcept			  = default;
