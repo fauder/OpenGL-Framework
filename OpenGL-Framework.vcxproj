@@ -195,6 +195,7 @@
     <ClInclude Include="Source\Framework\Renderer\Drawable.h" />
     <ClInclude Include="Source\Framework\Renderer\Drawable_Indexed.h" />
     <ClInclude Include="Source\Framework\Renderer\CameraController_Flight.h" />
+    <ClInclude Include="Source\Framework\Renderer\MeshUtility.hpp" />
     <ClInclude Include="Source\Framework\Renderer\Primitive\Primitive_Cube.h" />
     <ClInclude Include="Source\Framework\Utility\ImGuiUtility.h" />
     <ClInclude Include="Source\Framework\Core\Initialization.h" />
