@@ -21,7 +21,7 @@ namespace Framework::Test
 	{
 		Test::OnRenderImGui();
 
-		if( ImGui::Begin( "Clear Color Test", nullptr, CurrentImGuiWindowFlags() ) )
+		if( ImGui::Begin( "Clear Color Test", nullptr, CurrentImGuiWindowFlags() | ImGuiWindowFlags_AlwaysAutoResize ) )
 			if( ImGui::ColorPicker3( "Clear Color", const_cast< float* >( color_clear.Data() ) ) )
 				renderer.SetClearColor( color_clear );
 

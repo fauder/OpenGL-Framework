@@ -138,7 +138,7 @@ namespace Framework::Test
 
 	void Test_Camera_WalkAround::OnRenderImGui()
 	{
-		if( ImGui::Begin( "Test: Camera ", nullptr, CurrentImGuiWindowFlags() ) )
+		if( ImGui::Begin( "Test: Camera ", nullptr, CurrentImGuiWindowFlags() | ImGuiWindowFlags_AlwaysAutoResize ) )
 		{
 			Vector3 camera_position          = camera_transform.GetTranslation();
 			Vector3 camera_right_direction   = camera.Right();

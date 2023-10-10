@@ -190,7 +190,7 @@ namespace Framework::Test
 
 		void RenderImGui_Menu_BackButton()
 		{
-			ImGui::Begin( "Test Menu", nullptr, CurrentImGuiWindowFlags() );
+			ImGui::Begin( "Test Menu", nullptr, CurrentImGuiWindowFlags() | ImGuiWindowFlags_AlwaysAutoResize );
 
 			ImGui::Text( std::string( R"(Executing Test ")" + name + R"("...)" ).c_str() );
 			if( ImGui::Button( "<-" ) )
@@ -201,7 +201,7 @@ namespace Framework::Test
 
 		void RenderImGui_Flags()
 		{
-			if( ImGui::Begin( "Application Flags", nullptr, CurrentImGuiWindowFlags() ) )
+			if( ImGui::Begin( "App. Flags", nullptr, CurrentImGuiWindowFlags() | ImGuiWindowFlags_AlwaysAutoResize ) )
 			{
 				ImGui::Checkbox( "UI Interaction", &ui_interaction_enabled );
 			}
@@ -211,7 +211,7 @@ namespace Framework::Test
 
 		void RenderImGui_FrameStatistics()
 		{
-			if( ImGui::Begin( "Frame Statistics", nullptr, CurrentImGuiWindowFlags() ) )
+			if( ImGui::Begin( "Frame Statistics", nullptr, CurrentImGuiWindowFlags() | ImGuiWindowFlags_AlwaysAutoResize ) )
 			{
 				ImGui::Text( "FPS: %.1f fps", 1.0f / time_delta_real );
 				ImGui::Text( "Delta time (multiplied): %.3f ms | Delta time (real): %.3f", time_delta * 1000.0f, time_delta_real * 1000.0f );
