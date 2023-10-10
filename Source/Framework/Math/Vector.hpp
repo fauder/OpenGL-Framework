@@ -97,8 +97,8 @@ namespace Framework::Math
 
 	/* Getters & Setters. */
 		const Coordinate* Data() const { return data; };
-		constexpr Coordinate& operator[] ( const unsigned int index ) { return data[ index ]; }
-		constexpr const Coordinate& operator[] ( const unsigned int index ) const { return data[ index ]; }
+		constexpr Coordinate& operator[] ( const std::size_t index ) { return data[ index ]; }
+		constexpr const Coordinate& operator[] ( const std::size_t index ) const { return data[ index ]; }
 		
 		constexpr Coordinate X() const requires( Size >= 1 ) { return data[ 0 ]; };
 		constexpr Coordinate Y() const requires( Size >= 2 ) { return data[ 1 ]; };
