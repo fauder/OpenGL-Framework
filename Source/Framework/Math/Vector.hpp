@@ -69,11 +69,24 @@ namespace Framework::Math
 		{
 		}
 
-		template< typename... Values >
-		constexpr Vector( Values... values ) requires( sizeof...( values ) > 1 )
+		template< typename ... Values >
+		constexpr Vector( Values ... values ) requires( Size > 4 && sizeof ... ( Values ) == Size )
 			:
-			data{ values... }
+			data{ values ... }
 		{
+		}
+
+		template< typename ... Vectors >
+		constexpr Vector( Vectors ... vectors_to_concetanate ) // Due to requires clause on the constructor above, these two will not be ambiguous.
+			:
+			data{}
+		{
+			int i = 0;
+			( [ & ]
+				{
+					for( std::size_t j = 0; j < std::remove_reference_t< decltype( vectors_to_concetanate ) >::Dimension(); j++ )
+						data[ i++ ] = vectors_to_concetanate[ j ];
+				}(), ... );
 		}
 
 	/* Comparison Operators. */
@@ -113,10 +126,10 @@ namespace Framework::Math
 		constexpr Vector& SetW( const Coordinate value ) requires( Size >= 4 ) { data[ 3 ] = value; return *this; };
 
 		template< typename... Values >
-		constexpr Vector& Set( Values... values )
+		constexpr Vector& Set( Values ... values )
 		{
 			int i = 0;
-			( /* Lambda: */ [ & ]{ data[ i++ ] = values; }(), ... ); // Utilize fold expressions with a lambda to "loop over" the parameter pack.
+			( /* Lambda: */ [ & ]{ data[ i++ ] = values; }() , ... ); // Utilize fold expressions with a lambda to "loop over" the parameter pack.
 
 			return *this;
 		}
