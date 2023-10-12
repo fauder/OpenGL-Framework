@@ -181,13 +181,13 @@ namespace Framework::Log
 			const auto& uniform_map = material.shader->GetUniformInformations();
 
 			ImGui::SeparatorText( "Parameters" );
-			if( ImGui::BeginTable( "Parameters", 6, ImGuiTableFlags_Borders | ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_PreciseWidths ) )
+			if( ImGui::BeginTable( "Parameters", /*6*/ 3, ImGuiTableFlags_Borders | ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_PreciseWidths ) )
 			{
 				ImGui::TableSetupColumn( "Name" );
 				ImGui::TableSetupColumn( "Value" );
-				ImGui::TableSetupColumn( "Location" );
+				/*ImGui::TableSetupColumn( "Location" );
 				ImGui::TableSetupColumn( "Size" );
-				ImGui::TableSetupColumn( "Offset" );
+				ImGui::TableSetupColumn( "Offset" );*/
 				ImGui::TableSetupColumn( "Type" );
 
 				ImGui::TableHeadersRow();
@@ -196,9 +196,9 @@ namespace Framework::Log
 				{
 					ImGui::TableNextColumn(); ImGui::TextUnformatted( name.c_str() );
 					ImGui::TableNextColumn(); DumpUniform( material, uniform_info );
-					ImGui::TableNextColumn(); ImGui::Text( "%d", uniform_info.location );
+					/*ImGui::TableNextColumn(); ImGui::Text( "%d", uniform_info.location );
 					ImGui::TableNextColumn(); ImGui::Text( "%d", uniform_info.size );
-					ImGui::TableNextColumn(); ImGui::Text( "%d", uniform_info.offset );
+					ImGui::TableNextColumn(); ImGui::Text( "%d", uniform_info.offset );*/
 					ImGui::TableNextColumn(); ImGui::TextUnformatted( GetNameOfType( uniform_info.type ) );
 				}
 
