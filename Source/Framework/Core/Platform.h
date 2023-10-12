@@ -163,6 +163,8 @@ namespace Framework::Platform
 	void SwapBuffers();
 	void PollEvents();
 
+	void SetFrameBufferResizeCallback( std::function< void( const int width_new_pixels, const int height_new_pixels ) > callback = {} );
+
 	void SetKeyboardEventCallback( std::function< void( const KeyCode key_code, const KeyAction action, const KeyMods mods ) > callback = {} );
 	bool IsKeyPressed( const KeyCode key_code );
 	bool IsKeyReleased( const KeyCode key_code );
@@ -174,13 +176,16 @@ namespace Framework::Platform
 	std::pair< float, float > GetMouseCursorPositions();
 	std::pair< float, float > GetMouseScrollOffsets();
 
-	/* Time-Keeping Facilities. */
-	float GetCurrentTime();
 
 	void SetShouldClose( const bool value );
 
 	/* Queries. */
 	bool ShouldClose();
+	float GetCurrentTime();
+	int GetFrameBufferWidthInPixels();
+	int GetFrameBufferHeightInPixels();
+	float GetFrameBufferAspectRatio();
+	void* GetWindowHandle();
 
 	/* Utility. */
 	void ChangeTitle( const char* new_title );
@@ -188,5 +193,4 @@ namespace Framework::Platform
 	/* Shutdown. */
 	void CleanUp();
 
-	void* GetWindowHandle();
 }

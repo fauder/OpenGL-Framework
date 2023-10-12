@@ -10,7 +10,7 @@ namespace Framework::Test
 		friend Test< Test_ClearColor >;
 
 	public:
-		Test_ClearColor( Renderer& renderer, Color4 clear_color = Color4::Clear_Default() );
+		Test_ClearColor( Color4 clear_color = Color4::Clear_Default() );
 		~Test_ClearColor() override;
 
 	protected:

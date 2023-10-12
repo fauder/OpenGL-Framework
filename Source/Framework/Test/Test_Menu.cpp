@@ -3,9 +3,8 @@
 
 namespace Framework::Test
 {
-	Test_Menu::Test_Menu( Renderer& renderer, std::unique_ptr< TestInterface >& current_test )
+	Test_Menu::Test_Menu( std::unique_ptr< TestInterface >& current_test )
 		:
-		Test( renderer ),
 		test_current( current_test ),
 		color_clear( 255u, 185u, 0u, 255u )
 	{

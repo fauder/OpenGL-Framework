@@ -27,9 +27,10 @@ namespace Framework::Test
 	class Test : public TestInterface
 	{
 	public:
-		Test( Renderer& renderer, bool ui_starts_enabled = true, bool display_flags = true )
+		Test( bool ui_starts_enabled = true, bool display_flags = true )
 			:
-			renderer( renderer ),
+			camera( &camera_transform, Platform::GetFrameBufferAspectRatio() ),
+			renderer( &camera ),
 			name( ExtractTestNameFromTypeName( typeid( *this ).name() ) ),
 			display_frame_statistics( true ),
 			time_current( 0.0f ),
@@ -239,7 +240,9 @@ namespace Framework::Test
 		}
 
 	protected:
-		Renderer& renderer;
+		Transform camera_transform;
+		Camera camera;
+		Renderer renderer;
 		std::string name;
 
 		bool display_frame_statistics;

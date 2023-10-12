@@ -10,22 +10,33 @@
 #include <Vendor/OpenGL/GLFW/glfw3.h> 
 
 // std Includes.
+#include <iostream>
 #include <stdexcept>
 
 namespace Framework::Platform
 {
 	GLFWwindow* WINDOW = nullptr; // No need to expose this outside.
+	int FRAMEBUFFER_WIDTH_PIXELS = 0, FRAMEBUFFER_HEIGHT_PIXELS = 0;
+	float FRAMEBUFFER_ASPECT_RATIO = 0.0f;
 	float MOUSE_CURSOR_X_POS = 0.0f, MOUSE_CURSOR_Y_POS = 0.0f;
 	float MOUSE_CURSOR_X_DELTA = 0.0f, MOUSE_CURSOR_Y_DELTA = 0.0f;
 	float MOUSE_SCROLL_X_OFFSET = 0.0f, MOUSE_SCROLL_Y_OFFSET = 0.0f;
 	float MOUSE_SENSITIVITY = 0.004f;
 	bool MOUSE_CAPTURE_IS_RESET = true;
 	bool MOUSE_CAPTURE_ENABLED = false;
-	std::function< void( const KeyCode key_code, const KeyAction action, const KeyMods mods ) > KEYBOARD_CALLBACK;
+	std::function< void( const KeyCode key_code, const KeyAction action, const KeyMods mods ) > KEYBOARD_USER_CALLBACK;
+	std::function< void( const int width_new_pixels, const int height_new_pixels ) > FRAMEBUFFER_RESIZE_USER_CALLBACK;
 
 	void OnResize( GLFWwindow* window, const int width_new_pixels, const int height_new_pixels )
 	{
-		glViewport( 0, 0, width_new_pixels, height_new_pixels );
+		FRAMEBUFFER_WIDTH_PIXELS  = width_new_pixels;
+		FRAMEBUFFER_HEIGHT_PIXELS = height_new_pixels;
+		FRAMEBUFFER_ASPECT_RATIO  = ( float )width_new_pixels / height_new_pixels;
+
+		glViewport( 0, 0, FRAMEBUFFER_WIDTH_PIXELS, FRAMEBUFFER_HEIGHT_PIXELS );
+
+		if( FRAMEBUFFER_RESIZE_USER_CALLBACK )
+			FRAMEBUFFER_RESIZE_USER_CALLBACK( width_new_pixels, height_new_pixels );
 	}
 
 	void OnMouseCursorPositionChanged( GLFWwindow* window, const double x_position, const double y_position )
@@ -61,8 +72,8 @@ namespace Framework::Platform
 		if( ImGui::GetIO().WantCaptureKeyboard )
 			return;
 
-		if( KEYBOARD_CALLBACK )
-			KEYBOARD_CALLBACK( KeyCode( key_code ), KeyAction( action ), KeyMods( mods ) );
+		if( KEYBOARD_USER_CALLBACK )
+			KEYBOARD_USER_CALLBACK( KeyCode( key_code ), KeyAction( action ), KeyMods( mods ) );
 	}
 
 	/* GLAD needs the created window's context made current BEFORE it is initialized. */
@@ -72,51 +83,43 @@ namespace Framework::Platform
 			throw std::runtime_error( "ERROR::GRAPHICS::GLAD::FAILED_TO_INITIALIZE!" );
 	}
 
-	void RegisterFrameBufferResizeCallback()
-	{
-		glfwSetFramebufferSizeCallback( WINDOW, OnResize );
-	}
-
-	void RegisterMousePositionChangeCallback()
-	{
-		glfwSetCursorPosCallback( WINDOW, OnMouseCursorPositionChanged );
-	}
-
-	void RegisterMouseScrollCallback()
-	{
-		glfwSetScrollCallback( WINDOW, OnMouseScrolled );
-	}
-
 	void InitializeAndCreateWindow( const int width_pixels, const int height_pixels, const int pos_x_pixels, const int pos_y_pixels )
 	{
-		glfwInit();
-		glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
-		glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 3 );
-		glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
-
-		//glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE ); // Needed for Mac OS X.
-
-		glfwWindowHint( GLFW_VISIBLE, GLFW_FALSE ); // Start hidden as we will move it shortly.
-		WINDOW = glfwCreateWindow( width_pixels, height_pixels, "OpenGL Framework", nullptr, nullptr );
-		if( WINDOW == nullptr )
+		try
 		{
-			glfwTerminate();
-			throw std::runtime_error( "ERROR::PLATFORM::GLFW::FAILED TO CREATE GLFW WINDOW!" );
+			glfwInit();
+			glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
+			glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 3 );
+			glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
+
+			//glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE ); // Needed for Mac OS X.
+
+			glfwWindowHint( GLFW_VISIBLE, GLFW_FALSE ); // Start hidden as we will move it shortly.
+			WINDOW = glfwCreateWindow( width_pixels, height_pixels, "OpenGL Framework", nullptr, nullptr );
+			if( WINDOW == nullptr )
+			{
+				glfwTerminate();
+				throw std::runtime_error( "ERROR::PLATFORM::GLFW::WINDOW::FAILED TO CREATE GLFW WINDOW!" );
+			}
+
+			glfwSetWindowPos( WINDOW, pos_x_pixels, pos_y_pixels );
+			glfwShowWindow( WINDOW );
+
+			glfwMakeContextCurrent( WINDOW );
+
+			// GLAD needs the created window's context made current BEFORE it is initialized.
+			InitializeGLAD();
+
+			Resize( width_pixels, height_pixels );
+
+			glfwSetFramebufferSizeCallback( WINDOW, OnResize );
+			glfwSetCursorPosCallback( WINDOW, OnMouseCursorPositionChanged );
+			glfwSetScrollCallback( WINDOW, OnMouseScrolled );
 		}
-
-		glfwSetWindowPos( WINDOW, pos_x_pixels, pos_y_pixels );
-		glfwShowWindow( WINDOW );
-
-		glfwMakeContextCurrent( WINDOW );
-
-		// GLAD needs the created window's context made current BEFORE it is initialized.
-		InitializeGLAD();
-
-		Resize( width_pixels, height_pixels );
-
-		RegisterFrameBufferResizeCallback();
-		RegisterMousePositionChangeCallback();
-		RegisterMouseScrollCallback();
+		catch( const std::logic_error& e )
+		{
+			std::cerr << "ERROR::PLATFORM::GLFW::WINDOW::INTIALIZATION_ERROR:\n\t" << e.what() << std::endl;
+		}
 	}
 
 	void Resize( const int width_new_pixels, const int height_new_pixels )
@@ -136,9 +139,14 @@ namespace Framework::Platform
 		glfwPollEvents();
 	}
 
+	void SetFrameBufferResizeCallback( std::function< void( const int width_new_pixels, const int height_new_pixels ) > callback )
+	{
+		FRAMEBUFFER_RESIZE_USER_CALLBACK = callback;
+	}
+
 	void SetKeyboardEventCallback( std::function< void( const KeyCode key_code, const KeyAction action, const KeyMods mods ) > callback )
 	{
-		KEYBOARD_CALLBACK = callback;
+		KEYBOARD_USER_CALLBACK = callback;
 
 		ImGui_ImplGlfw_RestoreCallbacks( WINDOW );
 		glfwSetKeyCallback( WINDOW, OnKeyboardEvent );
@@ -202,6 +210,21 @@ namespace Framework::Platform
 	float GetCurrentTime()
 	{
 		return static_cast< float >( glfwGetTime() );
+	}
+
+	int GetFrameBufferWidthInPixels()
+	{
+		return FRAMEBUFFER_WIDTH_PIXELS;
+	}
+
+	int GetFrameBufferHeightInPixels()
+	{
+		return FRAMEBUFFER_HEIGHT_PIXELS;
+	}
+
+	float GetFrameBufferAspectRatio()
+	{
+		return FRAMEBUFFER_ASPECT_RATIO;
 	}
 
 	void SetShouldClose( const bool value )

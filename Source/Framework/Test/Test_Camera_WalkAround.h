@@ -20,7 +20,7 @@ namespace Framework::Test
 		friend Test< Test_Camera_WalkAround >;
 
 	public:
-		Test_Camera_WalkAround( Renderer& renderer );
+		Test_Camera_WalkAround();
 		~Test_Camera_WalkAround() override;
 
 	private:
@@ -42,8 +42,8 @@ namespace Framework::Test
 		std::unique_ptr< Drawable > cube_1;
 		std::unique_ptr< Texture > texture_test_cube;
 
-		Transform camera_transform;
-		Camera camera;
+		Transform cube_transform;
+
 		CameraController_Flight camera_controller_flight;
 
 		Vector3 camera_delta_position;

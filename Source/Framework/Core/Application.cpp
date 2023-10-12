@@ -19,15 +19,15 @@ using namespace Framework::Test;
 
 int main()
 {
-	Renderer renderer( 1600, 900, 800, 200 );
+	Platform::InitializeAndCreateWindow( 1600, 900, 800, 200 );
 
 	Framework::ImGuiSetup::Initialize();
 
-	/* renderer.CleanUp() will destroy the OpenGL context, which will cause GlGetError() calls (in OpenGL types' destructors) to return an error and cause an endless loop.
-	 * To prevent it, all Test code is vacuumed inside a local scope, to ensure all destructors run before renderer.CleanUp(). */
+	/* Platform::CleanUp() will destroy the OpenGL context, which will cause GlGetError() calls (in OpenGL types' destructors) to return an error and cause an endless loop.
+	 * To prevent it, all Test code is vacuumed inside a local scope, to ensure all destructors run before Platform::CleanUp(). */
 	{
 		std::unique_ptr< TestInterface > test_current;
-		std::unique_ptr< Test_Menu > test_menu = std::make_unique< Test_Menu >( renderer, test_current );
+		std::unique_ptr< Test_Menu > test_menu = std::make_unique< Test_Menu >( test_current );
 
 		test_menu->Register< Test_Camera_WalkAround>();
 		test_menu->Register< Test_Camera_LookAt >();
@@ -64,7 +64,7 @@ int main()
 
 	Framework::ImGuiSetup::Shutdown();
 
-	renderer.CleanUp();
+	Platform::CleanUp();
 
 	return 0;
 }

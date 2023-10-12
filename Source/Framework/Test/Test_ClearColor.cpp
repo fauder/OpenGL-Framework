@@ -3,9 +3,8 @@
 
 namespace Framework::Test
 {
-	Test_ClearColor::Test_ClearColor( Renderer& renderer, Color4 clear_color )
+	Test_ClearColor::Test_ClearColor( Color4 clear_color )
 		:
-		Test( renderer ),
 		color_clear( clear_color ),
 		color_clear_original( renderer.GetClearColor() )
 	{
@@ -15,6 +14,8 @@ namespace Framework::Test
 	Test_ClearColor::~Test_ClearColor()
 	{
 		renderer.SetClearColor( color_clear_original );
+
+		Test::~Test();
 	}
 
 	void Test_ClearColor::OnRenderImGui()

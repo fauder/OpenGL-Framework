@@ -10,9 +10,7 @@ namespace Framework::Test
 {
 	using namespace Framework::Math::Literals;
 
-	Test_Transfom_2Cubes::Test_Transfom_2Cubes( Renderer& renderer )
-		:
-		Test( renderer )
+	Test_Transfom_2Cubes::Test_Transfom_2Cubes()
 	{
 		using namespace Framework;
 
@@ -28,14 +26,16 @@ namespace Framework::Test
 		vertex_buffer_layout.Push< float >( 4 ); // Vertex colors.
 		cube_vertex_array = std::make_unique< VertexArray >( vertex_buffer, vertex_buffer_layout );
 
-		cube_1 = std::make_unique< Drawable >( shader.get(), cube_vertex_array.get() );
-		cube_2 = std::make_unique< Drawable >( shader.get(), cube_vertex_array.get() );
+		cube_material = std::make_unique< Material >( shader.get() );
+
+		cube_1 = std::make_unique< Drawable >( cube_material.get(), &cube_1_transform, cube_vertex_array.get() );
+		cube_2 = std::make_unique< Drawable >( cube_material.get(), &cube_2_transform, cube_vertex_array.get() );
 
 		renderer.AddDrawable( cube_1.get() );
 		renderer.AddDrawable( cube_2.get() );
 		renderer.SetPolygonMode( PolygonMode::FILL );
 
-		texture_container = std::make_unique< Texture >( "Asset/Texture/container.jpg", GL_RGB );
+		texture_container    = std::make_unique< Texture >( "Asset/Texture/container.jpg", GL_RGB );
 		texture_awesome_face = std::make_unique< Texture >( "Asset/Texture/awesomeface.png", GL_RGBA );
 
 		texture_container->ActivateAndBind( GL_TEXTURE0 );
@@ -47,31 +47,24 @@ namespace Framework::Test
 
 		//shader->SetBool( "use_vertex_color", 1 );
 
-		/* Putting the "camera" on z +3 means moving the world to z -3.*/
-		const auto view = Matrix::Translation( 0.0f, 0.0f, -3.0f );
-
-		const auto projection = Matrix::PerspectiveProjection( 0.1f, 100.0f, renderer.AspectRatio(), 45.0_deg );
-
-		shader->SetMatrix( "transformation_view", view );
-		shader->SetMatrix( "transformation_projection", projection );
+		camera_transform.SetTranslation( Vector3::Backward() * 3.0f );
 	}
 
-	Test_Transfom_2Cubes::~Test_Transfom_2Cubes()
+	/*Test_Transfom_2Cubes::~Test_Transfom_2Cubes()
 	{
-		renderer.RemoveDrawable( cube_1.get() );
-		renderer.RemoveDrawable( cube_2.get() );
-	}
+		Test::~Test();
+	}*/
 
-	void Test_Transfom_2Cubes::OnRender()
+	void Test_Transfom_2Cubes::OnUpdate()
 	{
 		const float sin_time = Math::Sin( Radians( time_current ) );
 
-		cube_1->transform.SetRotation( Quaternion( sin_time * 65.0_deg, rotation_axis ) );
-		cube_1->transform.SetTranslation( sin_time * Vector3::Right() );
-		cube_1->transform.SetScaling( Vector3( UNIFORM_INITIALIZATION, Math::Clamp( Math::Abs( sin_time ), 0.1f, 1.0f ) ) );
+		cube_1->transform->SetRotation( Quaternion( sin_time * 65.0_deg, rotation_axis ) );
+		cube_1->transform->SetTranslation( sin_time * Vector3::Right() );
+		cube_1->transform->SetScaling( Vector3( UNIFORM_INITIALIZATION, Math::Clamp( Math::Abs( sin_time ), 0.1f, 1.0f ) ) );
 
-		cube_2->transform.SetRotation( Quaternion( -sin_time * 65.0_deg, rotation_axis ) );
-		cube_2->transform.SetTranslation( -sin_time * Vector3::Up() );
-		cube_2->transform.SetScaling( Vector3( UNIFORM_INITIALIZATION, Math::Clamp( Math::Abs( sin_time * 0.5f ), 0.1f, 1.0f ) ) );
+		cube_2->transform->SetRotation( Quaternion( -sin_time * 65.0_deg, rotation_axis ) );
+		cube_2->transform->SetTranslation( -sin_time * Vector3::Up() );
+		cube_2->transform->SetScaling( Vector3( UNIFORM_INITIALIZATION, Math::Clamp( Math::Abs( sin_time * 0.5f ), 0.1f, 1.0f ) ) );
 	}
 }

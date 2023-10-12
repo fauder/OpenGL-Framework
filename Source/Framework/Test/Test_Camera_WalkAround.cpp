@@ -15,10 +15,9 @@ using namespace Framework::Math::Literals;
 
 namespace Framework::Test
 {
-	Test_Camera_WalkAround::Test_Camera_WalkAround( Renderer& renderer )
+	Test_Camera_WalkAround::Test_Camera_WalkAround()
 		:
-		Test( renderer, false /* UI starts disabled, to allow for camera movement via mouse input. */ ),
-		camera( &camera_transform, renderer.AspectRatio() ),
+		Test( false /* UI starts disabled, to allow for camera movement via mouse input. */ ),
 		camera_controller_flight( &camera, ResetCameraMoveSpeed() ),
 		camera_delta_position( ZERO_INITIALIZATION ),
 		input_is_enabled( true )
@@ -40,7 +39,7 @@ namespace Framework::Test
 		//vertex_buffer_layout.Push< float >( 4 ); // Vertex colors.
 		cube_vertex_array = std::make_unique< VertexArray >( vertex_buffer, vertex_buffer_layout );
 
-		cube_1 = std::make_unique< Drawable >( shader.get(), cube_vertex_array.get() );
+		cube_1 = std::make_unique< Drawable >( material.get(), &cube_transform, cube_vertex_array.get() );
 
 		renderer.AddDrawable( cube_1.get() );
 		renderer.SetPolygonMode( PolygonMode::FILL );
@@ -58,7 +57,7 @@ namespace Framework::Test
 
 	Test_Camera_WalkAround::~Test_Camera_WalkAround()
 	{
-		renderer.RemoveDrawable( cube_1.get() );
+		Test::~Test();
 
 		Platform::SetKeyboardEventCallback();
 		Platform::CaptureMouse( false );
@@ -132,8 +131,8 @@ namespace Framework::Test
 
 	void Test_Camera_WalkAround::OnRender()
 	{
-		material->SetMatrix( "transformation_view",		  camera.GetViewMatrix() );
-		material->SetMatrix( "transformation_projection", camera.GetProjectionMatrix() );
+		material->SetMatrix( "transform_view",		  camera.GetViewMatrix() );
+		material->SetMatrix( "transform_projection", camera.GetProjectionMatrix() );
 	}
 
 	void Test_Camera_WalkAround::OnRenderImGui()

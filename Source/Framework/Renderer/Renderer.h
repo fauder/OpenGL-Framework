@@ -3,6 +3,7 @@
 // Framework Includes.
 #include "Math/Color.hpp"
 
+#include "Renderer/Camera.h"
 #include "Renderer/Drawable.h"
 
 // std Includes.
@@ -18,13 +19,16 @@ namespace Framework
 	class Renderer
 	{
 	public:
-		Renderer( const int width_pixels = 800, const int height_pixels = 600, const int pos_x = 0, const int pos_y = 0, const Color4 clear_color = Color4::Clear_Default() );
+		Renderer( Camera* camera, const Color4 clear_color = Color4::Clear_Default() );
+		~Renderer();
+
+		void OnFrameBufferResize( const int width_new_pixels, const int height_new_pixels );
+
+		void SetCamera( Camera* camera_to_render_into );
 
 		void BeginFrame() const;
 		void DrawFrame();
 		void EndFrame() const;
-
-		void CleanUp() const;
 
 		void Clear() const;
 		void Clear( GLbitfield mask ) const;
@@ -46,6 +50,7 @@ namespace Framework
 		constexpr float			AspectRatio() const { return aspect_ratio; }
 
 	private:
+		Camera* camera_current;
 		unsigned int pixel_width, pixel_height;
 		float aspect_ratio;
 		std::vector< Drawable* > drawable_list;

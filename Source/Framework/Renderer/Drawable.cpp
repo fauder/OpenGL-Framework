@@ -4,9 +4,11 @@
 
 namespace Framework
 {
-	Drawable::Drawable( Shader* shader, const VertexArray* vertex_array )
+	Drawable::Drawable( Material* material, Transform* transform, const VertexArray* vertex_array )
 		:
-		shader( shader ),
+		transform( transform ),
+		material( material ),
+		shader( material->shader ),
 		vertex_array( vertex_array )
 	{
 	}
@@ -15,11 +17,16 @@ namespace Framework
 	{
 	}
 
-	void Drawable::Draw()
+	void Drawable::Submit( Camera* camera )
 	{
 		vertex_array->Bind();
-		shader->SetMatrix( "transformation_world", transform.GetFinalMatrix() );
 		shader->Bind();
+
+		material->SetMatrix( "transform_world",		 transform->GetFinalMatrix() );
+
+		material->SetMatrix( "transform_view",		 camera->GetViewMatrix() );
+		material->SetMatrix( "transform_projection", camera->GetProjectionMatrix() );
+
 		GLCALL( glDrawArrays( GL_TRIANGLES, 0, vertex_array->VertexCount() ) );
 	}
 }

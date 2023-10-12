@@ -18,19 +18,19 @@ namespace Framework::Test
 		using MapType = std::unordered_map< std::string, std::function< std::unique_ptr< TestInterface >() > >;
 
 	public:
-		Test_Menu( Renderer& renderer, std::unique_ptr< TestInterface >& current_test );
+		Test_Menu( std::unique_ptr< TestInterface >& current_test );
 
 		template< class TestClass, typename ... ConstructorParams >
 		void Register( ConstructorParams&& ... params )
 		{
 			const auto name = ExtractTestNameFromTypeName( typeid( TestClass ).name() );
-			test_creation_info_by_name[ name ] = [ &, ... params = std::forward< ConstructorParams >( params ) ]() { return std::make_unique< TestClass >( renderer, params ... ); };
+			test_creation_info_by_name[ name ] = [ &, ... params = std::forward< ConstructorParams >( params ) ]() { return std::make_unique< TestClass >( params ... ); };
 		}
 
 		template< class TestClass, typename ... ConstructorParams >
 		void Register( const std::string& test_name, ConstructorParams&& ... params )
 		{
-			test_creation_info_by_name[ test_name ] = [ &, ... params = std::forward< ConstructorParams >( params ) ]() { return std::make_unique< TestClass >( renderer, params ... ); };
+			test_creation_info_by_name[ test_name ] = [ &, ... params = std::forward< ConstructorParams >( params ) ]() { return std::make_unique< TestClass >( params ... ); };
 		}
 
 		template< class TestClass >

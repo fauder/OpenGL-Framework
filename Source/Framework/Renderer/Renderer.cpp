@@ -4,28 +4,40 @@
 #include "Renderer/Graphics.h"
 #include "Renderer/Renderer.h"
 
-// std Includes.
-#include <iostream>
-
 namespace Framework
 {
-	Renderer::Renderer( const int width_pixels, const int height_pixels, const int pos_x, const int pos_y, const Color4 clear_color )
+	Renderer::Renderer( Camera* camera, const Color4 clear_color )
 		:
-		pixel_width( width_pixels ),
-		pixel_height( height_pixels ),
+		camera_current( camera ),
+		pixel_width( Platform::GetFrameBufferWidthInPixels() ),
+		pixel_height( Platform::GetFrameBufferHeightInPixels() ),
 		aspect_ratio( float( pixel_width ) / pixel_height ),
 		color_clear( clear_color )
 	{
-		try
+		Platform::SetFrameBufferResizeCallback( [ = ]( const int width_new_pixels, const int height_new_pixels )
 		{
-			Platform::InitializeAndCreateWindow( pixel_width, pixel_height, pos_x, pos_y );
-		}
-		catch( const std::logic_error& e )
-		{
-			std::cerr << "ERROR::RENDERER::CONSTRUCTION_ERROR:\n\t" << e.what() << std::endl;
-		}
+			this->OnFrameBufferResize( width_new_pixels, height_new_pixels );
+		} );
 
 		EnableDepthTest();
+	}
+
+	Renderer::~Renderer()
+	{
+		Platform::SetFrameBufferResizeCallback();
+	}
+
+	void Renderer::OnFrameBufferResize( const int width_new_pixels, const int height_new_pixels )
+	{
+		pixel_width  = width_new_pixels;
+		pixel_height = height_new_pixels;
+
+		aspect_ratio = float( pixel_width ) / pixel_height;
+	}
+
+	void Renderer::SetCamera( Camera* new_camera )
+	{
+		camera_current = new_camera;
 	}
 
 	void Renderer::BeginFrame() const
@@ -36,17 +48,12 @@ namespace Framework
 	void Renderer::DrawFrame()
 	{
 		for( auto drawable : drawable_list )
-			drawable->Draw();
+			drawable->Submit( camera_current );
 	}
 
 	void Renderer::EndFrame() const
 	{
 		Platform::SwapBuffers();
-	}
-
-	void Renderer::CleanUp() const
-	{
-		Platform::CleanUp();
 	}
 
 	void Renderer::Clear() const

@@ -4,7 +4,8 @@
 #include "Vendor/OpenGL/glad/glad.h"
 
 // Framework Includes.
-#include "Renderer/Shader.h"
+#include "Renderer/Camera.h"
+#include "Renderer/Material.h"
 #include "Renderer/VertexArray.h"
 
 #include "Scene/Transform.h"
@@ -17,16 +18,17 @@ namespace Framework
 	class Drawable
 	{
 	public:
-		Drawable( Shader* shader, const VertexArray* vertex_array );
+		Drawable( Material* material, Transform* transform, const VertexArray* vertex_array );
 		~Drawable();
 
-		void Draw();
+		void Submit( Camera* camera );
 
 	public:
-		Transform transform;
+		Transform* const transform;
 
 	private:
-		Shader* shader;
+		Material* material;
+		Shader* const shader;
 		const VertexArray* vertex_array;
 	};
 }

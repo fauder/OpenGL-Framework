@@ -1,4 +1,6 @@
 // Framework Includes.
+#include "Core/Log_ImGui.h"
+
 #include "Math/Matrix.h"
 
 #include "Renderer/MeshUtility.hpp"
@@ -12,9 +14,8 @@ using namespace Framework::Math::Literals;
 
 namespace Framework::Test
 {
-	Test_Camera_LookAt::Test_Camera_LookAt( Renderer& renderer )
+	Test_Camera_LookAt::Test_Camera_LookAt()
 		:
-		Test( renderer ),
 		method_lookAt( LookAtMethod::LookAtMatrix ),
 		rotation_plane( RotationPlane::ZX ),
 		zoom( 0.25f )
@@ -33,9 +34,14 @@ namespace Framework::Test
 		//vertex_buffer_layout.Push< float >( 4 ); // Vertex colors.
 		cube_vertex_array = std::make_unique< VertexArray >( vertex_buffer, vertex_buffer_layout );
 
-		cube_1 = std::make_unique< Drawable >( shader.get(), cube_vertex_array.get() );
+		material = std::make_unique< Material >( shader.get() );
 
-		renderer.AddDrawable( cube_1.get() );
+		/* This test does not use a Drawable as the Drawable (currently) sets the view matrix by querying it from the Camera, which may or may not be set directly in this test
+		 * (i.e., constructed by other means & uploaded to shader in OnRender() ). Using a Drawable would cause the view matrix to be set again on Submit() & lead to incorrect behaviour. */
+		/*cube_1 = std::make_unique< Drawable >( material.get(), &cube_transform, cube_vertex_array.get() );
+
+		renderer.AddDrawable( cube_1.get() );*/
+
 		renderer.SetPolygonMode( PolygonMode::FILL );
 
 		texture_test_cube = std::make_unique< Texture >( "Asset/Texture/test_tex_cube.png", GL_RGBA );
@@ -43,18 +49,16 @@ namespace Framework::Test
 		texture_test_cube->ActivateAndBind( GL_TEXTURE0 );
 
 		shader->Bind();
-		shader->SetTextureSampler2D( "texture_sampler_1", 0 );
-
-		shader->SetMatrix( "transformation_projection", Matrix::PerspectiveProjection( 0.1f, 100.0f, renderer.AspectRatio(), 45_deg ) );
+		material->SetTextureSampler2D( "texture_sampler_1", 0 );
 
 		// Initial camera position and rotation:
 		ResetCameraTranslation();
 	}
 
-	Test_Camera_LookAt::~Test_Camera_LookAt()
+	/*Test_Camera_LookAt::~Test_Camera_LookAt()
 	{
-		renderer.RemoveDrawable( cube_1.get() );
-	}
+		Test::~Test();
+	}*/
 
 	void Test_Camera_LookAt::OnUpdate()
 	{
@@ -88,7 +92,7 @@ namespace Framework::Test
 
 		if( method_lookAt == LookAtMethod::LookAtMatrix )
 		{
-			shader->SetMatrix( "transformation_view", Matrix::LookAt( camera_position, lookAt_direction,
+			material->SetMatrix( "transform_view", Matrix::LookAt( camera_position, lookAt_direction,
 																	  rotation_plane == RotationPlane::ZX
 																		? Vector3::Up()
 																		: Math::Cross( Vector3::Right(), lookAt_direction ).Normalize() ) );
@@ -100,7 +104,7 @@ namespace Framework::Test
 																		? Vector3::Up()
 																		: Math::Cross( Vector3::Right(), lookAt_direction ).Normalize() ) );
 
-			shader->SetMatrix( "transformation_view", camera_transform.GetInverseOfFinalMatrix() );
+			material->SetMatrix( "transform_view", camera_transform.GetInverseOfFinalMatrix() );
 		}
 		else if( method_lookAt == LookAtMethod::QuaternionLookRotation_Naive )
 		{
@@ -109,7 +113,7 @@ namespace Framework::Test
 																			? Vector3::Up()
 																			: Math::Cross( Vector3::Right(), lookAt_direction ).Normalize() ) );
 
-			shader->SetMatrix( "transformation_view", camera_transform.GetInverseOfFinalMatrix() );
+			material->SetMatrix( "transform_view", camera_transform.GetInverseOfFinalMatrix() );
 		}
 		else if( method_lookAt == LookAtMethod::ManualRotationViaQuaternionSlerp )
 		{
@@ -123,7 +127,7 @@ namespace Framework::Test
 																			time_mod_2_pi / Constants< float >::Pi() ) );
 			const auto translation = Vector3::Forward() / zoom; // Moving the scene away (i.e, toward -Z) = inverse of zooming the camera out (i.e, moving toward +Z).
 
-			shader->SetMatrix( "transformation_view", Matrix4x4( rotation, translation ) ); // Create the view matrix from the viewpoint of the scene objects' transformation.
+			material->SetMatrix( "transform_view", Matrix4x4( rotation, translation ) ); // Create the view matrix from the viewpoint of the scene objects' transformation.
 		}
 		else if( method_lookAt == LookAtMethod::ManualRotationViaEulerToQuaternion )
 		{
@@ -132,8 +136,21 @@ namespace Framework::Test
 										: Math::EulerToMatrix3x3( 0_deg, 360_deg * time_mod_2_pi / Constants< float >::Two_Pi(), 0_deg ); // Counter-clockwise rotation of the scene = clockwise rotation of the camera.
 			const auto translation = Vector3::Forward() / zoom; // Moving the scene away (i.e, toward -Z) = inverse of zooming the camera out (i.e, moving toward +Z).
 
-			shader->SetMatrix( "transformation_view", Matrix4x4( rotation, translation ) ); // Create the view matrix from the viewpoint of the scene objects' transformation.
+			material->SetMatrix( "transform_view", Matrix4x4( rotation, translation ) ); // Create the view matrix from the viewpoint of the scene objects' transformation.
 		}
+
+		/* For this test, "manually" issue a draw call for the cube, as we can not use a Drawable for the reasons stated above. */
+
+		material->SetMatrix( "transform_projection", camera.GetProjectionMatrix() );
+
+		cube_vertex_array->Bind();
+		shader->Bind();
+
+		material->SetMatrix( "transform_world",	cube_transform.GetFinalMatrix() );
+
+		material->SetMatrix( "transform_projection", camera.GetProjectionMatrix() );
+
+		GLCALL( glDrawArrays( GL_TRIANGLES, 0, cube_vertex_array->VertexCount() ) );
 	}
 
 	void Test_Camera_LookAt::OnRenderImGui()
