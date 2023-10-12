@@ -2,6 +2,7 @@
 
 // Framework Includes.
 #include "Renderer/Graphics.h"
+#include "Renderer/ShaderTypeInformation.h"
 
 // std Includes.
 #include <vector>
@@ -14,21 +15,7 @@ namespace Framework
 		GLenum type;
 		GLboolean normalized;
 
-		inline unsigned int GetSizeOfType() const { return GetSizeOfType( type ); }
-
-		static unsigned int GetSizeOfType( GLenum type )
-		{
-			switch( type )
-			{
-				case GL_FLOAT:	return 4;
-				case GL_INT:	return 4;
-				case GL_BYTE:	return 1;
-
-				default: 
-					throw std::logic_error( "VertexAttribute::GetSizeOfType: Unknown type encountered." );
-					return 0;
-			}
-		}
+		inline unsigned int GetSizeOfType() const { return Framework::GetSizeOfType( type ); }
 	};
 
 	class VertexBufferLayout
@@ -48,17 +35,17 @@ namespace Framework
 			if constexpr( std::is_same_v< T, float > )
 			{
 				attribute_list.push_back( { count, GL_FLOAT, GL_FALSE } );
-				stride += count * VertexAttribute::GetSizeOfType( GL_FLOAT );
+				stride += count * Framework::GetSizeOfType( GL_FLOAT );
 			}
 			if constexpr( std::is_same_v< T, int > )
 			{
 				attribute_list.push_back( { count, GL_INT, GL_FALSE } );
-				stride += count * VertexAttribute::GetSizeOfType( GL_INT );
+				stride += count * Framework::GetSizeOfType( GL_INT );
 			}
 			if constexpr( std::is_same_v< T, unsigned char > )
 			{
 				attribute_list.push_back( { count, GL_BYTE, GL_TRUE } );
-				stride += count * VertexAttribute::GetSizeOfType( GL_BYTE );
+				stride += count * Framework::GetSizeOfType( GL_BYTE );
 			}
 		}
 
