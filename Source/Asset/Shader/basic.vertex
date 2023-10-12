@@ -1,0 +1,12 @@
+#version 330 core
+
+layout( location = 0 ) in vec3 position_local;
+
+uniform mat4 transform_world;
+uniform mat4 transform_view;
+uniform mat4 transform_projection;
+
+void main()
+{
+    gl_Position = vec4( position_local, 1.0 ) * transform_world * transform_view * transform_projection;
+}

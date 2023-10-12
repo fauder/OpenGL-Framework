@@ -150,11 +150,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="Source\Asset\Shader\basic.vertex">
+      <FileType>Document</FileType>
+    </None>
     <ClCompile Include="Source\Framework\Core\Application.cpp" />
     <ClCompile Include="Source\Framework\Renderer\Camera.cpp" />
     <ClCompile Include="Source\Framework\Renderer\Drawable.cpp" />
     <ClCompile Include="Source\Framework\Renderer\Drawable_Indexed.cpp" />
     <ClCompile Include="Source\Framework\Renderer\CameraController_Flight.cpp" />
+    <ClCompile Include="Source\Framework\Test\Test_Lighting.cpp" />
     <ClCompile Include="Source\Vendor\imgui\imgui.cpp" />
     <ClCompile Include="Source\Vendor\imgui\imgui_demo.cpp" />
     <ClCompile Include="Source\Vendor\imgui\imgui_draw.cpp" />
@@ -197,6 +201,7 @@
     <ClInclude Include="Source\Framework\Renderer\CameraController_Flight.h" />
     <ClInclude Include="Source\Framework\Renderer\MeshUtility.hpp" />
     <ClInclude Include="Source\Framework\Renderer\Primitive\Primitive_Cube.h" />
+    <ClInclude Include="Source\Framework\Test\Test_Lighting.h" />
     <ClInclude Include="Source\Framework\Utility\ImGuiUtility.h" />
     <ClInclude Include="Source\Framework\Core\Initialization.h" />
     <ClInclude Include="Source\Framework\Core\Log.h" />
@@ -247,8 +252,10 @@
     <ClInclude Include="Source\Vendor\stb\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Source\Asset\Shader\lit_basic.fragment" />
     <None Include="Source\Asset\Shader\textured_mix.fragment" />
     <None Include="Source\Asset\Shader\textured_mix.vertex" />
+    <None Include="Source\Asset\Shader\unlit.fragment" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Asset\Texture\awesomeface.png" />
