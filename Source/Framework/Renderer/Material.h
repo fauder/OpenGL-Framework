@@ -14,7 +14,7 @@ namespace Framework
 	class Material
 	{
 	public:
-		Material( Shader* const shader );
+		Material( Shader* const shader, const char* name );
 
 	/* Uniform Setters. */
 		Material& SetFloat( const std::string& name, const float value );
@@ -100,6 +100,8 @@ namespace Framework
 		int GetTextureSampler2D( const std::string& name );
 		int GetTextureSampler3D( const std::string& name );
 
+		inline const std::string& GetName() const { return name; }
+
 	private:
 		Material& CopyUniformToBlob( const void* value, const ShaderUniformInformation& uniform_info );
 
@@ -108,5 +110,6 @@ namespace Framework
 
 	private:
 		std::vector< char > uniform_blob;
+		std::string name;
 	};
 }

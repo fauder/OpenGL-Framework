@@ -34,7 +34,7 @@ namespace Framework::Test
 		//vertex_buffer_layout.Push< float >( 4 ); // Vertex colors.
 		cube_vertex_array = std::make_unique< VertexArray >( vertex_buffer, vertex_buffer_layout );
 
-		material = std::make_unique< Material >( shader.get() );
+		material = std::make_unique< Material >( shader.get(), "Cube" );
 
 		/* This test does not use a Drawable as the Drawable (currently) sets the view matrix by querying it from the Camera, which may or may not be set directly in this test
 		 * (i.e., constructed by other means & uploaded to shader in OnRender() ). Using a Drawable would cause the view matrix to be set again on Submit() & lead to incorrect behaviour. */

@@ -27,7 +27,7 @@ namespace Framework::Test
 		Platform::CaptureMouse( input_is_enabled );
 
 		shader   = std::make_unique< Shader >( "Source/Asset/Shader/textured_mix.vertex", "Source/Asset/Shader/textured_mix.fragment", "Textured Mix" );
-		material = std::make_unique< Material >( shader.get() );
+		material = std::make_unique< Material >( shader.get(), "Cube" );
 
 		constexpr auto vertices = MeshUtility::Interleave( Primitives::Cube::Positions, Primitives::Cube::UVs_CubeMap );
 
@@ -131,8 +131,6 @@ namespace Framework::Test
 
 	void Test_Camera_WalkAround::OnRender()
 	{
-		material->SetMatrix( "transform_view",		  camera.GetViewMatrix() );
-		material->SetMatrix( "transform_projection", camera.GetProjectionMatrix() );
 	}
 
 	void Test_Camera_WalkAround::OnRenderImGui()

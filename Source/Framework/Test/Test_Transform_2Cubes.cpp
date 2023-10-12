@@ -26,7 +26,7 @@ namespace Framework::Test
 		vertex_buffer_layout.Push< float >( 4 ); // Vertex colors.
 		cube_vertex_array = std::make_unique< VertexArray >( vertex_buffer, vertex_buffer_layout );
 
-		cube_material = std::make_unique< Material >( shader.get() );
+		cube_material = std::make_unique< Material >( shader.get(), "Cube" );
 
 		cube_1 = std::make_unique< Drawable >( cube_material.get(), &cube_1_transform, cube_vertex_array.get() );
 		cube_2 = std::make_unique< Drawable >( cube_material.get(), &cube_2_transform, cube_vertex_array.get() );
@@ -42,10 +42,10 @@ namespace Framework::Test
 		texture_awesome_face->ActivateAndBind( GL_TEXTURE1 );
 
 		shader->Bind();
-		shader->SetTextureSampler2D( "texture_sampler_1", 0 );
-		shader->SetTextureSampler2D( "texture_sampler_2", 1 );
+		cube_material->SetTextureSampler2D( "texture_sampler_1", 0 );
+		cube_material->SetTextureSampler2D( "texture_sampler_2", 1 );
 
-		//shader->SetBool( "use_vertex_color", 1 );
+		//cube_material->SetBool( "use_vertex_color", 1 );
 
 		camera_transform.SetTranslation( Vector3::Backward() * 3.0f );
 	}

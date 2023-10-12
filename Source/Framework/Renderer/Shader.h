@@ -153,7 +153,7 @@ namespace Framework
 		inline const ShaderUniformInformation& GetUniformInformation( const std::string& uniform_name );
 		inline const std::unordered_map< std::string, ShaderUniformInformation >& GetUniformInformations() const { return uniform_info_map; }
 
-		inline const std::string& Name() const { return name; }
+		inline const std::string& GetName() const { return name; }
 
 	private:
 		static std::string ReadShaderFromFile( const char* file_path, const char* shader_type_string );

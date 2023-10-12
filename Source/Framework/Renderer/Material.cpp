@@ -3,9 +3,10 @@
 
 namespace Framework
 {
-	Material::Material( Shader* const shader )
+	Material::Material( Shader* const shader, const char* name )
 		:
-		shader( shader )
+		shader( shader ),
+		name( name )
 	{
 		const auto& uniform_info_map = shader->GetUniformInformations();
 

@@ -182,7 +182,7 @@ namespace Framework::Log
 			if( ImGui::BeginTable( "General", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_PreciseWidths ) )
 			{
 				ImGui::TableNextColumn(); ImGui::TextUnformatted( "Material Name" );
-				ImGui::TableNextColumn(); ImGui::Text( "[Not Implemented Yet]" /*R"("%s")", material.Name().c_str() */ );
+				ImGui::TableNextColumn(); ImGui::Text( R"("%s")", material.GetName().c_str() );
 
 				ImGui::EndTable();
 			}
@@ -228,7 +228,7 @@ namespace Framework::Log
 			if( ImGui::BeginTable( "General", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_PreciseWidths ) )
 			{
 				ImGui::TableNextColumn(); ImGui::TextUnformatted( "Shader Name" );
-				ImGui::TableNextColumn(); ImGui::Text( R"("%s")", shader.Name().c_str() );
+				ImGui::TableNextColumn(); ImGui::Text( R"("%s")", shader.GetName().c_str() );
 
 				ImGui::EndTable();
 			}
