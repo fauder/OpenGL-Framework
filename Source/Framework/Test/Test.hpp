@@ -190,7 +190,8 @@ namespace Framework::Test
 
 		void RenderImGui_Menu_BackButton()
 		{
-			ImGui::Begin( "Test Menu", nullptr, CurrentImGuiWindowFlags() | ImGuiWindowFlags_AlwaysAutoResize );
+			ImGuiUtility::SetNextWindowPos( ImGuiUtility::HorizontalWindowPositioning::LEFT, ImGuiUtility::VerticalWindowPositioning::TOP );
+			ImGui::Begin( "Test Menu", nullptr, CurrentImGuiWindowFlags() | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove );
 
 			ImGui::Text( std::string( R"(Executing Test ")" + name + R"("...)" ).c_str() );
 			if( ImGui::Button( "<-" ) )
@@ -201,6 +202,7 @@ namespace Framework::Test
 
 		void RenderImGui_Flags()
 		{
+			ImGuiUtility::SetNextWindowPos( ImGuiUtility::HorizontalWindowPositioning::CENTER, ImGuiUtility::VerticalWindowPositioning::TOP );
 			if( ImGui::Begin( "App. Flags", nullptr, CurrentImGuiWindowFlags() | ImGuiWindowFlags_AlwaysAutoResize ) )
 			{
 				ImGui::Checkbox( "UI Interaction", &ui_interaction_enabled );
@@ -211,6 +213,7 @@ namespace Framework::Test
 
 		void RenderImGui_FrameStatistics()
 		{
+			ImGuiUtility::SetNextWindowPos( ImGuiUtility::HorizontalWindowPositioning::RIGHT, ImGuiUtility::VerticalWindowPositioning::TOP );
 			if( ImGui::Begin( "Frame Statistics", nullptr, CurrentImGuiWindowFlags() | ImGuiWindowFlags_AlwaysAutoResize ) )
 			{
 				ImGui::Text( "FPS: %.1f fps", 1.0f / time_delta_real );

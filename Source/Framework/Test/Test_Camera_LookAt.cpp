@@ -138,6 +138,7 @@ namespace Framework::Test
 
 	void Test_Camera_LookAt::OnRenderImGui()
 	{
+		ImGuiUtility::SetNextWindowPos( ImGuiUtility::HorizontalWindowPositioning::LEFT, ImGuiUtility::VerticalWindowPositioning::CENTER );
 		if( ImGui::Begin( "Test: Camera ", nullptr, CurrentImGuiWindowFlags() | ImGuiWindowFlags_AlwaysAutoResize ) )
 		{
 			ImGui::SliderFloat( "Zoom ", &zoom, 0.05f, 0.5f, "%.2f", ImGuiSliderFlags_Logarithmic ); ImGui::SameLine(); if( ImGui::Button( "Reset##zoom" ) ) zoom = 0.25f;
@@ -166,6 +167,9 @@ namespace Framework::Test
 			ImGui::RadioButton( "Manual Rotation via Math::Slerp( angle: -90 -> +90 )", ( int* )&method_lookAt, ( int )LookAtMethod::ManualRotationViaQuaternionSlerp );
 			ImGui::RadioButton( "Manual Rotation via Math::EulerToQuaternion( angle: 360 * time % (2 * Pi) )", ( int* )&method_lookAt, ( int )LookAtMethod::ManualRotationViaEulerToQuaternion );
 		}
+
+		ImGuiUtility::SetNextWindowPos( ImGuiUtility::HorizontalWindowPositioning::RIGHT, ImGuiUtility::VerticalWindowPositioning::BOTTOM );
+		Log::Dump( *material, CurrentImGuiWindowFlags() );
 
 		ImGui::End();
 	}

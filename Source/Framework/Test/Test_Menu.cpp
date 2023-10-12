@@ -25,7 +25,8 @@ namespace Framework::Test
 
 	void Test_Menu::OnRenderImGui()
 	{
-		ImGui::Begin( "Test Menu", nullptr, CurrentImGuiWindowFlags() | ImGuiWindowFlags_AlwaysAutoResize );
+		ImGuiUtility::SetNextWindowPos( ImGuiUtility::HorizontalWindowPositioning::LEFT, ImGuiUtility::VerticalWindowPositioning::TOP );
+		ImGui::Begin( "Test Menu", nullptr, CurrentImGuiWindowFlags() | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove );
 
 		for( const auto& [ test_name, create_test ] : test_creation_info_by_name )
 		{

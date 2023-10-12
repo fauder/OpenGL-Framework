@@ -177,8 +177,10 @@ namespace Framework::Test
 
 		ImGui::End();
 
-		Log::Dump( *shader,		CurrentImGuiWindowFlags() );
-		Log::Dump( *material,	CurrentImGuiWindowFlags() );
+		ImGuiUtility::SetNextWindowPos( ImGuiUtility::HorizontalWindowPositioning::LEFT, ImGuiUtility::VerticalWindowPositioning::BOTTOM );
+		Log::Dump( *shader, CurrentImGuiWindowFlags() );
+		ImGuiUtility::SetNextWindowPos( ImGuiUtility::HorizontalWindowPositioning::RIGHT, ImGuiUtility::VerticalWindowPositioning::BOTTOM );
+		Log::Dump( *material, CurrentImGuiWindowFlags() );
 	}
 
 	void Test_Camera_WalkAround::ResetCameraTranslation()

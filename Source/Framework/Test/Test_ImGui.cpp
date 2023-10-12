@@ -16,6 +16,9 @@ namespace Framework::Test
             show_demo_window = true;
 
         if( show_demo_window )
+        {
+            ImGuiUtility::SetNextWindowPos( ImGuiUtility::HorizontalWindowPositioning::CENTER, ImGuiUtility::VerticalWindowPositioning::CENTER, ImGuiCond_Once );
             ImGui::ShowDemoWindow( &show_demo_window );
+        }
 	}
 }
