@@ -30,6 +30,10 @@ namespace Framework::ImGuiUtility
 	/* Only works with same width items. */
 	void SetNextItemRightAligned( const int itemNo_StartingFromRight, const float itemWidth );
 
+	enum class HorizontalWindowPositioning { LEFT, CENTER, RIGHT  };
+	enum class VerticalWindowPositioning   { TOP,  CENTER, BOTTOM };
+	void SetNextWindowPos( const HorizontalWindowPositioning horizontal_positioning, const VerticalWindowPositioning vertical_positioning, const ImGuiCond condition = ImGuiCond_Always );
+
 	void GroupBoxBegin( const char* title, const float itemOffsetFromLeftBorder );
 	void GroupBoxEnd( const Vector2 bottomRightSpacing );
 }

@@ -37,6 +37,25 @@ namespace Framework::ImGuiUtility
 		ImGui::SetCursorPosX( ImGui::GetWindowWidth() - itemNo_StartingFromRight * ( ImGui::GetStyle().ItemSpacing.x + itemWidth ) );
 	}
 
+	void SetNextWindowPos( const HorizontalWindowPositioning horizontal_positioning, const VerticalWindowPositioning vertical_positioning, const ImGuiCond condition )
+	{
+		const auto& io = ImGui::GetIO();
+		const auto horizontal_position = horizontal_positioning == HorizontalWindowPositioning::RIGHT
+											? io.DisplaySize.x
+											: horizontal_positioning == HorizontalWindowPositioning::CENTER
+												? io.DisplaySize.x / 2.0f
+												: 0.0f;
+		const auto vertical_position = vertical_positioning == VerticalWindowPositioning::BOTTOM
+											? io.DisplaySize.y
+											: vertical_positioning == VerticalWindowPositioning::CENTER
+												? io.DisplaySize.y / 2.0f
+												: 0.0f;
+		const auto horizontal_pivot = ( float )horizontal_positioning / 2.0f; // Map to [+1, 0] range.
+		const auto vertical_pivot   = ( float )vertical_positioning   / 2.0f; // Map to [+1, 0] range.
+
+		ImGui::SetNextWindowPos( { horizontal_position, vertical_position }, condition, { horizontal_pivot, vertical_pivot } );
+	}
+
 	void GroupBoxBegin( const char* title, const float itemOffsetFromLeftBorder )
 	{
 		ImGui::TextUnformatted( title );
