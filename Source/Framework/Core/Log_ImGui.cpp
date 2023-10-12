@@ -3,6 +3,9 @@
 
 #include "Renderer/ShaderTypeInformation.h"
 
+// Vendor Includes.
+#include "Vendor/imgui/imgui_internal.h"
+
 namespace Framework::Log
 {
 	template< Concepts::Arithmetic Coordinate, std::size_t Size >
@@ -101,7 +104,13 @@ namespace Framework::Log
 				} );
 			} );
 
+			// TEMP: This is a hack to get nested tables working with auto-resize. It has a problem; When the matrix tables are hidden/shown, the window resizes erratically for 4-5 frames.
+			// Source: https://github.com/ocornut/imgui/issues/6586#issuecomment-1631455446
+			float table_width = ImGui::GetCurrentContext()->CurrentTable->ColumnsAutoFitWidth;
+			ImGui::PushStyleVar( ImGuiStyleVar_ItemSpacing, ImVec2( 0, 0 ) );
 			ImGui::EndTable();
+			ImGui::Dummy( ImVec2( table_width, 0 ) );
+			ImGui::PopStyleVar();
 		}
 
 		ImGui::TreePop();
